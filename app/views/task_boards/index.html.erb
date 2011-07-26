@@ -1,0 +1,24 @@
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'task_board', :plugin => 'redmine_task_board' %>
+<% end %>
+
+<%= html_title "#{@project.name} - Task board" -%>
+
+<div id="version_container">
+
+<ul class="version_holder">
+<% @project.versions.each do |v| %>
+
+  <li>
+    <%= link_to "#{v.name} (#{v.fixed_issues.length})",
+                    :controller => "task_boards",
+                    :action => "show",
+                    :version_id => v.id %>
+  </li>
+
+
+<% end %>
+
+</ul>
+</div>
+
