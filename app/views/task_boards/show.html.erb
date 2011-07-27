@@ -1,4 +1,4 @@
-<% html_title "#{@version.name} - Task board" -%>
+<% html_title "#{@version.nil? ? "Product Backlog" : @version.name} - Task board" -%>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'task_board', :plugin => 'redmine_task_board' %>
@@ -32,12 +32,17 @@
 <% end %>
 
 
-<h2><%= @version.name %> Task Board</h2>
+<h2><%= @version.nil? ? "Product Backlog" : @version.name %> Task Board</h2>
 
 <% unless @fixed_issues.empty? %>
 
+
+
+<div id="fixed_table_header"></div>
+
 <table id="task_board" cellspacing="0">
  
+  
   
   
   <thead>
@@ -49,6 +54,9 @@
       <% end -%>
     </tr>
   </thead>
+  
+  
+  
   <tbody>
     <% @stories_with_tasks.each do |story, tasks_by_status| %>
       <% reset_cycle %>
@@ -74,8 +82,10 @@
   </tbody>
 </table>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script> 
+<%= javascript_include_tag  'fixedtableheader', :plugin => 'redmine_task_board' %>
 <% else %>
-<h3>There are no issues.</h3>
+<h3>There are no issues targeted for this version.</h3>
 <% end %>
 
 

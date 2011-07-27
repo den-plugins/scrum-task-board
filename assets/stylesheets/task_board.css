@@ -27,6 +27,8 @@
   
   .version_holder li:hover{
     margin: 8px 12px 12px 8px;
+    background: #fff;
+    background:  -moz-linear-gradient(top, #fff, #BEDCE7);
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#BEDCE7));
     
     -moz-box-shadow: 2px 2px 2px #888;
@@ -44,11 +46,34 @@
 #task_board { width: 100%; }
   #task_board .hovered { background: #FEFF9F; }
   #task_board .story_subject { font-size: 10px; margin-top: 9px; }
-  
-  #task_board tr th { border-bottom: 1px solid #ddd; }
-  #task_board tr td { vertical-align: top; border: 1px solid #ddd; border-width: 0 1px 1px 0; }
+  #task_board tr th { background: #fff; }
+  #task_board tr td, #task_board tr th, .status-item { vertical-align: top; border: 1px solid #ddd; border-width: 1px 1px 1px 0; }
   
   #task_board ul { padding: 0; list-style: none; margin: 5px 0 0 0; }
     #task_board ul li { margin-bottom: 10px; background: #FFFFCF; padding: 3px 3px 0 3px; cursor: pointer; border: 1px solid #ffff55;}
       #task_board ul li p { border-bottom:1px solid #ddd; font-size:10px; margin-bottom: 4px; padding-bottom:2px; }
       #task_board ul li .pourcent { border-bottom: 0; margin-bottom: 0; }
+      
+      
+      
+
+
+.status-item{
+  display:inline-block;
+  float:left;
+  text-align: center;
+  padding: 0 2px 2px 0;
+  font-weight: bold;
+  background: #fff;
+
+}
+ 
+#fixed_table_header {
+  width: 1000%;
+  position: fixed;
+  top: 0;
+  background: #fff;
+  display: none;
+  z-index: 100;
+  border-bottom: 1px solid #ccc;
+}

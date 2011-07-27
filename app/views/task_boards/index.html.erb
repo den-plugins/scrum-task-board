@@ -5,9 +5,15 @@
 <%= html_title "#{@project.name} - Task board" -%>
 
 <div id="version_container">
-
+<% unless @project.issues.empty? %>
 <ul class="version_holder">
-<% @project.versions.each do |v| %>
+  <li><%= link_to "Product Backlog", 
+                  :controller => 'task_boards', 
+                  :action => 'show', 
+                  :id => @project.id %></li>
+
+
+  <% @project.versions.each do |v| %>
 
   <li>
     <%= link_to "#{v.name} (#{v.fixed_issues.length})",
@@ -17,8 +23,12 @@
   </li>
 
 
-<% end %>
+  <% end %>
+<% else %>
 
+<h3>This project has no issues yet.</h3>
+
+<% end %>
 </ul>
 </div>
 

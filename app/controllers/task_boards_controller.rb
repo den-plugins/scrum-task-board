@@ -9,11 +9,21 @@ class TaskBoardsController < ApplicationController
   end
   
   def show
-    @version = Version.find params[:version_id]
   
     @statuses = IssueStatus.all(:order => "position asc")
-
-    @fixed_issues = @version.fixed_issues
+  
+    unless params[:version_id].nil?
+      @version = Version.find params[:version_id]
+  
+      @fixed_issues = @version.fixed_issues
+    
+    else
+      find_version_and_project
+      
+      @fixed_issues = Issue.find(:all, :conditions => {:project_id => @project.id, :fixed_version_id => nil})   
+    end
+    
+    
     @stories_with_tasks = (Issue.instance_methods.include?("story")) ? @fixed_issues.group_by(&:story) : { nil => @fixed_issues }
     
     if @stories_with_tasks[nil]
