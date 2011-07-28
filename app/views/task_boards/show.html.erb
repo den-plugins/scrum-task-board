@@ -1,5 +1,10 @@
 <% html_title "#{@version.nil? ? "Product Backlog" : @version.name} - Task board" -%>
 
+<div style="float:right;">
+  <%= link_to "Show Chart", { :controller => 'burndowns', :action => 'show', :project_id => @version.project_id, 
+                              :id => @version.id } %>
+</div>
+
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
 
