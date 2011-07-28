@@ -15,6 +15,8 @@ jQuery(function( $ ){
 
 ////////////////////////////////////////////////
 //'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
+  jQuery("#showchart").colorbox();
+
   var $mark = jQuery( "#task_board thead" );
   var $header = jQuery( "#fixed_table_header" );
   
