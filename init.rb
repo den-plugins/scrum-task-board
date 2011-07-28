@@ -10,7 +10,7 @@ Dispatcher.to_prepare do
   IssueStatus.class_eval { include ScrumAlliance::Redmine::IssueStatusExtensions }
 end
 
-Redmine::Plugin.register :redmine_task_board do
+Redmine::Plugin.register :scrum_task_board do
   name 'Redmine Task Board plugin'
   author 'Dan Hodos'
   description "Creates a drag 'n' drop task board of the items in the current version and their status"
