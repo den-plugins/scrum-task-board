@@ -16,6 +16,7 @@ module TaskBoardsHelper
   def task_board_dom_id(issue, status, suffix='')
     element_id = dom_id(issue || Issue.new, status.class_name)
     element_id += "_#{suffix}" if suffix
+    #puts element_id
     element_id
   end
 end

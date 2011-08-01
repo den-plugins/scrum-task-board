@@ -16,7 +16,7 @@
   <% @project.versions.each do |v| %>
 
   <li>
-    <%= link_to "#{v.name} (#{v.fixed_issues.length})",
+    <%= link_to "#{v.name} (#{v.fixed_issues.count})",
                     :controller => "task_boards",
                     :action => "show",
                     :version_id => v.id %>

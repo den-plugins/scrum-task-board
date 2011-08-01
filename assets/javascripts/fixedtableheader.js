@@ -81,6 +81,18 @@ jQuery(function( $ ){
   first_item_padding();
 
  });
+ 
+ jQuery(".show_row").click(function()
+ {
+  setTimeout(function(){
+    var tops = jQuery(window).scrollTop();
+    jQuery(window).scrollTop(tops - 75);
+  }, 100 );
+  var tr = jQuery(this).attr('href');
+  jQuery(tr).css('border-color', '#ff0000');
+  setTimeout(30000);
+  jQuery(tr).css('border-color', '#ddd');
+ });
   
 });
 // script modified from http://www.bennadel.com/blog/1810-Creating-A-Sometimes-Fixed-Position-Element-With-jQuery.htm

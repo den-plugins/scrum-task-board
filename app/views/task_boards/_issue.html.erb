@@ -1,5 +1,10 @@
-<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %>">
-  <p><%= link_to_issue(issue) %>: <%=h issue.subject %></p>
+<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> <%= "has_subtasks" if @stories_with_tasks.include?(issue)%> ">
+  <p><%= link_to_issue(issue) %></p>
+ 
+
+<%= link_to "Show Row", "##{dom_id(issue)}_parent", :class => "show_row" if @stories_with_tasks.include?(issue) %>
   <%= progress_bar issue.done_ratio, :width => '50px', :legend => issue.assigned_to || "&nbsp;" %>
 </li>
-<%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'") %>
+<% if not @stories_with_tasks.include?(issue) %>   
+<%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'")%>
+<% end %>

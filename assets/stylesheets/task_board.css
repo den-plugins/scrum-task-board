@@ -55,7 +55,14 @@
       #task_board ul li .pourcent { border-bottom: 0; margin-bottom: 0; }
       
       
-      
+.has_subtasks { 
+  background: #96E14D !important;
+  border: 1px solid #629D2C !important;
+}      
+
+.has_subtask .status-item {
+  border: 1px solid #333 !important;
+}
 
 
 .status-item{

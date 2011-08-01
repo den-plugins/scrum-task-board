@@ -47,8 +47,8 @@
   
   <thead>
     <tr>
-      <% if (@stories_with_tasks.keys - [nil]).size > 0 -%><th>&nbsp;</th><% end -%>
-      
+      <% if (@stories_with_tasks.keys - [nil]).size > 0 %><th>Story</th><% end -%>
+         
       <% @statuses.each do |status| %>
         <th><%= status.name %></th>
       <% end -%>
@@ -60,11 +60,11 @@
   <tbody>
     <% @stories_with_tasks.each do |story, tasks_by_status| %>
       <% reset_cycle %>
-      <tr>
+      <tr <%= "id=\"#{dom_id(story)}_parent\"" if not story.nil?%>>
         <% if (@stories_with_tasks.keys - [nil]).size > 0 -%>
-          <td>
+          <td <%= "style='background:#ff0000'" if story.nil? %> >
             <% if story.nil? -%>&nbsp;<% else -%>
-              <p class="story_subject"><%= link_to_issue(story) %>: <%= story.subject %></p>
+              <p class="story_subject" ><%= link_to_issue(story) %> : <%= story.subject %></p>
             <% end -%>
           </td>
         <% end -%>
@@ -72,7 +72,7 @@
         <% @statuses.each do |status| -%>
           <td id="<%= task_board_dom_id(story, status) %>" class="<%= cycle('odd', 'even') %>">
             <ul id="<%= task_board_dom_id(story, status, 'list') %>">
-              <%= render :partial => 'issue', :collection => Array(tasks_by_status[status]) %>
+              <%= render :partial => 'issue', :collection => Array(tasks_by_status[status]), :locals => { :parents => @parents } %>
             </ul>
             <%= task_board_drop_receiving_element(task_board_dom_id(story, status), status) %>
           </td>
