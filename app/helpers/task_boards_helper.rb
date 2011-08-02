@@ -10,7 +10,7 @@ module TaskBoardsHelper
       :accept => status.class_name,
       :hoverclass => 'hovered',
       :url => {:controller => 'task_boards', :action => 'update_issue_status'},
-      :with => "'id=' + (element.id.split('_').last()) + '&status_id=#{status.id}'")
+      :with => "'id=' + (element.id.split('_').last()) + '&status_id=#{status.id}&parents=#{@parents}'")
   end
   
   def task_board_dom_id(issue, status, suffix='')

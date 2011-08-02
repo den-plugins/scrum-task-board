@@ -28,21 +28,25 @@ class TaskBoardsController < ApplicationController
     if @stories_with_tasks[nil]
       @stories_with_tasks[nil] = @stories_with_tasks[nil].reject {|issue| @stories_with_tasks.keys.include?(issue) }
     end
+    
+    @parents = []    
 
     @stories_with_tasks.each do |story, tasks|
       @stories_with_tasks[story] = tasks.group_by(&:status)
+      @parents << story
     end
     
     output_lengths "FINAL"
     puts "#############################################/n There are #{@fixed_issues.count} FIXED ISSUES!!!/n#############################################"
     
     puts "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
-    @parents.each {|p| puts p.id}
+    @parents.each {|p| puts p}
     puts "|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
   end
   
   def update_issue_status
     @status = IssueStatus.find(params[:status_id])
+    @parents = params["parents"]
     
     @issue = Issue.find(params[:id])
     @issue.init_journal(User.current, "Automated status change from the Task Board")
