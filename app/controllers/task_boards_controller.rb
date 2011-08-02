@@ -29,7 +29,7 @@ class TaskBoardsController < ApplicationController
       @stories_with_tasks[nil] = @stories_with_tasks[nil].reject {|issue| @stories_with_tasks.keys.include?(issue) }
     end
     
-    @parents = [] #empty this variable for reuse
+    #@parents = [] #empty this variable for reuse
 
     @stories_with_tasks.each do |story, tasks|
       @stories_with_tasks[story] = tasks.group_by(&:status)
@@ -69,17 +69,17 @@ private
   
   def order_issues
 
-    @parents, @children, @alone = [], [], [] 
+    @parents, @children, @alone, @stories = [], [], [], [] 
     
     @fixed_issues.each do |val|
-      @parents << val if val.parent.nil? 
+      @stories << val if val.parent.nil? 
       @children << val if not val.parent.nil?
     end
 
     @stories_with_tasks = {}
         
-    if not @parents.empty?
-      @parents.reject!.each { |val| @alone << val if val.children.empty? } #pls. recheck - looks like this isn't needed anymore
+    if not @stories.empty?
+      @stories.reject!.each { |val| @alone << val if val.children.empty? } #pls. recheck - looks like this isn't needed anymore
       
       @children.each do |c| #iterate through all child tasks
         #puts c.parent
@@ -87,7 +87,7 @@ private
         @stories_with_tasks[Issue.find c.parent.issue_from_id] << c #takes care of multiple levels of sub tasking, treats all as parent << child 
       end
       
-      @parents.reject!.each do |p|
+      @stories.reject!.each do |p|
         @alone << p unless @stories_with_tasks.member? p #parents who have no children in this version will be joining the @alone issues
       end
     end

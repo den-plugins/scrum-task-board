@@ -59,7 +59,10 @@
   
   <thead>
     <tr>
-      <% if (@stories_with_tasks.keys - [nil]).size > 0 %><th>Story</th><% end -%>
+      <% if (@stories_with_tasks.keys - [nil]).size > 0 %>
+        <th>Story</th>
+        <th>Subtasks</th>
+      <% end -%>
          
       <% @statuses.each do |status| %>
         <th><%= status.name %></th>
@@ -75,7 +78,13 @@
       <tr <%= "id=\"#{dom_id(story)}_parent\"" if not story.nil?%>>
         <% if (@stories_with_tasks.keys - [nil]).size > 0 -%>
           <td <%= "style='background:#ff0000'" if story.nil? %> >
-            <% if story.nil? -%>&nbsp;<% else -%>
+            <% if story.nil? or not @stories.include?(story)-%>&nbsp;<% else -%>
+              <p class="story_subject" ><%= link_to_issue(story) %> : <%= story.subject %></p>
+            <% end -%>
+          </td>
+
+          <td <%= "style='background:#ff0000'" if story.nil? %> >
+            <% if story.nil? or @stories.include?(story)-%>&nbsp;<% else -%>
               <p class="story_subject" ><%= link_to_issue(story) %> : <%= story.subject %></p>
             <% end -%>
           </td>
