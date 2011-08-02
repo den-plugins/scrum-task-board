@@ -1,7 +1,19 @@
 <% html_title "#{@version.nil? ? "Product Backlog" : @version.name} - Task board" -%>
 
+<div style="float:right; width: 80px;">
+  <span>
+  <%= image_tag("/plugin_assets/redmine_burndown/chart.png", :size => "20x20") %>
+  </span>
+  <span style="float: right; padding-top: 3px;">
+  <%= link_to "Show Chart", { :controller => 'burndowns', :action => 'chart', 
+                                              :project_id => @version.project_id, 
+                                              :id => @version.id }, :id => 'showchart' %>
+  </span>
+</div>
+
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
+  <%= stylesheet_link_tag 'colorbox', :plugin => 'scrum_task_board' %>
 
   <style type="text/css">
     .clearfix:after {
@@ -36,7 +48,7 @@
 
 <% unless @fixed_issues.empty? %>
 
-
+<div id="bdchart"> </div>
 
 <div id="fixed_table_header"></div>
 
@@ -83,7 +95,10 @@
 </table>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script> 
+
+<%= javascript_include_tag  'jquery.colorbox-min.js', :plugin => 'scrum_task_board' %>
 <%= javascript_include_tag  'fixedtableheader', :plugin => 'scrum_task_board' %>
+<%= javascript_include_tag 'swfobject', :plugin => 'redmine_burndown' %>
 <% else %>
 <h3>There are no issues targeted for this version.</h3>
 <% end %>
