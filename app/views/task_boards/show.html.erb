@@ -1,5 +1,5 @@
 <% html_title "#{@version.nil? ? "Product Backlog" : @version.name} - Task board" -%>
-
+<% unless @version.nil? %>
 <div style="float:right; width: 80px;">
   <span>
   <%= image_tag("/plugin_assets/redmine_burndown/chart.png", :size => "20x20") %>
@@ -10,7 +10,7 @@
                                               :id => @version.id }, :id => 'showchart' %>
   </span>
 </div>
-
+<% end %>
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
   <%= stylesheet_link_tag 'colorbox', :plugin => 'scrum_task_board' %>
