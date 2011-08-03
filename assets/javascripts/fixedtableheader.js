@@ -1,5 +1,4 @@
-j = jQuery.noConflict(); //This allows Prototype to go undisturbed
-
+//j = jQuery.noConflict(); //This allows Prototype to go undisturbed
 function th_resize(count)
 {
     var $item = jQuery("#task_board th:eq(" + count + ")");
@@ -8,13 +7,10 @@ function th_resize(count)
     jQuery(".status-item:eq(" + count + ")").css('width', width).css('height', height);
 }
 
-
-
 jQuery(function( $ ){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
-  jQuery("#showchart").colorbox();
 
   var $mark = jQuery( "#task_board thead" );
   var $header = jQuery( "#fixed_table_header" );
