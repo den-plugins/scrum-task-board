@@ -13,7 +13,7 @@
 
 <% content_for :header_tags do %>
 
-  <link type="text/css" media="screen" rel="stylesheet" href="http://dl.getdropbox.com/u/2863383/js/colorbox132/example5/colorbox.css" />
+  <link type="text/css" media="screen" rel="stylesheet" href="http://dl.getdropbox.com/u/2863383/js/colorbox132/example5/colorbox.css" /> 
 
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
   <%# stylesheet_link_tag 'colorbox', :plugin => 'scrum_task_board' %>
@@ -124,7 +124,7 @@
   <script type="text/javascript">
     jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
         var nil = null; // to translate nil to null
-        plot_chart(<%= BurndownChart.new(@version).data_and_dates.inspect %>);
+        plot_chart(<%= BurndownChart.new(@version).data_and_dates.inspect if !@version.effective_date.nil? %>);
     }});
   </script>
 
