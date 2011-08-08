@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 <% html_title "#{@version.nil? ? "Product Backlog" : @version.name} - Task board" -%>
 <% unless @version.nil? %>
+=======
+ <% html_title "#{@version.nil? ? "Product Backlog" : @version.name} - Task board" -%>
+
+>>>>>>> 867d942ba1e749a81ed1f27b2203493ef5c77d0e
 <div style="float:right; width: 80px;">
   <span>
   <%= image_tag("/plugin_assets/redmine_burndown/chart.png", :size => "20x20") %>
@@ -12,8 +17,11 @@
 </div>
 <% end %>
 <% content_for :header_tags do %>
+
+  <link type="text/css" media="screen" rel="stylesheet" href="http://dl.getdropbox.com/u/2863383/js/colorbox132/example5/colorbox.css" /> 
+
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
-  <%= stylesheet_link_tag 'colorbox', :plugin => 'scrum_task_board' %>
+  <%# stylesheet_link_tag 'colorbox', :plugin => 'scrum_task_board' %>
 
   <style type="text/css">
     .clearfix:after {
@@ -42,6 +50,7 @@
     #task_board tr th { width: <%= 100 / (@statuses.size + 1) %>%;}
     #show_reference { cursor: pointer;}
   </style>
+  
 <% end %>
 
 
@@ -171,6 +180,7 @@
   </tbody>
 </table>
 
+<<<<<<< HEAD
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script> 
 <script type="text/javascript">
 jQuery.noConflict();  
@@ -204,3 +214,31 @@ $link.click(function(){
 <%= javascript_include_tag 'plugins/jqplot.dateAxisRenderer.min.js', :plugin => 'redmine_burndown' %>
 <%= javascript_include_tag 'plugins/jqplot.highlighter.min.js', :plugin => 'redmine_burndown' %>
 <%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
+=======
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
+
+  <%= javascript_include_tag 'jquery.jqplot.js', :plugin => 'redmine_burndown' %>
+  <%= javascript_include_tag 'plugins/jqplot.canvasTextRenderer.min.js', :plugin => 'redmine_burndown' %>
+  <%= javascript_include_tag 'plugins/jqplot.canvasAxisLabelRenderer.min.js', :plugin => 'redmine_burndown' %>
+  <%= javascript_include_tag 'plugins/jqplot.cursor.min.js', :plugin => 'redmine_burndown' %>
+  <%= javascript_include_tag 'plugins/jqplot.dateAxisRenderer.min.js', :plugin => 'redmine_burndown' %>
+  <%= javascript_include_tag 'plugins/jqplot.highlighter.min.js', :plugin => 'redmine_burndown' %>
+  <%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
+
+  <%= javascript_include_tag  'jquery.colorbox-min.js', :plugin => 'scrum_task_board' %>
+  
+  <%= javascript_include_tag  'fixedtableheader', :plugin => 'scrum_task_board' %>
+
+  <script type="text/javascript">
+    jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
+        var nil = null; // to translate nil to null
+        plot_chart(<%= BurndownChart.new(@version).data_and_dates.inspect if !@version.effective_date.nil? %>);
+    }});
+  </script>
+
+<% else %>
+<h3>There are no issues targeted for this version.</h3>
+<% end %>
+
+
+>>>>>>> 867d942ba1e749a81ed1f27b2203493ef5c77d0e
