@@ -16,10 +16,23 @@
   <% @project.versions.each do |v| %>
 
   <li>
-    <%= link_to "#{v.name} <br/>Issues: #{v.fixed_issues.count}<br/>Features: #{v.feature_count}<br/>Tasks: #{v.task_count}<br/>Bugs: #{v.bug_count}",
+    <span><strong><%= v.name %></strong></span>
+    <br/>
+    <span>Issues: <strong><%= v.fixed_issues.count %></strong></span>
+    <br/>
+    
+    <%= link_to "Features: <span style='color: green'>#{v.feature_count}</span><br/>Tasks: #{v.task_count}",
                     :controller => "task_boards",
                     :action => "show",
-                    :version_id => v.id %>
+                    :version_id => v.id,
+                    :board => 1 %>
+    <br/>
+    
+    <%= link_to "Bugs: <span style='color: red'>#{v.bug_count}</span>",
+                    :controller => "task_boards",
+                    :action => "show",
+                    :version_id => v.id,
+                    :board => 2 %>                
   </li>
 
 
