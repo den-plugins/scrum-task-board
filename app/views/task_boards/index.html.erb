@@ -7,7 +7,7 @@
 <div id="version_container">
 <% unless @project.issues.empty? %>
 <ul class="version_holder">
-  <li><%= link_to "Product Backlog", 
+  <li><%= link_to "Issues with no versions", 
                   :controller => 'task_boards', 
                   :action => 'show', 
                   :id => @project.id %></li>
@@ -16,7 +16,7 @@
   <% @project.versions.each do |v| %>
 
   <li>
-    <%= link_to "#{v.name} (#{v.fixed_issues.count})",
+    <%= link_to "#{v.name} <br/>Issues: #{v.fixed_issues.count}<br/>Features: #{v.feature_count}<br/>Tasks: #{v.task_count}<br/>Bugs: #{v.bug_count}",
                     :controller => "task_boards",
                     :action => "show",
                     :version_id => v.id %>

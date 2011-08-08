@@ -16,16 +16,19 @@
     list-style: none;
   }
   
-  .version_holder li a { 
+ /* .version_holder li a { 
     display:block !important;  
     color: #333 !important;
     height: 50px;
     width: 300px;  
     margin: -10px;
     padding: 10px;
-  }
+  } */
   
-  .version_holder li:hover{
+  .version_holder l
+Task #25512
+Jejomar Dimayuga
+i:hover{
     margin: 8px 12px 12px 8px;
     background: #fff;
     background:  -moz-linear-gradient(top, #fff, #BEDCE7);
@@ -53,7 +56,13 @@
     #task_board ul li { margin-bottom: 10px; background: #FFFFCF; padding: 3px 3px 0 3px; cursor: pointer; border: 1px solid #ffff55;}
       #task_board ul li p { border-bottom:1px solid #ddd; font-size:10px; margin-bottom: 4px; padding-bottom:2px; }
       #task_board ul li .pourcent { border-bottom: 0; margin-bottom: 0; }
-      
+    #task_board ul li:hover { -webkit-box-shadow: 2px 2px 2px #888; margin: -2px 2px 2px -2px;} 
+  #task_board .task_board_task {
+    text-align: right;
+    border-left: 0;
+  }
+  
+  #task_board .has_subtasks:hover { -webkit-box-shadow: none; margin: none;}
       
 .has_subtasks { 
   background: #96E14D !important;

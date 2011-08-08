@@ -23,3 +23,6 @@ Redmine::Plugin.register :scrum_task_board do
   
   menu :project_menu, :task_board, {:controller => 'task_boards', :action => 'index'}, :before => :burndown, :caption => 'Task Board'
 end
+
+require File.dirname(__FILE__) + '/app/models/issue_extn.rb'
+require File.dirname(__FILE__) + '/app/models/version_extn.rb'

@@ -1,0 +1,36 @@
+<tr style="background:#<%= color.to_s(16) %>;">
+    <td class="task_board_feature" <%= "id=\"#{dom_id(feature)}_parent\""%> style="border: 1px solid #<%= color.to_s(16) %>; border-bottom: 1px solid #ddd;">
+        <% if feature.feature? %>
+    
+        <p><%= link_to_issue(feature) %></p>
+        <p><%= feature.subject %></p>
+        
+        <% else %>
+          
+        <p>&nbsp;</p>
+          
+        <% end %> 
+    </td> 
+    <td class="task_board_task" style="border: 1px solid #<%= color.to_s(16) %>; border-bottom: 1px solid #ddd;">
+        <% if feature.task? %>
+    
+        <p><%= link_to_issue(feature) %></p>
+        <p><%= feature.subject %></p>
+        
+        <% else %>
+          
+        <p>&nbsp;</p>
+          
+        <% end %>
+    </td>
+    
+    <% @statuses.each do |status| -%>
+          <td id="<%= task_board_dom_id(feature, status) %>" class="<%= cycle('odd', 'even') %>">
+            <ul id="<%= task_board_dom_id(feature, status, 'list') %>">
+              <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]) %>
+            </ul>
+            <%= task_board_drop_receiving_element(task_board_dom_id(feature, status), status) %>
+          </td>
+    <% end -%>      
+</tr>
+    
