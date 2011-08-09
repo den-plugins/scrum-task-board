@@ -21,34 +21,23 @@ class TaskBoardsController < ApplicationController
       
       #@fixed_issues = Issue.find(:all, :conditions => {:project_id => @project.id, :fixed_version_id => nil})   
     #end
-    puts params[:board].to_i.eql? 1
-    puts params[:board]
-    puts params[:board].class
-    puts 1.class
     
     if params[:board].to_i.eql? 1 
     #This part needs to be optimized 
       @features = @version.features
       @tasks = @version.tasks
       
-      #if not @features.empty?
         @features.delete_if.each do |f| 
           @tasks << f if not f.children_here?
         end
-      #end
-      
-      #if not @tasks.empty?
+
         @tasks.reject!.each do |f|
           unless f.parent.nil?
             p = Issue.find f.parent.issue_from_id
-            f if p.fixed_version_id == @version.id and p.feature?
+            f if p.fixed_version_id == @version.id and p.feature? #EDIT: check for consistency here (up to 2 levels up)
           end
         end
-       
-        
-      puts @features.empty?
-      puts @tasks.empty?  
-      puts "Hi"  
+ 
         
       @featured = true
       @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
@@ -58,9 +47,6 @@ class TaskBoardsController < ApplicationController
       
       @bugged = @bugs.empty? ? false : true
       @error_msg = "There are no Bugs for this version." if not @bugged
-    else
-    
-      puts "Actually, there's something very wrong going on here."
     end
     
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
