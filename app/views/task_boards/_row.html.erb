@@ -1,10 +1,10 @@
 <tr style="background:#<%= color.to_s(16) %>;">
     <td class="task_board_feature" <%= "id=\"#{dom_id(feature)}_parent\""%> style="border: 1px solid #<%= color.to_s(16) %>; border-bottom: 1px solid #ddd;">
         <% if feature.feature? %>
-    
-        <p><%= link_to_issue(feature) %></p>
-        <p><%= feature.subject %></p>
-        
+        <div class="task_board_data task_board_feature_data">
+          <p class="issue_no"><%= link_to_issue(feature) %></p>
+          <p class="issue_subject"><%= feature.subject %></p>
+        </div>
         <% else %>
           
         <p>&nbsp;</p>
@@ -13,10 +13,13 @@
     </td> 
     <td class="task_board_task" style="border: 1px solid #<%= color.to_s(16) %>; border-bottom: 1px solid #ddd;">
         <% if feature.task? %>
-    
-        <p><%= link_to_issue(feature) %></p>
-        <p><%= feature.subject %></p>
-        
+        <div>
+        <img alt="Child" src="/images/child.gif">
+        <div class="task_board_data has_subtasks" style="display:inline-block;">
+          <p><%= link_to_issue(feature) %></p>
+          <p><%= feature.subject %></p>
+        </div>
+        </div>
         <% else %>
           
         <p>&nbsp;</p>

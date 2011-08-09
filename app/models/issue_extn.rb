@@ -35,6 +35,10 @@ module IssueExtn
       
     end
     
+    def bug?
+      self.tracker_id.eql? 1
+    end
+    
     def feature?
       self.tracker_id.eql? 2
     end

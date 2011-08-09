@@ -1,4 +1,4 @@
-<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> <%= "has_subtasks" if issue.children_here? %>">
+<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%>">
   <p><%= link_to_issue(issue) %></p>
   <%= link_to "Show Row", "##{dom_id(issue)}", :class => "show_row" if issue.children_here? %>
 

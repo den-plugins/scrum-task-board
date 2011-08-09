@@ -30,20 +30,29 @@ class TaskBoardsController < ApplicationController
     #This part needs to be optimized 
       @features = @version.features
       @tasks = @version.tasks
-
-      @features.delete_if.each do |f| 
-        @tasks << f if not f.children_here?
-      end
-  
-      @tasks.reject!.each do |f|
-        unless f.parent.nil?
-          p = Issue.find f.parent.issue_from_id
-          f if p.fixed_version_id == @version.id and p.feature?
+      
+      #if not @features.empty?
+        @features.delete_if.each do |f| 
+          @tasks << f if not f.children_here?
         end
-      end
-      @featured = @features.empty? ? false : true
-      @tasked = @tasks.empty? ? false : true
-      @error_msg = "There are no Features/Tasks for this version." if not @featured and not @tasked
+      #end
+      
+      #if not @tasks.empty?
+        @tasks.reject!.each do |f|
+          unless f.parent.nil?
+            p = Issue.find f.parent.issue_from_id
+            f if p.fixed_version_id == @version.id and p.feature?
+          end
+        end
+       
+        
+      puts @features.empty?
+      puts @tasks.empty?  
+      puts "Hi"  
+        
+      @featured = true
+      @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
+     
     elsif params[:board].to_i.eql? 2
       @bugs = @version.bugs
       
@@ -56,11 +65,13 @@ class TaskBoardsController < ApplicationController
     
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
     
+    puts "@featured: #{@featured}"
+    
   end
   
   def update_issue_status
     @status = IssueStatus.find(params[:status_id])
-    @parents = params["parents"]
+    #@parents = params["parents"]
     
     @issue = Issue.find(params[:id])
     @issue.init_journal(User.current, "Automated status change from the Task Board")

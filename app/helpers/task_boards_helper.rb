@@ -20,6 +20,16 @@ module TaskBoardsHelper
     element_id
   end
   
+  def task_board_border_class issue
+    klass = ""
+    if issue.task? : klass = "task_board_task_data"  
+    elsif issue.feature? : klass = "task_board_feature_data" 
+    elsif issue.bug? : klass = "task_board_bug_data" 
+    end
+    klass += " has_subtasks" if issue.children_here?
+    klass
+  end
+  
   def get_children(parent, color, group)
       str = ""
       color = color - (1118481 * 2)

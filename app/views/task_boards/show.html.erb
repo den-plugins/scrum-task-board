@@ -1,4 +1,4 @@
-<% html_title "#{@version.nil? ? "Product Backlog" : @version.name} - Task board" -%>
+<% html_title "#{@version.nil? ? "Issues with no version" : @version.name} - Task board" -%>
 
 <div style="float:right; width: 80px;">
   <span>
@@ -53,7 +53,7 @@
 <h3>Version ID: <%= @version.nil? ? "None" : @version.id %></h3>
 <div id="bdchart"> </div>
 
-<div id="fixed_table_header"></div>
+<div id="fixed_table_header" style="display:none;"></div>
 
 <!--- Start REFERENCE (For Development Only) --->
 
@@ -212,7 +212,7 @@
     </td>
     <% @statuses.each do |status| %>
       <td id="<%= task_board_dom_id(nil, status) %>" class="<%= cycle('odd', 'even') %>">
-            <ul id="<%= task_board_dom_id(nil, status, 'list') %>9">
+            <ul id="<%= task_board_dom_id(nil, status, 'list') %>">
               <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[status]) %>
             </ul>
             <%= task_board_drop_receiving_element(task_board_dom_id(nil, status), status) %>
@@ -229,7 +229,7 @@
     </td>
     <% @statuses.each do |status| %>
       <td id="<%= task_board_dom_id(nil, status) %>" class="<%= cycle('odd', 'even') %>">
-            <ul id="<%= task_board_dom_id(nil, status, 'list') %>9">
+            <ul id="<%= task_board_dom_id(nil, status, 'list') %>">
               <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>
             </ul>
             <%= task_board_drop_receiving_element(task_board_dom_id(nil, status), status) %>

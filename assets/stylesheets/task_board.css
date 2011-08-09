@@ -12,8 +12,11 @@
     padding: 10px;
     margin: 10px;
     height: 90px;
-    background: #BEDCE7;
+    background: #F9F9F9/*#BEDCE7*/;
     list-style: none;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
   }
   
  /* .version_holder li a { 
@@ -28,8 +31,8 @@
   .version_holder li:hover{
     margin: 8px 12px 12px 8px;
     background: #fff;
-    background:  -moz-linear-gradient(top, #fff, #BEDCE7);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#BEDCE7));
+    background:  -moz-linear-gradient(top, #fff, #E9E9E9);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#E9E9E9));
     
     -moz-box-shadow: 2px 2px 2px #888;
     -webkit-box-shadow: 2px 2px 2px #888;
@@ -50,25 +53,13 @@
   #task_board tr td, #task_board tr th, .status-item { vertical-align: top; border: 1px solid #ddd; border-width: 1px 1px 1px 0; }
   
   #task_board ul { padding: 0; list-style: none; margin: 5px 0 0 0; }
-    #task_board ul li { margin-bottom: 10px; background: #FFFFCF; padding: 3px 3px 0 3px; cursor: pointer; border: 1px solid #ffff55;}
+    #task_board ul li { margin-bottom: 10px; background: #FEFEFE; padding: 3px 3px 0 3px; cursor: move;}
       #task_board ul li p { border-bottom:1px solid #ddd; font-size:10px; margin-bottom: 4px; padding-bottom:2px; }
       #task_board ul li .pourcent { border-bottom: 0; margin-bottom: 0; }
-    #task_board ul li:hover { -webkit-box-shadow: 2px 2px 2px #888; margin: -2px 2px 2px -2px;} 
   #task_board .task_board_task {
-    text-align: right;
     border-left: 0;
+    padding-right: 10px;
   }
-  
-  #task_board .has_subtasks:hover { -webkit-box-shadow: none; margin-bottom: 10px;}
-      
-.has_subtasks { 
-  background: #96E14D !important;
-  border: 1px solid #629D2C !important;
-}      
-
-.has_subtask .status-item {
-  border: 1px solid #333 !important;
-}
 
 
 .status-item{
@@ -78,7 +69,49 @@
   padding: 0 2px 2px 0;
   font-weight: bold;
   background: #fff;
+}
 
+#task_board .task_board_feature_data{
+  border: 1px solid #0D0;
+  border-left: 8px solid #0D0;
+}  
+
+#task_board .task_board_task_data{
+  border: 1px solid #FFA100;
+  border-left: 6px solid #FFA100;
+} 
+
+#task_board .task_board_task_data:hover, #task_board .has_subtasks{ /*-webkit-box-shadow: 2px 2px 2px #888; margin: -2px 2px 2px -2px;*/
+  color: #010101; 
+  border: 1px solid #ff5500; 
+  border-left: 6px solid #ff5500;
+} 
+
+#task_board .task_board_bug_data{
+  border: 1px solid #5F5F5F;
+  border-left: 6px solid #5F5F5F;
+} 
+
+#task_board .task_board_bug_data:hover {
+  border: 1px solid #333;
+  border-left: 6px solid #333;
+  color: #010101;
+} 
+
+#task_board .task_board_data {
+  background: #fefefe;
+  padding: 4px;
+}
+
+#task_board .task_board_data p {
+  padding: 0;
+  margin: 0;
+}
+  
+#task_board .has_subtasks {
+  cursor: default;
+}  
+ 
 }
  
 #fixed_table_header {
