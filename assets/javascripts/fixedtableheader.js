@@ -81,9 +81,7 @@ $view.resize(function(){
   th_adjust();
 });
 
-////DOM element is inserted or removed 
-
- 
+///Jump to row 
  jQuery(".show_row").click(function()
  {
   var tr = jQuery(this).attr('href');
@@ -93,10 +91,11 @@ $view.resize(function(){
     jQuery(tr).css('background', '#ff0000');
   }, 100);
   setTimeout(function(){
-    jQuery(tr).css('background', '#fff');
+    jQuery(tr).css('background', '#fefefe');
   }, 200);
- 
- });
+  });
+
+////DOM element is inserted or removed 
 ///http://stackoverflow.com/questions/4979738/fire-jquery-event-on-div-change 
   jQuery("#task_board").bind('DOMNodeInserted DOMNodeRemoved', function(event) {
     th_adjust();
