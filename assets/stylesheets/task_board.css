@@ -101,6 +101,17 @@
 #task_board .task_board_data {
   background: #fefefe;
   padding: 4px;
+  -moz-box-shadow: 2px 2px 2px #818181;
+  -webkit-box-shadow: 2px 2px 2px #818181;
+  box-shadow: 2px 2px 2px #818181;
+  margin: -2px 2px 12px -2px;
+}
+
+#task_board .task_board_data:hover {
+  -moz-box-shadow: 2px 2px 2px #515151;
+  -webkit-box-shadow: 2px 2px 2px #515151;
+  box-shadow: 2px 2px 2px #515151;
+  margin: -2px 4px 12px -4px;
 }
 
 #task_board .task_board_data p {
@@ -110,6 +121,17 @@
   
 #task_board .has_subtasks {
   cursor: default;
+}
+
+#task_board .no_drag, #task_board .no_drag:hover {
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  margin: 0px 0px 10px 2px;
+}
+
+#task_board a:hover {
+  text-decoration: none;
 }
  
 #fixed_table_header {

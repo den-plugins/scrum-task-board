@@ -15,7 +15,7 @@ module TaskBoardsHelper
   
   def task_board_dom_id(issue, status, suffix='')
     element_id = dom_id(issue || Issue.new, status.class_name)
-    element_id += "_#{suffix}" if suffix
+    element_id += "_#{suffix}" if suffix 
     #puts element_id
     element_id
   end
@@ -26,7 +26,7 @@ module TaskBoardsHelper
     elsif issue.feature? : klass = "task_board_feature_data" 
     elsif issue.bug? : klass = "task_board_bug_data" 
     end
-    klass += " has_subtasks" if issue.children_here?
+    klass += " has_subtasks no_drag" if issue.children_here?
     klass
   end
   
