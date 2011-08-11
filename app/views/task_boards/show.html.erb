@@ -255,7 +255,12 @@
 <%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
 
 <script type="text/javascript">
-jQuery.noConflict();  
+jQuery.noConflict(); 
+
+jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
+  var nil = null; // to translate nil to null
+  plot_chart(<%= @chart_data.inspect if !@version.effective_date.nil? %>);
+}}); 
 
 var $link = jQuery(".show_reference");
 $link.click(function(){
