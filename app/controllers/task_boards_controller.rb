@@ -33,8 +33,17 @@ class TaskBoardsController < ApplicationController
 
         @tasks.reject!.each do |f|
           unless f.parent.nil?
+             #EDIT: check for consistency here (up to 2 levels up)
+             #Dirty checking...feel free to optimize
             p = Issue.find f.parent.issue_from_id
-            f if p.fixed_version_id == @version.id and p.feature? #EDIT: check for consistency here (up to 2 levels up)
+              if p.fixed_version_id == @version.id
+                if p.feature?
+                  f
+                elsif p.task? and not p.parent.nil?
+                  pp = Issue.find p.parent.issue_from_id
+                  f if (pp.feature? or pp.task?) and pp.fixed_version.id == @version.id
+                end               
+              end
           end
         end
  
