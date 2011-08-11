@@ -50,9 +50,9 @@ class TaskBoardsController < ApplicationController
     end
     
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
-    if !@version.effective_date.nil?
-      @chart_data = BurndownChart.new(@version).data_and_dates
-    end
+    #if !@version.effective_date.nil?
+     # @chart_data = BurndownChart.new(@version).data_and_dates
+    #end
   end
   
   def update_issue_status

@@ -42,6 +42,10 @@ module IssueExtn
     def feature?
       self.tracker_id.eql? 2
     end
+     
+    def support?
+      self.tracker_id.eql? 3
+    end
     
     def task?
       self.tracker_id.eql? 4

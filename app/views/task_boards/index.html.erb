@@ -5,14 +5,8 @@
 <h2><%= html_title "#{@project.name} - Task board" -%></h2>
 
 <div id="version_container">
-<% unless @project.issues.empty? %>
+<% unless @project.versions.empty? %>
 <ul class="version_holder">
-  <li><%= link_to "Issues with no versions", 
-                  :controller => 'task_boards', 
-                  :action => 'show', 
-                  :id => @project.id %></li>
-
-
   <% @project.versions.each do |v| %>
 
   <li>
@@ -39,7 +33,7 @@
   <% end %>
 <% else %>
 
-<h3>This project has no issues yet.</h3>
+<h3>This project has no versions yet.</h3>
 
 <% end %>
 </ul>

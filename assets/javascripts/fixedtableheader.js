@@ -1,4 +1,4 @@
-//j = jQuery.noConflict(); //This allows Prototype to go undisturbed
+j = jQuery.noConflict(); //This allows Prototype to go undisturbed
 function th_resize(count)
 {
     var $item = jQuery("#task_board th:eq(" + count + ")");

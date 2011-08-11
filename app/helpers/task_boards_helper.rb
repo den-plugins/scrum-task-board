@@ -24,7 +24,8 @@ module TaskBoardsHelper
     klass = ""
     if issue.task? : klass = "task_board_task_data"  
     elsif issue.feature? : klass = "task_board_feature_data" 
-    elsif issue.bug? : klass = "task_board_bug_data" 
+    elsif issue.bug? : klass = "task_board_bug_data"
+    elsif issue.support? : klass = "task_board_support_data" 
     end
     klass += " has_subtasks no_drag" if issue.children_here?
     klass

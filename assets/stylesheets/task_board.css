@@ -81,6 +81,11 @@
   border-left: 6px solid #FFA100;
 } 
 
+#task_board .task_board_support_data{
+  border: 1px solid #3C03EE;
+  border-left: 6px solid #3C03EE;
+} 
+
 #task_board .task_board_task_data:hover, #task_board .has_subtasks{ /*-webkit-box-shadow: 2px 2px 2px #888; margin: -2px 2px 2px -2px;*/
   color: #010101; 
   border: 1px solid #ff5500; 
@@ -98,9 +103,21 @@
   color: #010101;
 } 
 
+#task_board .task_board_feature_data:hover {
+  border: 1px solid #0EA94B;
+  border-left: 8px solid #0EA94B;
+  color: #010101;
+} 
+
+#task_board .task_board_support_data:hover {
+  border: 1px solid #000099;
+  border-left: 6px solid #000099;
+  color: #010101;
+} 
+
 #task_board .task_board_data {
   background: #fefefe;
-  padding: 4px;
+  padding: 4px 4px 6px 5px;
   -moz-box-shadow: 2px 2px 2px #818181;
   -webkit-box-shadow: 2px 2px 2px #818181;
   box-shadow: 2px 2px 2px #818181;

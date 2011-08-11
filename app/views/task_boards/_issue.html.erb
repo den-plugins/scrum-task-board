@@ -1,5 +1,6 @@
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%>">
   <p><%= link_to_issue(issue) %></p>
+  <p><%= issue.subject %></p>
   <%= progress_bar issue.done_ratio, :width => '50px', :legend => issue.assigned_to || "&nbsp;" %>
   <%= link_to "Show Children", "##{dom_id(issue)}_parent", :class => "show_row" if issue.children_here? %>
 </li>
