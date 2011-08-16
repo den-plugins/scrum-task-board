@@ -11,10 +11,12 @@
   </div>
   
   <div class="edit_here" style="display:none;">
+  <div class="cancel" >Cancel</div>
+  <div class="submit_link">Save</div>
+     <p class="task_number"><%= issue.id %></p>
   <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue_assigned_to', :id => issue.id}, :method => :post) do |f| %>
    
-   <%= select_assigned_to f, issue %>
-   <a class="submit_link">Save</a> 
+   <%= select_assigned_to f, issue %> 
   <% end %>
    
   </div>
@@ -24,30 +26,21 @@
 <%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'")%>
 <% end %>
 
-
-
-
-
-
-
-
-
 <script type="text/javascript">
-  jQuery("#<%= dom_id(issue) %> .edit").click(
-    function(){
-      if(jQuery("#<%= dom_id(issue) %> .current_data").is(":visible"))
-      {
-        jQuery("#<%= dom_id(issue) %> .current_data").hide();
-        jQuery("#<%= dom_id(issue) %> .edit_here").show();
-        jQuery("#<%= dom_id(issue) %> .edit").text("Cancel");
-      }
-      else
-      {
-        jQuery("#<%= dom_id(issue) %> .current_data").show();
-        jQuery("#<%= dom_id(issue) %> .edit_here").hide();
-        jQuery("#<%= dom_id(issue) %> .edit").text("Edit");
-      }
-    });
+    jQuery("#<%= dom_id(issue) %>").hover(
+    function(){jQuery("#<%= dom_id(issue) %> .edit").show();},
+    function(){jQuery("#<%= dom_id(issue) %> .edit").hide();});
+
+  jQuery("#<%= dom_id(issue) %> .edit").click(function(){
+      jQuery("#<%= dom_id(issue) %> .current_data, #<%= dom_id(issue) %> .edit").hide();
+      jQuery("#<%= dom_id(issue) %> .edit_here").show();
+  });
+        
+  jQuery("#<%= dom_id(issue) %> .cancel").click(function(){
+      jQuery("#<%= dom_id(issue) %> .edit_here").hide(); 
+      jQuery("#<%= dom_id(issue) %> .current_data, #<%= dom_id(issue) %> .edit").show(); 
+  });  
+
   jQuery("#<%= dom_id(issue) %> .submit_link").click(
     function()
     {
@@ -57,4 +50,5 @@
       else
         return false;
     });
+
 </script>

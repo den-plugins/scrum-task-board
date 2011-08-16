@@ -172,6 +172,35 @@
   text-align: right;
 }
 
+#task_board .edit, #task_board .submit_link, #task_board .cancel {
+  cursor: pointer;
+  position: absolute;
+  background: #fff;
+  width:18px;
+  height:18px;
+  text-indent:-9999px;
+  top: 0;
+  border-radius: 4px;
+}
+
+#task_board .task_number {
+  text-align:right;
+}
+
+#task_board .edit {
+  background: url('/images/edit.png') no-repeat;
+  display: none;
+}
+
+#task_board .cancel {
+  background: url('/images/false.png') no-repeat;
+}
+
+#task_board .submit_link {
+  background: url('/images/true.png') no-repeat;
+  left: 26px;
+}
+
 #fixed_table_header {
   width: 1000%;
   position: fixed;

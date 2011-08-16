@@ -73,6 +73,7 @@ class TaskBoardsController < ApplicationController
   end
   
   def update_issue_assigned_to   
+    #TODO Permissions trapping - view
     @issue = Issue.find(params[:id])
     @issue.update_attributes(params[:issue])
     puts dom_id(@issue)
