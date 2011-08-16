@@ -10,7 +10,7 @@ module TaskBoardsHelper
       :accept => status.class_name,
       :hoverclass => 'hovered',
       :url => {:controller => 'task_boards', :action => 'update_issue_status'},
-      :with => "'id=' + (element.id.split('_').last()) + '&status_id=#{status.id}&parents=#{@parents}'")
+      :with => "'issue_id=' + (element.id.split('_').last()) + '&status_id=#{status.id}&id=#{@project.id}'")
   end
   
   def task_board_dom_id(issue, status, suffix='')
@@ -29,6 +29,17 @@ module TaskBoardsHelper
     end
     klass += " has_subtasks no_drag" if issue.children_here?
     klass
+  end
+  
+  def select_assigned_to f, issue
+    f.select :assigned_to_id, (@project.members.collect {|p| [p.name, p.user.id]}), :selected => (issue.assigned_to.nil? ? '' : issue.assigned_to.id), :required => true
+  end
+  
+  def link_to_issue(issue, options={})
+    options[:class] ||= ''
+    options[:class] << ' issue'
+    options[:class] << ' task_board_closed' if issue.closed?
+    link_to "#{issue.id}", {:controller => "issues", :action => "show", :id => issue}, options
   end
   
   def get_children(parent, color, group)

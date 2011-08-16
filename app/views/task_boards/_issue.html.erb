@@ -1,10 +1,60 @@
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%>">
-  <p><%= link_to_issue(issue) %></p>
-  <p><%= issue.subject %></p>
-  <%= progress_bar issue.done_ratio, :width => '50px', :legend => issue.assigned_to || "&nbsp;" %>
-  <%= link_to "Show Children", "##{dom_id(issue)}_parent", :class => "show_row" if issue.children_here? %>
-</li>
   
+  
+  <div class="edit" >Edit</div>
+  <div class="current_data">
+    <p class="task_number"><%= link_to_issue issue %></p>
+    <p class="assignee <%= "current_is_assigned" if issue.assigned_to.eql? User.current %>"><%= issue.assigned_to %></p>
+    <p><%= truncate(issue.subject, :length => 20) %></p>
+    <%= progress_bar issue.done_ratio, :width => '50px' || "&nbsp;" %>
+    <%= link_to "Show Children", "##{dom_id(issue)}_parent", :class => "show_row" if issue.children_here? %>
+  </div>
+  
+  <div class="edit_here" style="display:none;">
+  <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue_assigned_to', :id => issue.id}, :method => :post) do |f| %>
+   
+   <%= select_assigned_to f, issue %>
+   <a class="submit_link">Save</a> 
+  <% end %>
+   
+  </div>
+  
+</li> 
 <% if not issue.children_here? %>      
 <%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'")%>
 <% end %>
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  jQuery("#<%= dom_id(issue) %> .edit").click(
+    function(){
+      if(jQuery("#<%= dom_id(issue) %> .current_data").is(":visible"))
+      {
+        jQuery("#<%= dom_id(issue) %> .current_data").hide();
+        jQuery("#<%= dom_id(issue) %> .edit_here").show();
+        jQuery("#<%= dom_id(issue) %> .edit").text("Cancel");
+      }
+      else
+      {
+        jQuery("#<%= dom_id(issue) %> .current_data").show();
+        jQuery("#<%= dom_id(issue) %> .edit_here").hide();
+        jQuery("#<%= dom_id(issue) %> .edit").text("Edit");
+      }
+    });
+  jQuery("#<%= dom_id(issue) %> .submit_link").click(
+    function()
+    {
+      var choice = confirm("Are you sure you want to change assigned to?");
+      if(choice)
+        jQuery("#<%= dom_id(issue) %> form").submit();
+      else
+        return false;
+    });
+</script>

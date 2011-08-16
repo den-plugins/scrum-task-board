@@ -21,18 +21,7 @@ module IssueExtn
   module InstanceMethods
     
     def version_children
-    #  same = []  
-     # self.children.each do |child|
-      #  if child.fixed_version_id == self.fixed_version_id
-       #   same << child
-        #end
-  #    end
-    #  same
-      
       fixed_children = self.children.delete_if { |c| c unless c.fixed_version_id.eql? self.fixed_version_id }
-      #fixed_children = fixed_children.nil? ? [] : fixed_children
-      
-      
     end
     
     def bug?

@@ -4,6 +4,8 @@
         <div class="task_board_data task_board_feature_data no_drag">
           <p class="issue_no"><%= link_to_issue(feature) %></p>
           <p class="issue_subject"><%= feature.subject %></p>
+          <hr/>
+          <%= progress_bar feature.done_ratio, :width => '50px', :legend => feature.assigned_to || "&nbsp;" %>
         </div>
         <% else %>
           
@@ -18,7 +20,8 @@
         <div class="task_board_data has_subtasks no_drag" id="<%= dom_id(feature) %>_parent" style="display:inline-block;">
           <p><%= link_to_issue(feature) %></p>
           <p><%= feature.subject %></p>
-
+          <hr/>
+          <%= progress_bar feature.done_ratio, :width => '50px', :legend => feature.assigned_to || "&nbsp;" %>
         </div>
         </div>
         <% else %>

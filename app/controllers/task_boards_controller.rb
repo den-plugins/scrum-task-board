@@ -1,8 +1,8 @@
 class TaskBoardsController < ApplicationController
   unloadable
   menu_item :task_board
-  
-  before_filter :get_project, :authorize, :only => [:index]
+  layout 'base'
+  before_filter :get_project, :authorize, :only => [:index, :show]
   
   def index
   
@@ -11,17 +11,7 @@ class TaskBoardsController < ApplicationController
   def show
     @statuses = IssueStatus.all(:order => "position asc")
     @version = Version.find params[:version_id]
-    #unless params[:version_id].nil?
-     # @version = Version.find params[:version_id]
-  
-      #@fixed_issues = @version.fixed_issues
-    
-    #else #this condition is for the Product Backlogs(issues with no targeted version)
-     # get_project
-      
-      #@fixed_issues = Issue.find(:all, :conditions => {:project_id => @project.id, :fixed_version_id => nil})   
-    #end
-    
+
     if params[:board].to_i.eql? 1 
     #This part needs to be optimized 
       @features = @version.features
@@ -65,20 +55,33 @@ class TaskBoardsController < ApplicationController
   end
   
   def update_issue_status
+    get_project
     @status = IssueStatus.find(params[:status_id])
-    #@parents = params["parents"]
     
-    @issue = Issue.find(params[:id])
+    @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, "Automated status change from the Task Board")
 
     attrs = {:status_id => @status.id}
-    attrs.merge!(:assigned_to_id => User.current.id) unless @issue.assigned_to_id?
+    #attrs.merge!(:assigned_to_id => User.current.id) unless @issue.assigned_to_id?
     @issue.update_attributes(attrs)
     
     render :update do |page|
       page.remove dom_id(@issue)
       story = Issue.find @issue.parent.issue_from_id unless @issue.parent.nil?
       page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue
+    end
+  end
+  
+  def update_issue_assigned_to   
+    @issue = Issue.find(params[:id])
+    @issue.update_attributes(params[:issue])
+    puts dom_id(@issue)
+    render :update do |page|
+      page.select("##{dom_id(@issue)} .edit_here").first.hide
+      page.select("##{dom_id(@issue)} .current_data .assignee").first.update("#{@issue.assigned_to}") # replace this with a partial if editing more than one field
+      page.select("##{dom_id(@issue)} .edit").first.update("Edit")
+      page.select("##{dom_id(@issue)} .current_data").first.show
+      page.visual_effect(:highlight, "#{dom_id(@issue)}")
     end
   end
     

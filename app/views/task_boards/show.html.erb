@@ -44,7 +44,10 @@
 
 
 <% if @featured or @bugged %>
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script> 
+<script type="text/javascript">
+j = jQuery.noConflict(); //This allows Prototype to go undisturbed
+</script>
 <table id="task_board" cellspacing="0">
   <thead>
   <tr>
@@ -119,8 +122,6 @@
   <% end %>
   </tbody>
 </table>
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script> 
 <%= javascript_include_tag  'fixedtableheader', :plugin => 'scrum_task_board' %>
 <% else %>
   <h3><%= @error_msg %></h3>
