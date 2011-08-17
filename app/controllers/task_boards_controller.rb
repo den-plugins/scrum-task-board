@@ -11,6 +11,16 @@ class TaskBoardsController < ApplicationController
   def show
     @statuses = IssueStatus.all(:order => "position asc")
     @version = Version.find params[:version_id]
+#    @task_cols = {"Todo" => [], "Assigned" => [],
+#                  "In Progress" => [], "For Verification" => [],
+#                  "Feedback" => [], "Done" => []}
+    @task_cols = ActiveSupport::OrderedHash.new
+    @task_cols["Todo"] = IssueStatus.all(:conditions => "name = 'New'")
+    @task_cols["Assigned"] = IssueStatus.all(:conditions => "name = 'Assigned'")
+    @task_cols["In Progress"] = IssueStatus.all(:conditions => "name = 'In Progress'")
+    @task_cols["For Verification"] = IssueStatus.all(:conditions => "name = 'Resolved'")
+    @task_cols["Feedback"] = IssueStatus.all(:conditions => "name = 'Feedback'")
+    @task_cols["Done"] = IssueStatus.all(:conditions => "name = 'Closed'")
 
     if params[:board].to_i.eql? 1 
     #This part needs to be optimized 
@@ -49,9 +59,11 @@ class TaskBoardsController < ApplicationController
     end
     
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
-    #if !@version.effective_date.nil?
-     # @chart_data = BurndownChart.new(@version).data_and_dates
-    #end
+
+#    if !@version.effective_date.nil?
+#      @chart_data = BurndownChart.new(@version).data_and_dates
+#    end
+
   end
   
   def update_issue_status

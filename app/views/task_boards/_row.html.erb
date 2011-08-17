@@ -31,7 +31,8 @@
         <% end %>
     </td>
     
-    <% @statuses.each do |status| -%>
+    <% @task_cols.to_a.each do |col| %>
+      <% status = col[1][0] %>
           <td id="<%= task_board_dom_id(feature, status) %>" class="<%= cycle('odd', 'even') %>">
             <ul id="<%= task_board_dom_id(feature, status, 'list') %>">
               <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]) %>
