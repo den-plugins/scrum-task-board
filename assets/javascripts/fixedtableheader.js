@@ -6,22 +6,19 @@ function th_resize(count)
     jQuery(".status-item:eq(" + count + ")").css('width', width).css('height', height);
 }
 
-
-
 jQuery(function( $ ){
  // jQuery("#task_board ul").each(function(){jQuery(this).find("li:eq(0)").css("margin-top", 0)});
- jCurr = jQuery(".current_data");
  jToggleDetails = jQuery('.toggle_details');
  jQuery("#toggle_all").click(function(){
   if(jQuery(this).is(":checked"))
   {
-    jCurr.show();  
-    jToggleDetails.css('background-image', "url('/images/zoom_out.png')");
+     jQuery(".current_data").show();  
+    jToggleDetails.css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
   }
   else
   {
-    jCurr.hide();
-    jToggleDetails.css('background-image', "url('/images/zoom_in.png')");
+     jQuery(".current_data").hide();
+    jToggleDetails.css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
   }
  });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
