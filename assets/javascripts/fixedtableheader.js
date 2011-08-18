@@ -11,11 +11,18 @@ function th_resize(count)
 jQuery(function( $ ){
  // jQuery("#task_board ul").each(function(){jQuery(this).find("li:eq(0)").css("margin-top", 0)});
  jCurr = jQuery(".current_data");
+ jToggleDetails = jQuery('.toggle_details');
  jQuery("#toggle_all").click(function(){
   if(jQuery(this).is(":checked"))
-    jCurr.show();
+  {
+    jCurr.show();  
+    jToggleDetails.css('background-image', "url('/images/zoom_out.png')");
+  }
   else
+  {
     jCurr.hide();
+    jToggleDetails.css('background-image', "url('/images/zoom_in.png')");
+  }
  });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width

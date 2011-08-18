@@ -6,7 +6,7 @@
   
   
   <div class="issue_number"><%= link_to_issue issue %></div>
-  <div class="initial_controls" style="display:none">
+  <div class="initial_controls">
     <div class="edit" title="Edit">Edit</div>
     <div class="toggle_details" title="Show Details">Show Details</div>
   </div>
@@ -41,10 +41,6 @@
 <% end %>
 
 <script type="text/javascript">
-  jQuery("#<%= dom_id(issue) %>").hover(
-    function(){jQuery("#<%= dom_id(issue) %> .initial_controls").show();},
-    function(){jQuery("#<%= dom_id(issue) %> .initial_controls").hide();});
-
   jQuery("#<%= dom_id(issue) %> .edit").click(function(){
       jQuery("#<%= dom_id(issue) %> .current_data, #<%= dom_id(issue) %> .initial_controls").hide();
       jQuery("#<%= dom_id(issue) %> .edit_here").show();
