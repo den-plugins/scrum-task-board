@@ -243,6 +243,14 @@
   font-size: 10px;
 }
 
+#task_board .issue_closed {
+  color: #333 !important;
+}
+
+#task_board .bug_closed {
+  color: #ffff00 !important;
+}
+
 #fixed_table_header {
   width: 1000%;
   position: fixed;

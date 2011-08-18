@@ -38,7 +38,10 @@ module TaskBoardsHelper
   def link_to_issue(issue, options={})
     options[:class] ||= ''
     options[:class] << ' issue'
-    options[:class] << ' task_board_closed' if issue.closed?
+    if issue.closed?
+      klass = issue.bug? ? ' bug_closed' : ' issue_closed'
+      options[:class] << klass
+    end
     link_to "#{issue.id}", {:controller => "issues", :action => "show", :id => issue}, options
   end
   
