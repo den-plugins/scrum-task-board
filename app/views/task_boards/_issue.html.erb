@@ -1,19 +1,25 @@
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%>">
   
   
-  <div class="edit" >Edit</div>
-  <div class="current_data">
-    <p class="task_number"><%= link_to_issue issue %></p>
+  
+  
+  <div class="issue_number"><%= link_to_issue issue %></div>
+  <div class="initial_controls" style="display:none">
+    <div class="edit" title="Edit">Edit</div>
+    <div class="toggle_details" title="Show Details">Show Details</div>
+  </div>
+  <%= link_to "Show Children", "##{dom_id(issue)}_parent", :class => "has_subtasks", :title => "This issue has sub-issues" if issue.children_here? %>
+  <div class="current_data" style="display:none">
     <p class="assignee <%= "current_is_assigned" if issue.assigned_to.eql? User.current %>"><%= issue.assigned_to %></p>
-    <p><%= truncate(issue.subject, :length => 20) %></p>
-    <%= progress_bar issue.done_ratio, :width => '50px' || "&nbsp;" %>
-    <%= link_to "Show Children", "##{dom_id(issue)}_parent", :class => "show_row" if issue.children_here? %>
+    <p><%= truncate(issue.subject, :length => 50) %></p>
+    <%= progress_bar issue.done_ratio, :width => '100%'%>
+    
+    </div>
   </div>
   
   <div class="edit_here" style="display:none;">
-  <div class="cancel" >Cancel</div>
-  <div class="submit_link">Save</div>
-     <p class="task_number"><%= issue.id %></p>
+    <div class="cancel" title="Cancel">Cancel</div>
+    <div class="submit_link" title="Save">Save</div>
   <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue_assigned_to', :id => issue.id}, :method => :post) do |f| %>
    
    <%= select_assigned_to f, issue %> 
@@ -22,24 +28,43 @@
   </div>
   
 </li> 
+
+
+
+
+
+
 <% if not issue.children_here? %>      
 <%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'")%>
 <% end %>
 
 <script type="text/javascript">
-    jQuery("#<%= dom_id(issue) %>").hover(
-    function(){jQuery("#<%= dom_id(issue) %> .edit").show();},
-    function(){jQuery("#<%= dom_id(issue) %> .edit").hide();});
+  jQuery("#<%= dom_id(issue) %>").hover(
+    function(){jQuery("#<%= dom_id(issue) %> .initial_controls").show();},
+    function(){jQuery("#<%= dom_id(issue) %> .initial_controls").hide();});
 
   jQuery("#<%= dom_id(issue) %> .edit").click(function(){
-      jQuery("#<%= dom_id(issue) %> .current_data, #<%= dom_id(issue) %> .edit").hide();
+      jQuery("#<%= dom_id(issue) %> .current_data, #<%= dom_id(issue) %> .initial_controls").hide();
       jQuery("#<%= dom_id(issue) %> .edit_here").show();
   });
         
   jQuery("#<%= dom_id(issue) %> .cancel").click(function(){
       jQuery("#<%= dom_id(issue) %> .edit_here").hide(); 
-      jQuery("#<%= dom_id(issue) %> .current_data, #<%= dom_id(issue) %> .edit").show(); 
+      jQuery("#<%= dom_id(issue) %> .initial_controls").show();
+      var img =  jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image').split('/');
+      if(img[img.length -1] == "zoom_out.png)")
+         jQuery("#<%= dom_id(issue) %> .current_data").show();
   });  
+  
+  jQuery("#<%= dom_id(issue) %> .toggle_details").click(function(){
+      jQuery("#<%= dom_id(issue) %> .current_data").toggle(1, function()
+      {
+        if(jQuery(this).is(":visible"))
+          jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image', "url('/images/zoom_out.png')");
+        else
+          jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image', "url('/images/zoom_in.png')");
+      });
+  })
 
   jQuery("#<%= dom_id(issue) %> .submit_link").click(
     function()

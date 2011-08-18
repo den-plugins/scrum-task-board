@@ -53,9 +53,10 @@
   #task_board tr td, #task_board tr th, .status-item { vertical-align: top; border: 1px dashed #ddd; border-width: 1px 1px 1px 0; }
   
   #task_board ul { padding: 0; list-style: none; margin: 5px 0 0 0; }
-    #task_board ul li { margin-bottom: 10px; background: #FEFEFE; padding: 3px 3px 0 3px; cursor: move; width: 80px; min-height: 80px;}
+    #task_board ul li { margin-bottom: 10px; background: #FEFEFE; cursor: move; }
       #task_board ul li p { /*border-bottom:1px solid #ddd;*/ font-size:10px; margin-bottom: 4px; padding-bottom:2px; color: #101010;}
       #task_board ul li .pourcent { border-bottom: 0; margin-bottom: 0; }
+  #task_board .progress { float:none; }    
   #task_board .task_board_task {
     border-left: 0;
     padding-right: 10px;
@@ -71,30 +72,50 @@
   background: #fff;
 }
 
-#task_board .task_board_feature_data{
-  border: 1px solid #0D0;
-  border-left: 8px solid #0D0;
+#task_board .task_board_feature_parent, #task_board .task_board_task_parent {
+  padding: 2px;
+}
+
+#task_board .task_board_feature_parent {
+  border: 1px solid #0EA94B;
+}
+
+#task_board .task_board_task_parent {
+  border: 1px solid #5081AA;
+}
+
+
+#task_board .task_board_feature_data .issue_number, #task_board .task_board_task_data .issue_number, #task_board .task_board_bug_data .issue_number{
+  padding:4px;
+}
+
+#task_board .task_board_feature_data .issue_number a, #task_board .task_board_task_data .issue_number a, #task_board .task_board_bug_data .issue_number a {
+  color: #f1f1f1;
+  font-size: 10px;
+}
+
+
+#task_board .task_board_feature_data .issue_number{
+  background: #0EA94B;
 }  
 
-#task_board .task_board_task_data{
-  border: 1px solid #FFA100;
-  border-left: 6px solid #FFA100;
+#task_board .task_board_task_data .issue_number{
+  background: #5081AA;
 } 
 
-#task_board .task_board_support_data{
-  border: 1px solid #3C03EE;
-  border-left: 6px solid #3C03EE;
+#task_board .task_board_support_data .issue_number{
+  background: #3C03EE;
 } 
 
-#task_board .task_board_task_data:hover, #task_board .has_subtasks{ /*-webkit-box-shadow: 2px 2px 2px #888; margin: -2px 2px 2px -2px;*/
+#task_board .task_board_bug_data .issue_number{
+  background: #5F5F5F;
+} 
+
+/*
+#task_board .task_board_task_data:hover, #task_board .has_subtasks{
   color: #010101; 
   border: 1px solid #ff5500; 
   border-left: 6px solid #ff5500;
-} 
-
-#task_board .task_board_bug_data{
-  border: 1px solid #5F5F5F;
-  border-left: 6px solid #5F5F5F;
 } 
 
 #task_board .task_board_bug_data:hover {
@@ -114,22 +135,22 @@
   border-left: 6px solid #000099;
   color: #010101;
 } 
-
+*/
 #task_board .task_board_data {
   background: #fefefe;
-  padding: 4px 4px 6px 5px;
   -moz-box-shadow: 2px 2px 2px #818181;
   -webkit-box-shadow: 2px 2px 2px #818181;
   box-shadow: 2px 2px 2px #818181;
-  margin: -2px 2px 12px -2px;
-  width: 80px;
+  margin: 6px 2px;
+  width: 100px;
+ 
 }
 
 #task_board .task_board_data:hover {
   -moz-box-shadow: 2px 2px 2px #515151;
   -webkit-box-shadow: 2px 2px 2px #515151;
   box-shadow: 2px 2px 2px #515151;
-  margin: -2px 4px 12px -4px;
+ /* margin: -72px 2px -72px -2px; */
 }
 
 #task_board .task_board_data p {
@@ -137,7 +158,7 @@
   margin: 0;
 }
   
-#task_board .has_subtasks {
+#task_board ul .has_subtasks {
   cursor: default;
 }
 
@@ -145,7 +166,8 @@
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-  margin: 0px 0px 10px 2px;
+  margin: 4px -4px 4px 4px;
+  position: relative;
 }
 
 #task_board a:hover {
@@ -159,7 +181,7 @@
 
 .task_board_data .assignee {
   background: #ddd;
-  border-radius: 4px
+  padding: 0 4px;
 }
  
 .task_board_data .current_is_assigned {
@@ -172,33 +194,56 @@
   text-align: right;
 }
 
-#task_board .edit, #task_board .submit_link, #task_board .cancel {
+#task_board .edit, #task_board .submit_link, #task_board .cancel, #task_board .toggle_details, #task_board .has_subtasks {
   cursor: pointer;
   position: absolute;
   background: #fff;
   width:18px;
   height:18px;
   text-indent:-9999px;
-  top: 0;
+  top: 1px;
   border-radius: 4px;
 }
 
-#task_board .task_number {
+#task_board .issue_number {
   text-align:right;
 }
 
 #task_board .edit {
-  background: url('/images/edit.png') no-repeat;
-  display: none;
+  background: #fff url('/images/edit.png') no-repeat;
+  left: 2px;
 }
 
 #task_board .cancel {
-  background: url('/images/false.png') no-repeat;
+  background: #fff url('/images/false.png') no-repeat;
+  left: 2px;
 }
 
 #task_board .submit_link {
-  background: url('/images/true.png') no-repeat;
+  background: #fff url('/images/true.png') no-repeat;
   left: 26px;
+}
+
+#task_board .toggle_details {
+  background: #fff url('/images/zoom_in.png') no-repeat;
+  left: 26px;
+}
+
+#task_board .has_subtasks {
+  background: #fff url('/images/copy.png') no-repeat;
+  left: 50px;
+}
+
+#task_board .current_data, #task_board .edit_here {
+  min-height:80px;
+}
+
+#task_board .issue_subject {
+  font-size: 11px;
+}
+
+#task_board form select {
+  font-size: 10px;
 }
 
 #fixed_table_header {

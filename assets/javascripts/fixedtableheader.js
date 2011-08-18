@@ -6,8 +6,17 @@ function th_resize(count)
     jQuery(".status-item:eq(" + count + ")").css('width', width).css('height', height);
 }
 
-jQuery(function( $ ){
 
+
+jQuery(function( $ ){
+ // jQuery("#task_board ul").each(function(){jQuery(this).find("li:eq(0)").css("margin-top", 0)});
+ jCurr = jQuery(".current_data");
+ jQuery("#toggle_all").click(function(){
+  if(jQuery(this).is(":checked"))
+    jCurr.show();
+  else
+    jCurr.hide();
+ });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
 
@@ -81,7 +90,7 @@ $view.resize(function(){
 });
 
 ///Jump to row 
- jQuery(".show_row").click(function()
+ jQuery(".has_subtasks").click(function()
  {
   var tr = jQuery(this).attr('href');
   setTimeout(function(){
