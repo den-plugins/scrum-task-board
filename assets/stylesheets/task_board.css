@@ -144,12 +144,14 @@
   margin: 6px 2px;
   width: 100px;
   cursor: move;
+  opacity: 0.9;
 }
 
 #task_board .task_board_data:hover {
   -moz-box-shadow: 2px 2px 2px #515151;
   -webkit-box-shadow: 2px 2px 2px #515151;
   box-shadow: 2px 2px 2px #515151;
+  opacity: 1;
  /* margin: -72px 2px -72px -2px; */
 }
 
