@@ -32,13 +32,21 @@
     </td>
     
     <% @task_cols.to_a.each do |col| %>
-      <% status = col[1][0] %>
-          <td id="<%= task_board_dom_id(feature, status) %>" class="<%= cycle('odd', 'even') %>">
-            <ul id="<%= task_board_dom_id(feature, status, 'list') %>">
-              <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]) %>
-            </ul>
-            <%= task_board_drop_receiving_element(task_board_dom_id(feature, status), status) %>
-          </td>
-    <% end -%>      
+      <%# status = col[1][0] %>
+      <% col[1].each do |status| %>
+        <% if !status.eql?(col[1].last) or col[1].one? %>
+          <% if status.name.eql?(col[1].last) or col[1].one? %>
+            <td id="<%= task_board_dom_id(feature, status) %>" class="<%= cycle('odd', 'even') %>">
+              <ul id="<%= task_board_dom_id(feature, status, 'list') %>">
+              <% col[1].each do |s| %>
+                <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[s]) %>
+              <% end %>
+              </ul>
+              <%= task_board_drop_receiving_element(task_board_dom_id(feature, status), status) %>
+            </td>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end -%>
 </tr>
     

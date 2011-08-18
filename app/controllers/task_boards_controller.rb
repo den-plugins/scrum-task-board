@@ -18,8 +18,8 @@ class TaskBoardsController < ApplicationController
     @task_cols["Todo"] = IssueStatus.all(:conditions => "name = 'New'")
     @task_cols["Assigned"] = IssueStatus.all(:conditions => "name = 'Assigned'")
     @task_cols["In Progress"] = IssueStatus.all(:conditions => "name = 'In Progress'")
-    @task_cols["For Verification"] = IssueStatus.all(:conditions => "name = 'Resolved'")
-    @task_cols["Feedback"] = IssueStatus.all(:conditions => "name = 'Feedback'")
+    @task_cols["For Verification"] = IssueStatus.all(:conditions => "name = 'Resolved' or name = 'Not a Defect' or name = 'Cannot Reproduce'") << "Resolved"
+    @task_cols["Feedback"] = IssueStatus.all(:conditions => "name = 'Feedback' or name = 'For Review' or name = 'For Monitoring'") << "Feedback"
     @task_cols["Done"] = IssueStatus.all(:conditions => "name = 'Closed'")
 
     if params[:board].to_i.eql? 1 
