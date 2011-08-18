@@ -131,7 +131,7 @@ j = jQuery.noConflict(); //This allows Prototype to go undisturbed
             <td id="<%= task_board_dom_id(nil, status) %>" class="<%= cycle('odd', 'even') %>">
               <ul id="<%= task_board_dom_id(nil, status, 'list') %>">
               <% col[1].each do |s| %>
-                <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>
+                <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[s]) %>
               <% end %>
               </ul>
               <%= task_board_drop_receiving_element(task_board_dom_id(nil, status), status) %>
