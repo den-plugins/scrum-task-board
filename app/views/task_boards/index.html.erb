@@ -15,7 +15,7 @@
     <span>Issues: <strong><%= v.fixed_issues.count %></strong></span>
     <br/>
     
-    <%= link_to "Features: <span style='color: green'>#{v.feature_count}</span><br/>Tasks: <span style='color:#FF5500'>#{v.task_count}</span>",
+    <%= link_to "Features: <span style='color: #0EA94B'>#{v.feature_count}</span><br/>Tasks: <span style='color:#5081AA'>#{v.task_count}</span>",
                     :controller => "task_boards",
                     :action => "show",
                     :version_id => v.id,
