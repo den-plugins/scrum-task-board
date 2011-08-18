@@ -48,6 +48,9 @@
 <script type="text/javascript">
 j = jQuery.noConflict(); //This allows Prototype to go undisturbed
 </script>
+
+<%# @task_cols = [ "Todo", "Assigned", "In Progress", "For Verification", "Feedback", "Done" ] %>
+
 <table id="task_board" cellspacing="0">
   <thead>
   <tr>
@@ -61,9 +64,13 @@ j = jQuery.noConflict(); //This allows Prototype to go undisturbed
   <% else %>
     <th colspan="2">&nbsp;</th>
   <% end %>
-  <% @statuses.each do |status| %>
-    <th><%= status.name %></th>
-  <% end -%>
+  <%# @statuses.each do |status| %>
+  <!--  <th><%# status.name %></th> -->
+  <%# end -%>
+  
+  <% @task_cols.to_a.each do |cols| %>
+    <th> <%= cols[0] %> </th>
+  <% end %>
   
   </tr>
   </thead>
@@ -91,15 +98,23 @@ j = jQuery.noConflict(); //This allows Prototype to go undisturbed
     <td colspan="2">
         <strong>Other Issues</strong>
     </td>
-    <% @statuses.each do |status| %>
-      <td id="<%= task_board_dom_id(nil, status) %>" class="<%= cycle('odd', 'even') %>">
-            <ul id="<%= task_board_dom_id(nil, status, 'list') %>">
-              <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[status]) %>
-            </ul>
-            <%= task_board_drop_receiving_element(task_board_dom_id(nil, status), status) %>
-          </td>
-    
-     <% end %>     
+    <% @task_cols.to_a.each do |col| %>
+      <%# status = col[1][0] %>
+      <% col[1].each do |status| %>
+        <% if !status.eql?(col[1].last) or col[1].one? %>
+          <% if status.name.eql?(col[1].last) or col[1].one? %>
+            <td id="<%= task_board_dom_id(nil, status) %>" class="<%= cycle('odd', 'even') %>">
+              <ul id="<%= task_board_dom_id(nil, status, 'list') %>">
+              <% col[1].each do |s| %>
+                <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[s]) %>
+              <% end %>
+              </ul>
+              <%= task_board_drop_receiving_element(task_board_dom_id(nil, status), status) %>
+            </td>
+            <% end %>
+        <% end %>
+      <% end %>
+     <% end %>
   </tr>
   <% end %>
   <% else %>
@@ -108,14 +123,22 @@ j = jQuery.noConflict(); //This allows Prototype to go undisturbed
     <td colspan="2">
         <strong>Bugs</strong>
     </td>
-    <% @statuses.each do |status| %>
-      <td id="<%= task_board_dom_id(nil, status) %>" class="<%= cycle('odd', 'even') %>">
-            <ul id="<%= task_board_dom_id(nil, status, 'list') %>">
-              <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>
-            </ul>
-            <%= task_board_drop_receiving_element(task_board_dom_id(nil, status), status) %>
-          </td>
-    
+    <% @task_cols.to_a.each do |col| %>
+      <%# status = col[1][0] %>
+      <% col[1].each do |status| %>
+        <% if !status.eql?(col[1].last) or col[1].one? %>
+          <% if status.name.eql?(col[1].last) or col[1].one? %>
+            <td id="<%= task_board_dom_id(nil, status) %>" class="<%= cycle('odd', 'even') %>">
+              <ul id="<%= task_board_dom_id(nil, status, 'list') %>">
+              <% col[1].each do |s| %>
+                <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>
+              <% end %>
+              </ul>
+              <%= task_board_drop_receiving_element(task_board_dom_id(nil, status), status) %>
+            </td>
+          <% end %>
+        <% end %>
+      <% end %>
      <% end %>     
   </tr>
   
@@ -123,6 +146,42 @@ j = jQuery.noConflict(); //This allows Prototype to go undisturbed
   </tbody>
 </table>
 <%= javascript_include_tag  'fixedtableheader', :plugin => 'scrum_task_board' %>
+
+<%= javascript_include_tag 'jquery.jqplot.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.canvasTextRenderer.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.canvasAxisLabelRenderer.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.cursor.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.dateAxisRenderer.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.highlighter.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
+
+<script type="text/javascript">
+jQuery.noConflict(); 
+/*
+jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
+  var nil = null; // to translate nil to null
+  plot_chart(<%# @chart_data.inspect if !@version.effective_date.nil? %>);
+}}); 
+*/
+var $link = jQuery(".show_reference");
+$link.click(function(){
+  var group = jQuery(this).attr("title");
+  var $group = jQuery("#" + group);
+  
+  if($group.is(":visible"))
+  {
+    $group.slideUp();
+    $link.text("Show Reference");
+  }
+   
+  else
+  {
+    $group.slideDown();
+    $link.text("Hide Reference");
+  }
+})
+</script>
+
 <% else %>
   <h3><%= @error_msg %></h3>
 <% end %>

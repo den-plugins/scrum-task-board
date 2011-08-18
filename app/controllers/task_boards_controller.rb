@@ -5,38 +5,58 @@ class TaskBoardsController < ApplicationController
   before_filter :get_project, :authorize, :only => [:index, :show]
   
   def index
-  
   end
 
   def show
     @statuses = IssueStatus.all(:order => "position asc")
     @version = Version.find params[:version_id]
+    #@task_cols = {"Todo" => [], "Assigned" => [],
+    #                             "In Progress" => [], "For Verification" => [],
+    #                             "Feedback" => [], "Done" => []}
+    @task_cols = ActiveSupport::OrderedHash.new
+    @task_cols["Todo"] = IssueStatus.all(:conditions => "name = 'New'")
+    @task_cols["Assigned"] = IssueStatus.all(:conditions => "name = 'Assigned'")
+    @task_cols["In Progress"] = IssueStatus.all(:conditions => "name = 'In Progress'")
+    @task_cols["For Verification"] = IssueStatus.all(:conditions => "name = 'Resolved' or name = 'Not a Defect' or name = 'Cannot Reproduce'") << "Resolved"
+    @task_cols["Feedback"] = IssueStatus.all(:conditions => "name = 'Feedback' or name = 'For Review' or name = 'For Monitoring'") << "Feedback"
+    @task_cols["Done"] = IssueStatus.all(:conditions => "name = 'Closed'")
 
-    if params[:board].to_i.eql? 1 
-    #This part needs to be optimized 
+    if params[:board].to_i.eql? 1
+      #This part needs to be optimized
       @features = @version.features
       @tasks = @version.tasks
       
-        @features.delete_if.each do |f| 
-          @tasks << f if not f.children_here?
-        end
+      @features.delete_if.each do |f|
+        @tasks << f if not f.children_here?
+      end
 
-        @tasks.reject!.each do |f|
-          unless f.parent.nil?
-             #EDIT: check for consistency here (up to 2 levels up)
-             #Dirty checking...feel free to optimize
-            p = Issue.find f.parent.issue_from_id
-              if p.fixed_version_id == @version.id
-                if p.feature?
-                  f
-                elsif p.task? and not p.parent.nil?
-                  pp = Issue.find p.parent.issue_from_id
-                  f if (pp.feature? or pp.task?) and pp.fixed_version.id == @version.id
-                end               
-              end
+      @tasks.reject!.each do |f|
+        if f.version_child?(@version)
+          p = f.parent.other_issue(f)
+          if p.feature?
+            f
+          elsif p.task? and p.version_child?(@version)
+            pp = p.parent.other_issue(p)
+            f if pp.feature? or pp.task?
           end
         end
- 
+      end
+      
+      #@tasks.reject!.each do |f|
+      #  unless f.parent.nil?
+      #     #EDIT: check for consistency here (up to 2 levels up)
+      #     #Dirty checking...feel free to optimize
+      #    p = Issue.find f.parent.issue_from_id
+      #      if p.fixed_version_id == @version.id
+      #        if p.feature?
+      #          f #reject if parent is a feature
+      #        elsif p.task? and not p.parent.nil?
+      #          pp = Issue.find p.parent.issue_from_id
+      #          f if (pp.feature? or pp.task?) and pp.fixed_version.id == @version.id
+      #        end               
+      #      end
+      #  end
+      #end
         
       @featured = true
       @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
@@ -49,9 +69,10 @@ class TaskBoardsController < ApplicationController
     end
     
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
-    #if !@version.effective_date.nil?
-     # @chart_data = BurndownChart.new(@version).data_and_dates
-    #end
+
+    #    if !@version.effective_date.nil?
+    #      @chart_data = BurndownChart.new(@version).data_and_dates
+    #    end
   end
   
   def update_issue_status

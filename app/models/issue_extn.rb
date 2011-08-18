@@ -43,7 +43,10 @@ module IssueExtn
     def children_here?
       not self.version_children.empty?
     end
-
+    
+    def version_child?(version)
+      not parent.nil? and parent.other_issue(self).fixed_version_id == version.id
+    end
     
   end
 end
