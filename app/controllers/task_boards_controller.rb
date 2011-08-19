@@ -14,8 +14,7 @@ class TaskBoardsController < ApplicationController
     #                             "In Progress" => [], "For Verification" => [],
     #                             "Feedback" => [], "Done" => []}
     @task_cols = ActiveSupport::OrderedHash.new
-    @task_cols["Todo"] = IssueStatus.all(:conditions => "name = 'New'")
-    @task_cols["Assigned"] = IssueStatus.all(:conditions => "name = 'Assigned'")
+    @task_cols["Todo"] = IssueStatus.all(:conditions => "name = 'New' or name = 'Assigned' ") << "New"
     @task_cols["In Progress"] = IssueStatus.all(:conditions => "name = 'In Progress'")
     @task_cols["For Verification"] = IssueStatus.all(:conditions => "name = 'Resolved' or name = 'Not a Defect' or name = 'Cannot Reproduce'") << "Resolved"
     @task_cols["Feedback"] = IssueStatus.all(:conditions => "name = 'Feedback' or name = 'For Review' or name = 'For Monitoring'") << "Feedback"
@@ -33,11 +32,11 @@ class TaskBoardsController < ApplicationController
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
           p = f.parent.other_issue(f)
-          if p.feature?
+          if p.feature? or p.support?
             f
           elsif p.task? and p.version_child?(@version)
             pp = p.parent.other_issue(p)
-            f if pp.feature? or pp.task?
+            f if pp.feature? or pp.task? or pp.support?
           end
         end
       end

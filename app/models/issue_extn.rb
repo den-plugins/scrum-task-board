@@ -21,7 +21,7 @@ module IssueExtn
   module InstanceMethods
     
     def version_children
-      fixed_children = self.children.delete_if { |c| c unless c.fixed_version_id.eql? self.fixed_version_id }
+      fixed_children = self.children.delete_if { |c| c unless c.fixed_version_id.eql? self.fixed_version_id and !c.support? and !c.bug? }
     end
     
     def bug?
