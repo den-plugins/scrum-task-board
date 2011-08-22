@@ -92,11 +92,10 @@ class TaskBoardsController < ApplicationController
     end
   end
   
-  def update_issue_assigned_to   
+  def update_issue
     #TODO Permissions trapping - view
     @issue = Issue.find(params[:id])
     @issue.update_attributes(params[:issue])
-    puts dom_id(@issue)
     render :update do |page|
       page.select("##{dom_id(@issue)} .edit_here").first.hide
       page.select("##{dom_id(@issue)} .current_data .assignee").first.update("#{@issue.assigned_to}") # replace this with a partial if editing more than one field

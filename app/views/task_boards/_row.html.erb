@@ -41,7 +41,7 @@
             <td id="<%= task_board_dom_id(feature, status) %>" class="<%= cycle('odd', 'even') %>">
               <ul id="<%= task_board_dom_id(feature, status, 'list') %>">
               <% col[1].each do |s| %>
-                <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[s]) %>
+                <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[s]), :locals => {:status => col[1]}%>
               <% end %>
               </ul>
               <%= task_board_drop_receiving_element(task_board_dom_id(feature, status), status) %>

@@ -24,7 +24,8 @@
     <div class="submit_link" title="Save">Save</div>
   <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue_assigned_to', :id => issue.id}, :method => :post) do |f| %>
    
-   <%= select_assigned_to f, issue %> 
+   <%= select_assigned_to f, issue %>
+   <%= f.select :status_id, status.collect {|s| [s.name, s.id] if s.is_a? IssueStatus}.reject {|val, id| id.nil? }, :selected => issue.status_id, :include_blank => false %>
   <% end %>
    
   </div>
@@ -72,7 +73,7 @@
   jQuery("#<%= dom_id(issue) %> .submit_link").click(
     function()
     {
-      var choice = confirm("Are you sure you want to change assigned to?");
+      var choice = confirm("Check changes for assigned to and status and confirm.");
       if(choice)
         jQuery("#<%= dom_id(issue) %> form").submit();
       else
