@@ -15,8 +15,7 @@ module TaskBoardsHelper
   
   def task_board_dom_id(issue, status, suffix='')
     element_id = dom_id(issue || Issue.new, status.class_name)
-    element_id += "_#{suffix}" if suffix 
-    #puts element_id
+    element_id += "_#{suffix}" if suffix
     element_id
   end
   
@@ -33,6 +32,12 @@ module TaskBoardsHelper
   
   def select_assigned_to f, issue
     f.select :assigned_to_id, (@project.members.collect {|p| [p.name, p.user.id]}), :selected => (issue.assigned_to.nil? ? '' : issue.assigned_to.id), :required => true
+  end
+  
+  def collection_status_group(issue)
+    group = IssueStatusGroup::GROUPED
+    x = group.keys.detect {|k| group[k][:statuses].include? issue.status }
+    group[x][:statuses].collect {|k| [k.name, k.id]}
   end
   
   def link_to_issue(issue, options={})

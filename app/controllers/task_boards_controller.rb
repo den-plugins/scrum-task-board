@@ -13,12 +13,15 @@ class TaskBoardsController < ApplicationController
     #@task_cols = {"Todo" => [], "Assigned" => [],
     #                             "In Progress" => [], "For Verification" => [],
     #                             "Feedback" => [], "Done" => []}
-    @task_cols = ActiveSupport::OrderedHash.new
-    @task_cols["Todo"] = IssueStatus.all(:conditions => "name = 'New' or name = 'Assigned' ") << "New"
-    @task_cols["In Progress"] = IssueStatus.all(:conditions => "name = 'In Progress'")
-    @task_cols["For Verification"] = IssueStatus.all(:conditions => "name = 'Resolved' or name = 'Not a Defect' or name = 'Cannot Reproduce'") << "Resolved"
-    @task_cols["Feedback"] = IssueStatus.all(:conditions => "name = 'Feedback' or name = 'For Review' or name = 'For Monitoring'") << "Feedback"
-    @task_cols["Done"] = IssueStatus.all(:conditions => "name = 'Closed'")
+    #@task_cols = ActiveSupport::OrderedHash.new
+    #@task_cols["Todo"] = IssueStatus.all(:conditions => "name = 'New' or name = 'Assigned' ") << "New"
+    #@task_cols["In Progress"] = IssueStatus.all(:conditions => "name = 'In Progress'")
+    #@task_cols["For Verification"] = IssueStatus.all(:conditions => "name = 'Resolved' or name = 'Not a Defect' or name = 'Cannot Reproduce'") << "Resolved"
+    #@task_cols["Feedback"] = IssueStatus.all(:conditions => "name = 'Feedback' or name = 'For Review' or name = 'For Monitoring'") << "Feedback"
+    #@task_cols["Done"] = IssueStatus.all(:conditions => "name = 'Closed'")
+    
+    @status_grouped = IssueStatusGroup::GROUPED
+    @status_columns = ordered_keys(@status_grouped)
 
     if params[:board].to_i.eql? 1
       #This part needs to be optimized
@@ -62,7 +65,6 @@ class TaskBoardsController < ApplicationController
      
     elsif params[:board].to_i.eql? 2
       @bugs = @version.bugs
-      
       @bugged = @bugs.empty? ? false : true
       @error_msg = "There are no Bugs for this version." if not @bugged
     end
@@ -111,6 +113,10 @@ private
   end
       
   def get_version
-    @version = Version.find params[:version_id]   
+    @version = Version.find params[:version_id]
+  end
+  
+  def ordered_keys(values)
+    values.keys.sort{|x,y| values[x][:order] <=> values[y][:order]}
   end
 end

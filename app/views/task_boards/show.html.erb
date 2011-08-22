@@ -1,9 +1,7 @@
 <% html_title "#{@version.nil? ? "Issues with no version" : @version.name} - Task board" -%>
 
-
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
-
   <style type="text/css">
     .clearfix:after {
       content: ".";
@@ -11,137 +9,109 @@
       height: 0;
       clear: both;
       visibilicount(:all, :conditions => ["fixed_version_id = ?", self.id], :include => :status)ty: hidden;
-      }
-
-  .clearfix {display: inline-block;}  /* for IE/Mac */  
+    }
+    .clearfix {display: inline-block;}  /* for IE/Mac */
   </style><!-- main stylesheet ends, CC with new stylesheet below... -->
 
-  <!--[if IE]>
-  <style type="text/css">
-    .clearfix {
-      zoom: 1;     /* triggers hasLayout */
-      display: block;     /* resets display for IE/Win */
-      }  /* Only IE can see inside the conditional comment
-      and read this CSS rule. Don't ever use a normal HTML
-      comment inside the CC or it will close prematurely. */
-  </style><a title="reference" class="show_reference">Show Reference</a>
-  <![endif]-->
-  
+    <!--[if IE]>
+    <style type="text/css">
+      .clearfix {
+        zoom: 1;     /* triggers hasLayout */
+        display: block;     /* resets display for IE/Win */
+      }
+     /* Only IE can see inside the conditional comment
+    and read this CSS rule. Don't ever use a normal HTML
+    comment inside the CC or it will close prematurely. */
+    </style><a title="reference" class="show_reference">Show Reference</a>
+    <![endif]-->
+
   <style type="text/css" media="screen">
     #task_board tr th { width: <%= 100 / (@statuses.size + 1) %>%;}
     .show_reference { cursor: pointer;}
   </style>
-  
 <% end %>
 
 
 <h2><%= @version.nil? ? "Product Backlog" : @version.name %> Task Board</h2>
 <input type="checkbox" id="toggle_all"/><label>Show Issue Details</label>
-<div id="bdchart"> </div>
-
+<div id="bdchart"></div>
 <div id="fixed_table_header"></div>
 
-
-
 <% if @featured or @bugged %>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script> 
-<script type="text/javascript">
-j = jQuery.noConflict(); //This allows Prototype to go undisturbed
-</script>
-
-<%# @task_cols = [ "Todo", "Assigned", "In Progress", "For Verification", "Feedback", "Done" ] %>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    j = jQuery.noConflict(); //This allows Prototype to go undisturbed
+  </script>
 
 <table id="task_board" cellspacing="0">
   <thead>
   <tr>
   <% if @featured %>
     <% unless @features.empty? %>
-    <th>Feature</th>
-    <th>Tasks</th>
+      <th>Feature</th>
+      <th>Tasks</th>
     <% else %>
-    <th colspan="2">&nbsp;</th>
+      <th colspan="2">&nbsp;</th>
     <% end %>
   <% else %>
     <th colspan="2">&nbsp;</th>
-  <% end %>
-  <%# @statuses.each do |status| %>
-  <!--  <th><%# status.name %></th> -->
-  <%# end -%>
-  
-  <% @task_cols.to_a.each do |cols| %>
-    <th> <%= cols[0] %> </th>
-  <% end %>
-  
-  </tr>
-  </thead>
-  
-  <tbody>
-  <% if @featured %>
-  <% @features.each do |feature| %> 
-   <%= render :partial => "row", :locals => { :feature => feature, :color => 16777215 } %>
-    <%  feature.children.each do |child|
-        if child.fixed_version_id == @version.id and child.children_here? %>
-      <%= render :partial => "row", :locals => { :feature => child, :color => (16777215 - (1118481 * 2)) } %>
-      
-      <%  child.children.each do |childnext|
-        if childnext.fixed_version_id == @version.id and childnext.children_here? %>
-      <%= render :partial => "row", :locals => { :feature => childnext, :color => (16777215 - (1118481 * 4)) } %>
-      <% end %>
-      <% end %>
-      
-    <% end %>
-  <%  end %>
   <% end %>
 
-  <% unless @tasks.empty? %>
-  <tr id="other_issues">
-    <td colspan="2">
-        <strong>Other Issues</strong>
-    </td>
-    <% @task_cols.to_a.each do |col| %>
-      <%# status = col[1][0] %>
-      <% col[1].each do |status| %>
-        <% if !status.eql?(col[1].last) or col[1].one? %>
-          <% if status.name.eql?(col[1].last) or col[1].one? %>
-            <td id="<%= task_board_dom_id(nil, status) %>" class="<%= cycle('odd', 'even') %>">
-              <ul id="<%= task_board_dom_id(nil, status, 'list') %>">
-              <% col[1].each do |s| %>
-                <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[s]) %>
-              <% end %>
-              </ul>
-              <%= task_board_drop_receiving_element(task_board_dom_id(nil, status), status) %>
-            </td>
-            <% end %>
-        <% end %>
-      <% end %>
-     <% end %>
-  </tr>
+  <% @status_columns.each do |cols| %>
+    <th> <%= cols %> </th>
   <% end %>
-  <% else %>
-  
-  <tr id="task_board_bugs">
-    <td colspan="2">
-        <strong>Bugs</strong>
-    </td>
-    <% @task_cols.to_a.each do |col| %>
-      <%# status = col[1][0] %>
-      <% col[1].each do |status| %>
-        <% if !status.eql?(col[1].last) or col[1].one? %>
-          <% if status.name.eql?(col[1].last) or col[1].one? %>
-            <td id="<%= task_board_dom_id(nil, status) %>" class="<%= cycle('odd', 'even') %>">
-              <ul id="<%= task_board_dom_id(nil, status, 'list') %>">
-              <% col[1].each do |s| %>
-                <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[s]) %>
-              <% end %>
-              </ul>
-              <%= task_board_drop_receiving_element(task_board_dom_id(nil, status), status) %>
-            </td>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% if @featured %>
+    <% @features.each do |feature| %>
+      <%= render :partial => "row", :locals => { :feature => feature, :color => 16777215 } %>
+      <%  feature.children.each do |child|
+        if child.fixed_version_id == @version.id and child.children_here? %>
+          <%= render :partial => "row", :locals => { :feature => child, :color => (16777215 - (1118481 * 2)) } %>
+          <%  child.children.each do |childnext|
+            if childnext.fixed_version_id == @version.id and childnext.children_here? %>
+              <%= render :partial => "row", :locals => { :feature => childnext, :color => (16777215 - (1118481 * 4)) } %>
+            <% end %>
           <% end %>
         <% end %>
+      <%  end %>
+    <% end %>
+    
+    <% unless @tasks.empty? %>
+      <tr id="other_issues">
+        <td colspan="2"><strong>Other Issues</strong></td>
+        <% @status_columns.each do |k| %>
+          <% default = @status_grouped[k][:default] %>
+          <td id="<%= task_board_dom_id(nil, default) %>" class="<%= cycle('odd', 'even') %>">
+          <ul id="<%= task_board_dom_id(nil, default, 'list') %>">
+            <% @status_grouped[k][:statuses].each do |status| %>
+              <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[status]) %>
+            <% end %>
+          </ul>
+          <%= task_board_drop_receiving_element(task_board_dom_id(nil, default), default) %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+    
+  <% else %>
+    <tr id="task_board_bugs">
+      <td colspan="2"><strong>Bugs</strong></td>
+      <% @status_columns.each do |k| %>
+        <% default = @status_grouped[k][:default] %>
+        <td id="<%= task_board_dom_id(nil, default) %>" class="<%= cycle('odd', 'even') %>">
+        <ul id="<%= task_board_dom_id(nil, default, 'list') %>">
+          <% @status_grouped[k][:statuses].each do |status| %>
+            <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>
+          <% end %>
+        </ul>
+        <%= task_board_drop_receiving_element(task_board_dom_id(nil, default), default) %>
+        </td>
       <% end %>
-     <% end %>     
-  </tr>
-  
+    </tr>
+    
   <% end %>
   </tbody>
 </table>
@@ -156,30 +126,30 @@ j = jQuery.noConflict(); //This allows Prototype to go undisturbed
 <%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
 
 <script type="text/javascript">
-jQuery.noConflict(); 
-/*
-jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
-  var nil = null; // to translate nil to null
-  plot_chart(<%# @chart_data.inspect if !@version.effective_date.nil? %>);
-}}); 
-*/
-var $link = jQuery(".show_reference");
-$link.click(function(){
-  var group = jQuery(this).attr("title");
-  var $group = jQuery("#" + group);
-  
-  if($group.is(":visible"))
-  {
-    $group.slideUp();
-    $link.text("Show Reference");
-  }
-   
-  else
-  {
-    $group.slideDown();
-    $link.text("Hide Reference");
-  }
-})
+  jQuery.noConflict();
+  /*
+    jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
+      var nil = null; // to translate nil to null
+      plot_chart(<%# @chart_data.inspect if !@version.effective_date.nil? %>);
+    }});
+  */
+  var $link = jQuery(".show_reference");
+  $link.click(function(){
+    var group = jQuery(this).attr("title");
+    var $group = jQuery("#" + group);
+
+    if($group.is(":visible"))
+    {
+      $group.slideUp();
+      $link.text("Show Reference");
+    }
+
+    else
+    {
+      $group.slideDown();
+      $link.text("Hide Reference");
+    }
+  })
 </script>
 
 <% else %>

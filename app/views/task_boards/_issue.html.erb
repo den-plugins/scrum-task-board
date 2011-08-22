@@ -1,10 +1,4 @@
-
-
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%>">
-  
-  
-  
-  
   <div class="issue_number"><%= link_to_issue issue %></div>
   <div class="initial_controls" style="display: none;">
     <div class="edit" title="Edit">Edit</div>
@@ -15,30 +9,20 @@
     <p class="assignee <%= "current_is_assigned" if issue.assigned_to.eql? User.current %>"><%= issue.assigned_to %></p>
     <p><%= truncate(issue.subject, :length => 50) %></p>
     <%= progress_bar issue.done_ratio, :width => '100%'%>
-    
-    </div>
   </div>
-  
+
   <div class="edit_here" style="display:none;">
     <div class="cancel" title="Cancel">Cancel</div>
     <div class="submit_link" title="Save">Save</div>
-  <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue', :id => issue.id}, :method => :post) do |f| %>
-   
-   <%= select_assigned_to f, issue %>
-   <%#= f.select :status_id, status.collect {|s| [s.name, s.id] if s.is_a? IssueStatus}.reject {|val, id| id.nil? }, :selected => issue.status_id, :include_blank => false %>
-  <% end %>
-   
+    <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue', :id => issue.id}, :method => :post) do |f| %>
+      <%= select_assigned_to f, issue %>
+      <%= f.select :status_id, collection_status_group(issue), :selected => issue.status.id %>
+    <% end %>
   </div>
-  
-</li> 
+</li>
 
-
-
-
-
-
-<% if not issue.children_here? %>      
-<%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'")%>
+<% if not issue.children_here? %>
+  <%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'")%>
 <% end %>
 
 <script type="text/javascript">
@@ -47,40 +31,42 @@
     function(){
       if(!jQuery("#<%= dom_id(issue) %> .edit_here").is(":visible"))
         jQuery("#<%= dom_id(issue) %> .initial_controls").show();
-    },
+      },
     function(){jQuery("#<%= dom_id(issue) %> .initial_controls").hide();});
 
   jQuery("#<%= dom_id(issue) %> .edit").click(function(){
-      jQuery("#<%= dom_id(issue) %> .current_data, #<%= dom_id(issue) %> .initial_controls").hide();
-      jQuery("#<%= dom_id(issue) %> .edit_here").show();
+    jQuery("#<%= dom_id(issue) %> .current_data, #<%= dom_id(issue) %> .initial_controls").hide();
+    jQuery("#<%= dom_id(issue) %> .edit_here").show();
   });
         
   jQuery("#<%= dom_id(issue) %> .cancel").click(function(){
-      jQuery("#<%= dom_id(issue) %> .edit_here").hide(); 
-      jQuery("#<%= dom_id(issue) %> .initial_controls").show();
-      var img =  jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image').split('/');
-      if(img[img.length -1] == "zoom_out.png)")
-         jQuery("#<%= dom_id(issue) %> .current_data").show();
-  });  
+    jQuery("#issue_assigned_to_id").val("<%= issue.assigned_to ? issue.assigned_to.id : '' %>");
+    jQuery("#issue_status_id").val("<%= issue.status.id %>");
+    jQuery("#<%= dom_id(issue) %> .edit_here").hide();
+    jQuery("#<%= dom_id(issue) %> .initial_controls").show();
+    var img =  jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image').split('/');
+    if(img[img.length -1] == "zoom_out.png)")
+      jQuery("#<%= dom_id(issue) %> .current_data").show();
+  });
   
   jQuery("#<%= dom_id(issue) %> .toggle_details").click(function(){
-      jQuery("#<%= dom_id(issue) %> .current_data").toggle(1, function()
-      {
-        if(jQuery(this).is(":visible"))
-          jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
-        else
-          jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
+    jQuery("#<%= dom_id(issue) %> .current_data").toggle(1, function()
+    {
+      if(jQuery(this).is(":visible"))
+        jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
+      else
+        jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
       });
   })
 
   jQuery("#<%= dom_id(issue) %> .submit_link").click(
-    function()
-    {
-      var choice = confirm("Check changes for assigned to and status and confirm.");
-      if(choice)
-        jQuery("#<%= dom_id(issue) %> form").submit();
-      else
-        return false;
-    });
+  function()
+  {
+    var choice = confirm("Check changes for assigned to and status and confirm.");
+    if(choice)
+      jQuery("#<%= dom_id(issue) %> form").submit();
+    else
+      return false;
+  });
 
 </script>

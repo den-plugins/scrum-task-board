@@ -2,7 +2,6 @@
       if child.fixed_version_id == @version.id and not child.version_children.empty? %>
     <%= render :partial => "row", :locals => { :feature => parent, :color =>  color } %>
    <% end %>
-<%  end %>  
+<%  end %>
 
-
-  <%= render :partial => "loop", :locals => { :parent => feature, :color => 16777215 } %>
+<%= render :partial => "loop", :locals => { :parent => feature, :color => 16777215 } %>

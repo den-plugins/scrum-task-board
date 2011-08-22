@@ -1,54 +1,46 @@
 <tr style="background:#<%= color.to_s(16) %>;">
-    <td class="task_board_feature" style="border: 1px solid #<%= color.to_s(16) %>; border-bottom: 1px solid #ddd;">
-        <% if feature.feature? %>
-        <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag">
-          <div class="issue_number"><%= link_to_issue(feature) %></div>
-          <p class="assignee <%= "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to %></p>
-          <p class="issue_subject"><%= feature.subject %></p>
-          <hr/>
-          <%= progress_bar feature.done_ratio, :width => '100%'%>
-        </div>
-        <% else %>
-          
-        <p>&nbsp;</p>
-          
-        <% end %> 
-    </td> 
-    <td class="task_board_task" style="border: 1px solid #<%= color.to_s(16) %>; border-bottom: 1px solid #ddd;">
-        <% if feature.task? %>
-        <div>
-        <img alt="Child" src="/images/child.gif">
-        <div class="task_board_data task_board_task_data task_board_task_parent no_drag" id="<%= dom_id(feature) %>_parent" style="display:inline-block;">
-          <div class="issue_number"><%= link_to_issue(feature) %></div>
-          <p class="assignee <%= "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to %></p>
-          <p><%= feature.subject %></p>
-          <hr/>
-          <%= progress_bar feature.done_ratio, :width => '100%'%>
-        </div>
-        </div>
-        <% else %>
-          
-        <p>&nbsp;</p>
-          
-        <% end %>
-    </td>
-    
-    <% @task_cols.to_a.each do |col| %>
-      <%# status = col[1][0] %>
-      <% col[1].each do |status| %>
-        <% if !status.eql?(col[1].last) or col[1].one? %>
-          <% if status.name.eql?(col[1].last) or col[1].one? %>
-            <td id="<%= task_board_dom_id(feature, status) %>" class="<%= cycle('odd', 'even') %>">
-              <ul id="<%= task_board_dom_id(feature, status, 'list') %>">
-              <% col[1].each do |s| %>
-                <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[s]) %>
-              <% end %>
-              </ul>
-              <%= task_board_drop_receiving_element(task_board_dom_id(feature, status), status) %>
-            </td>
-          <% end %>
-        <% end %>
+  <td class="task_board_feature" style="border: 1px solid #<%= color.to_s(16) %>; border-bottom: 1px solid #ddd;">
+  <% if feature.feature? %>
+    <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag">
+      <div class="issue_number"><%= link_to_issue(feature) %></div>
+      <p class="assignee <%= "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to %></p>
+      <p class="issue_subject"><%= feature.subject %></p>
+      <hr/>
+      <%= progress_bar feature.done_ratio, :width => '100%'%>
+    </div>
+  <% else %>
+    <p>&nbsp;</p>
+  <% end %>
+  </td>
+   
+  <td class="task_board_task" style="border: 1px solid #<%= color.to_s(16) %>; border-bottom: 1px solid #ddd;">
+  <% if feature.task? %>
+    <div>
+      <img alt="Child" src="/images/child.gif">
+      <div class="task_board_data task_board_task_data task_board_task_parent no_drag" id="<%= dom_id(feature) %>_parent" style="display:inline-block;">
+        <div class="issue_number"><%= link_to_issue(feature) %></div>
+        <p class="assignee <%= "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to %></p>
+        <p><%= feature.subject %></p>
+        <hr/>
+        <%= progress_bar feature.done_ratio, :width => '100%'%>
+      </div>
+    </div>
+  <% else %>
+    <p>&nbsp;</p>
+  <% end %>
+  </td>
+
+  <% @status_columns.each do |k| %>
+    <% default = @status_grouped[k][:default] %>
+    <td id="<%= task_board_dom_id(feature, default) %>" class="<%= cycle('odd', 'even') %>">
+    <ul id="<%= task_board_dom_id(feature, default, 'list') %>">
+      <% @status_grouped[k][:statuses].each do |status| %>
+        <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]) %>
       <% end %>
-    <% end -%>
+    </ul>
+    <%= task_board_drop_receiving_element(task_board_dom_id(feature, default), default) %>
+    </td>
+  <% end %>
+  
 </tr>
     
