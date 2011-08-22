@@ -25,7 +25,7 @@
   <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue', :id => issue.id}, :method => :post) do |f| %>
    
    <%= select_assigned_to f, issue %>
-   <%= f.select :status_id, status.collect {|s| [s.name, s.id] if s.is_a? IssueStatus}.reject {|val, id| id.nil? }, :selected => issue.status_id, :include_blank => false %>
+   <%#= f.select :status_id, status.collect {|s| [s.name, s.id] if s.is_a? IssueStatus}.reject {|val, id| id.nil? }, :selected => issue.status_id, :include_blank => false %>
   <% end %>
    
   </div>
