@@ -240,6 +240,7 @@
   background: transparent url('../images/copy.png') no-repeat;
   top: 2px;
   left: 50px;
+  outline: 0;
 }
 
 #task_board .current_data, #task_board .edit_here {
