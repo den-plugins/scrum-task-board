@@ -22,7 +22,7 @@
   <div class="edit_here" style="display:none;">
     <div class="cancel" title="Cancel">Cancel</div>
     <div class="submit_link" title="Save">Save</div>
-  <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue_assigned_to', :id => issue.id}, :method => :post) do |f| %>
+  <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue', :id => issue.id}, :method => :post) do |f| %>
    
    <%= select_assigned_to f, issue %>
    <%= f.select :status_id, status.collect {|s| [s.name, s.id] if s.is_a? IssueStatus}.reject {|val, id| id.nil? }, :selected => issue.status_id, :include_blank => false %>
@@ -44,7 +44,10 @@
 <script type="text/javascript">
 
   jQuery("#<%= dom_id(issue) %>").hover(
-    function(){jQuery("#<%= dom_id(issue) %> .initial_controls").show();},
+    function(){
+      if(!jQuery("#<%= dom_id(issue) %> .edit_here").is(":visible"))
+        jQuery("#<%= dom_id(issue) %> .initial_controls").show();
+    },
     function(){jQuery("#<%= dom_id(issue) %> .initial_controls").hide();});
 
   jQuery("#<%= dom_id(issue) %> .edit").click(function(){
