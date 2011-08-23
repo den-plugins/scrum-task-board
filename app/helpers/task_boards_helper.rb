@@ -34,10 +34,12 @@ module TaskBoardsHelper
     f.select :assigned_to_id, (@project.members.collect {|p| [p.name, p.user.id]}), :selected => (issue.assigned_to.nil? ? '' : issue.assigned_to.id), :required => true
   end
   
-  def collection_status_group(issue)
+  def select_status f, issue
     group = @status_grouped
     x = group.keys.detect {|k| group[k][:statuses].include? issue.status }
-    group[x][:statuses].collect {|k| [k.name, k.id]}
+    if group[x][:statuses].count > 1
+      f.select :status_id, group[x][:statuses].collect {|k| [k.name, k.id]}, :selected => issue.status.id
+    end
   end
   
   def link_to_issue(issue, options={})
