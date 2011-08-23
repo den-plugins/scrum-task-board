@@ -33,7 +33,7 @@ module VersionExtn
     end
     
     def narrow_down tracker
-      Issue.find(:all, :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker], :include => [:status, :fixed_version, :assigned_to, :parent, :relations_from])
+      Issue.find(:all, :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker], :include => [:status, :assigned_to])
     end
     
     def bug_count

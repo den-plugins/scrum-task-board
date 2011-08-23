@@ -26,47 +26,6 @@
 <% end %>
 
 <script type="text/javascript">
-
-  jQuery("#<%= dom_id(issue) %>").hover(
-    function(){
-      if(!jQuery("#<%= dom_id(issue) %> .edit_here").is(":visible"))
-        jQuery("#<%= dom_id(issue) %> .initial_controls").show();
-      },
-    function(){jQuery("#<%= dom_id(issue) %> .initial_controls").hide();});
-
-  jQuery("#<%= dom_id(issue) %> .edit").click(function(){
-    jQuery("#<%= dom_id(issue) %> .current_data, #<%= dom_id(issue) %> .initial_controls").hide();
-    jQuery("#<%= dom_id(issue) %> .edit_here").show();
-  });
-        
-  jQuery("#<%= dom_id(issue) %> .cancel").click(function(){
-    jQuery("#issue_assigned_to_id").val("<%= issue.assigned_to ? issue.assigned_to.id : '' %>");
-    jQuery("#issue_status_id").val("<%= issue.status.id %>");
-    jQuery("#<%= dom_id(issue) %> .edit_here").hide();
-    jQuery("#<%= dom_id(issue) %> .initial_controls").show();
-    var img =  jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image').split('/');
-    if(img[img.length -1] == "zoom_out.png)")
-      jQuery("#<%= dom_id(issue) %> .current_data").show();
-  });
-  
-  jQuery("#<%= dom_id(issue) %> .toggle_details").click(function(){
-    jQuery("#<%= dom_id(issue) %> .current_data").toggle(1, function()
-    {
-      if(jQuery(this).is(":visible"))
-        jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
-      else
-        jQuery('#<%= dom_id(issue) %> .toggle_details').css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
-      });
-  })
-
-  jQuery("#<%= dom_id(issue) %> .submit_link").click(
-  function()
-  {
-    var choice = confirm("Check changes for assigned to and status and confirm.");
-    if(choice)
-      jQuery("#<%= dom_id(issue) %> form").submit();
-    else
-      return false;
-  });
-
+  sticky_note("<%= dom_id(issue) %>", "<%= issue.assigned_to ? issue.assigned_to : '' %>", "<%= issue.status.id %>");
 </script>
+

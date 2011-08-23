@@ -39,9 +39,10 @@
 
 <% if @featured or @bugged %>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    j = jQuery.noConflict(); //This allows Prototype to go undisturbed
-  </script>
+  <%= javascript_include_tag  'sticky_note', :plugin => 'scrum_task_board', :cache => true %>
+28416
+Show Children
+CancelSave  
 
 <table id="task_board" cellspacing="0">
   <thead>
@@ -115,43 +116,8 @@
   <% end %>
   </tbody>
 </table>
-<%= javascript_include_tag  'fixedtableheader', :plugin => 'scrum_task_board' %>
-
-<%= javascript_include_tag 'jquery.jqplot.js', :plugin => 'redmine_burndown' %>
-<%= javascript_include_tag 'plugins/jqplot.canvasTextRenderer.min.js', :plugin => 'redmine_burndown' %>
-<%= javascript_include_tag 'plugins/jqplot.canvasAxisLabelRenderer.min.js', :plugin => 'redmine_burndown' %>
-<%= javascript_include_tag 'plugins/jqplot.cursor.min.js', :plugin => 'redmine_burndown' %>
-<%= javascript_include_tag 'plugins/jqplot.dateAxisRenderer.min.js', :plugin => 'redmine_burndown' %>
-<%= javascript_include_tag 'plugins/jqplot.highlighter.min.js', :plugin => 'redmine_burndown' %>
-<%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
-
-<script type="text/javascript">
-  jQuery.noConflict();
-  /*
-    jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
-      var nil = null; // to translate nil to null
-      plot_chart(<%# @chart_data.inspect if !@version.effective_date.nil? %>);
-    }});
-  */
-  var $link = jQuery(".show_reference");
-  $link.click(function(){
-    var group = jQuery(this).attr("title");
-    var $group = jQuery("#" + group);
-
-    if($group.is(":visible"))
-    {
-      $group.slideUp();
-      $link.text("Show Reference");
-    }
-
-    else
-    {
-      $group.slideDown();
-      $link.text("Hide Reference");
-    }
-  })
-</script>
-
+<%= javascript_include_tag  'fixedtableheader', :plugin => 'scrum_task_board', :cache => true %>
+<%= javascript_include_tag 'jquery.jqplot.js', 'plugins/jqplot.canvasTextRenderer.min.js',  'plugins/jqplot.canvasAxisLabelRenderer.min.js', 'plugins/jqplot.cursor.min.js', 'plugins/jqplot.dateAxisRenderer.min.js', 'plugins/jqplot.highlighter.min.js', 'chart.js', :plugin => 'redmine_burndown', :cache => "burndown_chart" %>
 <% else %>
   <h3><%= @error_msg %></h3>
 <% end %>
