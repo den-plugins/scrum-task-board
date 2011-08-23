@@ -10,7 +10,7 @@ module TaskBoardsHelper
       :accept => status.class_name,
       :hoverclass => 'hovered',
       :url => {:controller => 'task_boards', :action => 'update_issue_status'},
-      :with => "'issue_id=' + (element.id.split('_').last()) + '&status_id=#{status.id}&id=#{@project.id}'")
+      :with => "'issue_id=' + (element.id.split('_').last()) + '&status_id=#{status.id}&id=#{@project.id}&board=#{params[:board]}'")
   end
   
   def task_board_dom_id(issue, status, suffix='')
@@ -35,7 +35,7 @@ module TaskBoardsHelper
   end
   
   def collection_status_group(issue)
-    group = IssueStatusGroup::GROUPED
+    group = @status_grouped
     x = group.keys.detect {|k| group[k][:statuses].include? issue.status }
     group[x][:statuses].collect {|k| [k.name, k.id]}
   end

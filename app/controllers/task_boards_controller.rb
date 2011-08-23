@@ -20,10 +20,11 @@ class TaskBoardsController < ApplicationController
     #@task_cols["Feedback"] = IssueStatus.all(:conditions => "name = 'Feedback' or name = 'For Review' or name = 'For Monitoring'") << "Feedback"
     #@task_cols["Done"] = IssueStatus.all(:conditions => "name = 'Closed'")
     
-    @status_grouped = IssueStatusGroup::GROUPED
-    @status_columns = ordered_keys(@status_grouped)
 
     if params[:board].to_i.eql? 1
+      @status_grouped = IssueStatusGroup::TASK_GROUPED
+      @status_columns = ordered_keys(@status_grouped)
+      
       #This part needs to be optimized
       @features = @version.features
       @tasks = @version.tasks
@@ -64,6 +65,8 @@ class TaskBoardsController < ApplicationController
       @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
      
     elsif params[:board].to_i.eql? 2
+      @status_grouped = IssueStatusGroup::BUG_GROUPED
+      @status_columns = ordered_keys(@status_grouped)
       @bugs = @version.bugs
       @bugged = @bugs.empty? ? false : true
       @error_msg = "There are no Bugs for this version." if not @bugged
@@ -79,13 +82,14 @@ class TaskBoardsController < ApplicationController
   def update_issue_status
     get_project
     @status = IssueStatus.find(params[:status_id])
-    
     @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, "Automated status change from the Task Board")
 
     attrs = {:status_id => @status.id}
     #attrs.merge!(:assigned_to_id => User.current.id) unless @issue.assigned_to_id?
     @issue.update_attributes(attrs)
+    
+    @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
     
     render :update do |page|
       page.remove dom_id(@issue)
