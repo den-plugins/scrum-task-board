@@ -100,7 +100,8 @@ class TaskBoardsController < ApplicationController
     @issue.update_attributes(params[:issue])
     render :update do |page|
       page.select("##{dom_id(@issue)} .edit_here").first.hide
-      page.select("##{dom_id(@issue)} .current_data .assignee").first.update("#{@issue.assigned_to}") # replace this with a partial if editing more than one field
+      page.select("##{dom_id(@issue)} .current_data .assignee").first.update("#{@issue.assigned_to}")
+      page.select("##{dom_id(@issue)} .current_data .status").first.update("#{@issue.status}")
       page.select("##{dom_id(@issue)} .edit").first.update("Edit")
       page.select("##{dom_id(@issue)} .current_data").first.show
       page.visual_effect(:highlight, "#{dom_id(@issue)}")

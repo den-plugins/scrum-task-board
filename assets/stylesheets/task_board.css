@@ -46,7 +46,11 @@
 
 /***** SHOW *****/
 
-#task_board { width: 100%; }
+#task_board { 
+  width: 100%;
+  empty-cells: show;
+  table-layout: fixed;
+}
   #task_board .hovered { background: #FEFF9F; }
   #task_board .story_subject { font-size: 10px; margin-top: 9px; }
   #task_board tr th { background: #fff; }
@@ -142,7 +146,6 @@
   -webkit-box-shadow: 2px 2px 2px #818181;
   box-shadow: 2px 2px 2px #818181;
   margin: 6px 2px;
-  width: 160px;
   cursor: move;
   opacity: 0.9;
 }
@@ -164,7 +167,6 @@
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-  margin: 4px -4px 4px 4px;
   position: relative;
   cursor: default;
 }
@@ -178,9 +180,23 @@
   font-size: 8px;
 } 
 
-.task_board_data .assignee {
-  background: #ddd;
-  padding: 0 4px;
+.current_data .assignee {
+  background: #d0d0d0;
+  font-weight: bold;
+  height: 12px;
+}
+
+.current_data .status {
+  font-style: italic;
+}
+
+.current_data .estimate {
+  background-color: #b5b5b5;
+  height: 12px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 40px;
 }
  
 .task_board_data .current_is_assigned {
@@ -224,14 +240,8 @@
   left: 26px;
 }
 
-#task_board .toggle_details {
-  background:  transparent url('../images/zoom_in.png') no-repeat;
-  top: 2px;
-  left: 26px;
-}
-
-#task_board .toggle_details_min {
-  background:  transparent url('../images/zoom_in.png') no-repeat;
+#task_board .toggle_details{
+  background:  transparent url('../images/zoom_out.png') no-repeat;
   top: 2px;
   left: 26px;
 }
@@ -245,6 +255,8 @@
 
 #task_board .current_data, #task_board .edit_here {
   min-height:80px;
+  font-family: sans, Arial;
+  font-size: 12px;
 }
 
 #task_board .issue_subject {

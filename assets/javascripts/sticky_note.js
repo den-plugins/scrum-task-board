@@ -20,7 +20,7 @@ function sticky_note(issue, assigned_to, status_id)
     jQuery("#" + issue + " .edit_here").hide();
     jQuery("#" + issue + " .initial_controls").show();
     var img =  jQuery("#" + issue + " .toggle_details").css('background-image').split('/');
-    if(img[img.length -1] == "zoom_out.png)")
+    if(img[img.length-1] == "zoom_ out.png)")
       jQuery("#" + issue + " .current_data").show();
   });
   

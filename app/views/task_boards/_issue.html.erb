@@ -1,3 +1,4 @@
+<div style='width: 100%; padding: 0; margin: 0;' >
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%>">
   <div class="issue_number"><%= link_to_issue issue %></div>
   <div class="initial_controls" style="display: none;">
@@ -5,10 +6,13 @@
     <div class="toggle_details" title="Show Details">Show Details</div>
   </div>
   <%= link_to "Show Children", "##{dom_id(issue)}_parent", :class => "has_subtasks", :title => "This issue has sub-issues" if issue.children_here? %>
-  <div class="current_data" style="display:none">
-    <p class="assignee <%= "current_is_assigned" if issue.assigned_to.eql? User.current %>"><%= issue.assigned_to %></p>
+  <div class="current_data">
+    <p class="estimate"><%= issue.estimated_hours ? issue.estimated_hours : '' %></p>
+    <p class="assignee <%= "current_is_assigned" if issue.assigned_to.eql? User.current %>"><%= issue.assigned_to ? issue.assigned_to : '' %></p>
+    <p class="status"><%= issue.status.name %></p>
+    <hr/>
     <p><%= truncate(issue.subject, :length => 50) %></p>
-    <%= progress_bar issue.done_ratio, :width => '100%'%>
+    <%= progress_bar issue.done_ratio, :width =>'100%' %>
   </div>
 
   <div class="edit_here" style="display:none;">
@@ -20,6 +24,7 @@
     <% end %>
   </div>
 </li>
+</div>
 
 <% if not issue.children_here? %>
   <%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'")%>
