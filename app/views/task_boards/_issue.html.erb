@@ -7,7 +7,7 @@
   </div>
   <%= link_to "Show Children", "##{dom_id(issue)}_parent", :class => "has_subtasks", :title => "This issue has sub-issues" if issue.children_here? %>
   <div class="current_data">
-    <p class="estimate"><%= issue.estimated_hours ? issue.estimated_hours : '' %></p>
+    <p class="estimate"><%= issue.remaining_effort ? issue.remaining_effort : '' %></p>
     <p class="assignee <%= "current_is_assigned" if issue.assigned_to.eql? User.current %>"><%= issue.assigned_to ? issue.assigned_to : '' %></p>
     <p class="status"><%= issue.status.name %></p>
     <hr/>

@@ -3,19 +3,13 @@ require_dependency 'project'
 module VersionExtn
   def self.included(base)
     base.extend(ClassMethods)
-
     base.send(:include, InstanceMethods)
-
-    # Same as typing in the class
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
-
     end
-
   end
   
   module ClassMethods  
-      
   end
   
   module InstanceMethods
@@ -33,7 +27,7 @@ module VersionExtn
     end
     
     def narrow_down tracker
-      Issue.find(:all, :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker], :include => [:status, :assigned_to])
+      Issue.find(:all, :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker], :include => [:status, :assigned_to], :order => 'id ASC')
     end
     
     def bug_count
@@ -48,11 +42,9 @@ module VersionExtn
       selected_issue_count 4
     end
     
-    
     def selected_issue_count tracker
       Issue.count(:all, :select => "id", :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker])
     end
-    
     
   end
 end
