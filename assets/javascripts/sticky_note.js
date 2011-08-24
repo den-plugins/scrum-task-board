@@ -19,18 +19,21 @@ function sticky_note(issue, assigned_to, status_id)
     jQuery("#issue_status_id").val(status_id);
     jQuery("#" + issue + " .edit_here").hide();
     jQuery("#" + issue + " .initial_controls").show();
-    var img =  jQuery("#" + issue + " .toggle_details").css('background-image').split('/');
-    if(img[img.length-1] == "zoom_ out.png)")
+    if ( jQuery("#" + issue + " .toggle_details").hasClass('maximized')){
       jQuery("#" + issue + " .current_data").show();
+    }
   });
   
   jQuery("#" + issue + " .toggle_details").click(function(){
     jQuery("#" + issue + " .current_data").toggle(1, function()
     {
-      if(jQuery(this).is(":visible"))
-        jQuery("#" + issue + " .toggle_details").css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
+      //if(jQuery(this).is(":visible"))
+      if ( jQuery("#" + issue + " .toggle_details").hasClass('maximized'))
+        //jQuery("#" + issue + " .toggle_details").css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
+        jQuery("#" + issue + " .toggle_details").removeClass("maximized").addClass("minimized");
       else
-        jQuery("#" + issue + " .toggle_details").css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
+        //jQuery("#" + issue + " .toggle_details").css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
+        jQuery("#" + issue + " .toggle_details").removeClass("minimized").addClass("maximized");
       });
   })
 

@@ -12,13 +12,15 @@ jQuery(function( $ ){
  jQuery("#toggle_all").click(function(){
   if(jQuery(this).is(":checked"))
   {
-     jQuery(".current_data").show();  
-    jToggleDetails.css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
+     jQuery(".current_data").show();
+     if (jToggleDetails.hasClass("minimized")) jToggleDetails.removeClass("minimized").addClass("maximized");
+     //jToggleDetails.css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
   }
   else
   {
      jQuery(".current_data").hide();
-    jToggleDetails.css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
+     if (jToggleDetails.hasClass("maximized")) jToggleDetails.removeClass("maximized").addClass("minimized");
+     //jToggleDetails.css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
   }
  });
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

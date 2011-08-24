@@ -240,8 +240,14 @@
   left: 26px;
 }
 
-#task_board .toggle_details{
+#task_board .toggle_details.maximized{
   background:  transparent url('../images/zoom_out.png') no-repeat;
+  top: 2px;
+  left: 26px;
+}
+
+#task_board .toggle_details.minimized{
+  background:  transparent url('../images/zoom_in.png') no-repeat;
   top: 2px;
   left: 26px;
 }
