@@ -6,7 +6,7 @@ module IssueExtn
     base.send(:include, InstanceMethods)
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
-      has_many :remaining_effort_entries
+      has_many :remaining_effort_entries, :dependent => :destroy
     end
   end
   
@@ -16,7 +16,7 @@ module IssueExtn
   module InstanceMethods
   
     def remaining_effort=(value)
-      self.remaining_effort_entries.build(:remaining_effort => value, :created_on => Date.today) unless value.nil?
+      self.remaining_effort_entries.build(:remaining_effort => value, :created_on => Date.today)
     end
     
     def remaining_effort

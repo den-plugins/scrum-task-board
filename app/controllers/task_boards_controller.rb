@@ -103,11 +103,9 @@ class TaskBoardsController < ApplicationController
     @issue = Issue.find(params[:id])
     @issue.update_attributes(params[:issue])
     render :update do |page|
-      page.select("##{dom_id(@issue)} .edit_here").first.hide
       page.select("##{dom_id(@issue)} .current_data .assignee").first.update("#{@issue.assigned_to}")
       page.select("##{dom_id(@issue)} .current_data .status").first.update("#{@issue.status}")
       page.select("##{dom_id(@issue)} .edit").first.update("Edit")
-      page.select("##{dom_id(@issue)} .current_data").first.show
       page[dom_id(@issue).to_sym].className = "#{status_classes_for(@issue, User.current)} task_board_data #{ task_board_border_class(@issue) }"
       page.visual_effect(:highlight, "#{dom_id(@issue)}")
     end

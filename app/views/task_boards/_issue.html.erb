@@ -21,7 +21,6 @@
     <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue', :id => issue.id}, :method => :post) do |f| %>
       <%= select_assigned_to f, issue %>
       <%= select_status f, issue %>
-      <%#= f.select :status_id, collection_status_group(issue), :selected => issue.status.id %>
     <% end %>
   </div>
 </li>

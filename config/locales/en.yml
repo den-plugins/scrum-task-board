@@ -1,5 +1,6 @@
 en:
   field_estimated_hours: Estimated Effort
   field_remaining_effort: Remaining Effort
+  field_remaining_effort_entries: Remaining Effort
   field_sp_hours: Story Points/ Hours
   task_board_text_no_sprint: There is no current Sprint for this Project

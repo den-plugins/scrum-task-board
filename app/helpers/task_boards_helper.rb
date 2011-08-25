@@ -31,7 +31,7 @@ module TaskBoardsHelper
   end
   
   def select_assigned_to f, issue
-    f.select :assigned_to_id, (@project.members.collect {|p| [p.name, p.user.id]}), :selected => (issue.assigned_to.nil? ? '' : issue.assigned_to.id), :required => true
+    f.select :assigned_to_id, (@project.members.collect {|p| [p.name, p.user.id]}), :selected => (issue.assigned_to.nil? ? '' : issue.assigned_to.id), :include_blank => true
   end
   
   def select_status f, issue

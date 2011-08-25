@@ -15,24 +15,18 @@ function sticky_note(issue, assigned_to, status_id)
   });
         
   jQuery("#" + issue + " .cancel").click(function(){
-    jQuery("#issue_assigned_to_id").val(assigned_to);
-    jQuery("#issue_status_id").val(status_id);
     jQuery("#" + issue + " .edit_here").hide();
     jQuery("#" + issue + " .initial_controls").show();
-    if ( jQuery("#" + issue + " .toggle_details").hasClass('maximized')){
+    if ( jQuery("#" + issue + " .toggle_details").hasClass('maximized'))
       jQuery("#" + issue + " .current_data").show();
-    }
   });
   
   jQuery("#" + issue + " .toggle_details").click(function(){
     jQuery("#" + issue + " .current_data").toggle(1, function()
     {
-      //if(jQuery(this).is(":visible"))
       if ( jQuery("#" + issue + " .toggle_details").hasClass('maximized'))
-        //jQuery("#" + issue + " .toggle_details").css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
         jQuery("#" + issue + " .toggle_details").removeClass("maximized").addClass("minimized");
       else
-        //jQuery("#" + issue + " .toggle_details").css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
         jQuery("#" + issue + " .toggle_details").removeClass("minimized").addClass("maximized");
       });
   })
@@ -41,9 +35,13 @@ function sticky_note(issue, assigned_to, status_id)
   function()
   {
     var choice = confirm("Check changes for assigned to and status and confirm.");
-    if(choice)
+    if(choice){
+      jQuery("#" + issue + " .edit_here").hide();
+      if (jQuery("#" + issue + " .toggle_details").hasClass('maximized'))
+        jQuery("#" + issue + " .current_data").show();
       jQuery("#" + issue + " form").submit();
-    else
+    }else{
       return false;
+    }
   });
 }
