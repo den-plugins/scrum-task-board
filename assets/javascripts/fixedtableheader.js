@@ -97,7 +97,7 @@ $view.resize(function(){
 });
 
 ///Jump to row 
- jQuery(".has_subtasks").click(function()
+ jQuery(".to_parent").click(function()
  {
   var tr = jQuery(this).attr('href');
   setTimeout(function(){
