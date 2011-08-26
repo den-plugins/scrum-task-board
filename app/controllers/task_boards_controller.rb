@@ -30,7 +30,7 @@ class TaskBoardsController < ApplicationController
       @tasks = @version.tasks
       
       @features.delete_if.each do |f|
-        @tasks << f if not f.children_here?
+        @tasks << f if f.version_descendants.empty?
       end
 
       @tasks.reject!.each do |f|

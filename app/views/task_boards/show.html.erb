@@ -26,7 +26,7 @@
     <![endif]-->
 
   <style type="text/css" media="screen">
-    #task_board tr th { width: <%= 100 / (@statuses.size + 1) %>%;}
+    #task_board tr th { width: <%= 100 / (@status_columns.size) %>%;}
     .show_reference { cursor: pointer;}
   </style>
 <% end %>
@@ -47,16 +47,13 @@
   <% if @featured %>
     <% unless @features.empty? %>
       <th>Feature</th>
-      <th>Tasks</th>
-    <% else %>
-      <th colspan="2">&nbsp;</th>
     <% end %>
   <% else %>
-    <th colspan="2">&nbsp;</th>
+    <th>&nbsp;</th>
   <% end %>
 
   <% @status_columns.each do |cols| %>
-    <th> <%= cols %> </th>
+    <th> <%= cols %></th>
   <% end %>
   </tr>
   </thead>
@@ -65,21 +62,15 @@
   <% if @featured %>
     <% @features.each do |feature| %>
       <%= render :partial => "row", :locals => { :feature => feature, :color => 16777215 } %>
-      <%  feature.children.each do |child|
-        if child.fixed_version_id == @version.id and child.children_here? %>
-          <%= render :partial => "row", :locals => { :feature => child, :color => (16777215 - (1118481 * 2)) } %>
-          <%  child.children.each do |childnext|
-            if childnext.fixed_version_id == @version.id and childnext.children_here? %>
-              <%= render :partial => "row", :locals => { :feature => childnext, :color => (16777215 - (1118481 * 4)) } %>
-            <% end %>
-          <% end %>
-        <% end %>
-      <%  end %>
+      <% children = feature.version_children.reject {|f| f unless f.task_parent? } %>
+      <% Array(children).each do |child| %>
+        <%= render :partial => "row", :locals => { :feature => child, :color => 16777215 } %>
+      <% end %>
     <% end %>
     
     <% unless @tasks.empty? %>
       <tr id="other_issues">
-        <td colspan="2"><strong>Other Issues</strong></td>
+        <td><strong>Other Issues</strong></td>
         <% @status_columns.each do |k| %>
           <% default = @status_grouped[k][:default] %>
           <td id="<%= task_board_dom_id(nil, default) %>" class="<%= cycle('odd', 'even') %>">

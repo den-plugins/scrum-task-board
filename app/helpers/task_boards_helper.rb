@@ -26,7 +26,7 @@ module TaskBoardsHelper
     elsif issue.bug? : klass = "task_board_bug_data"
     elsif issue.support? : klass = "task_board_support_data" 
     end
-    klass += " no_drag" if issue.children_here?
+    klass += " no_drag" unless issue.version_descendants.empty?
     klass
   end
   

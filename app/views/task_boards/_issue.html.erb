@@ -5,7 +5,6 @@
     <div class="edit" title="Edit">Edit</div>
     <div class="toggle_details maximized" title="Show Details">Show Details</div>
   </div>
-  <%= link_to "Show Children", "##{dom_id(issue)}_parent", :class => "has_subtasks", :title => "This issue has sub-issues" if issue.children_here? %>
   <div class="current_data">
     <p class="estimate"><%= issue.remaining_effort ? issue.remaining_effort : '' %></p>
     <p class="assignee <%= "current_is_assigned" if issue.assigned_to.eql? User.current %>"><%= issue.assigned_to ? issue.assigned_to : '' %></p>
@@ -26,7 +25,7 @@
 </li>
 </div>
 
-<% if not issue.children_here? %>
+<% if issue.version_descendants.empty? %>
   <%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'")%>
 <% end %>
 

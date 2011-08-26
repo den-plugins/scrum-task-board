@@ -44,24 +44,23 @@ module IssueExtn
       self.tracker_id.eql? 4
     end
     
-    def children_here?
-      not self.version_children.empty?
-    end
+    #def children_here?
+    #  not self.version_children.empty?
+    #end
     
     def version_child?(version)
       not parent.nil? and parent.other_issue(self).fixed_version_id == version.id
     end
     
-    def version_descendants(version = nil)
-      descendants = []
+    def task_parent?
+      not version_descendants.empty? and !parent.nil? and parent.other_issue(self).parent.nil?
+    end
+    
+    def version_descendants(include_self=false)
+      descendants = include_self ? Array(self) : []
       self.children.each do |child|
-        if version
-          descendants << child if child.fixed_version_id == version.id
-          descendants += child.version_descendants(version)
-        else
-          descendants << child
+          descendants << child if child.fixed_version_id == self.fixed_version_id
           descendants += child.version_descendants
-        end
       end
       descendants
     end
