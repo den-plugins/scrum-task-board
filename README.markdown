@@ -2,11 +2,13 @@
 
 ## Introduction
 
-This plugin adds a 'Task Board' tab to your Project Menu for any Project with the 'Task Boards' module enabled (Settings>Modules). This tab will show the Task Board for the current Sprint (cough Version cough). 
+This plugin adds a 'Task Board' tab to your Project Menu for any Project with the 'Task Boards' module enabled (Settings>Modules). This tab will show the Task Board for the any Version. 
 
 The task board is a visual representation of the Issues in the Sprint grouped by Issue Status. This plugin allows you to drag-n-drop Issues from one Status to another as you progress through the Sprint.
 
 ## Coming Soon
+1. When a Project is compose of many sub-teams we need a way to view Task Boards in any Version in a specific Team or the whole Project.
+2. Display parent and its sub-tasking in a deck of cards view.
 
 ## Installation
 
