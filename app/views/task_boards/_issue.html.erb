@@ -19,7 +19,7 @@
     <div class="submit_link" title="Save">Save</div>
     <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue', :id => issue.id}, :method => :post) do |f| %>
       <%= select_assigned_to f, issue %>
-      <%= select_status f, issue %>
+      <%= select_status f, issue if issue.version_descendants.empty? %>
     <% end %>
   </div>
 </li>

@@ -44,16 +44,17 @@ module IssueExtn
       self.tracker_id.eql? 4
     end
     
-    #def children_here?
-    #  not self.version_children.empty?
-    #end
-    
     def version_child?(version)
       not parent.nil? and parent.other_issue(self).fixed_version_id == version.id
     end
     
     def task_parent?
       not version_descendants.empty? and !parent.nil? and parent.other_issue(self).parent.nil?
+    end
+    
+    def task_parent
+      return parent.other_issue(self) if parent.other_issue(self).parent.nil? and version_descendants.empty?
+      task_parent? ? self : parent.other_issue(self).task_parent
     end
     
     def version_descendants(include_self=false)

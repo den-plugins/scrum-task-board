@@ -47,6 +47,8 @@
   <% if @featured %>
     <% unless @features.empty? %>
       <th>Feature</th>
+    <% else %>
+      <th>&nbsp;</th>
     <% end %>
   <% else %>
     <th>&nbsp;</th>
@@ -87,7 +89,7 @@
     
   <% else %>
     <tr id="task_board_bugs">
-      <td colspan="2"><strong>Bugs</strong></td>
+      <td><strong>Bugs</strong></td>
       <% @status_columns.each do |k| %>
         <% default = @status_grouped[k][:default] %>
         <td id="<%= task_board_dom_id(nil, default) %>" class="<%= cycle('odd', 'even') %>">
