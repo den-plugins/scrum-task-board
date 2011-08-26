@@ -50,8 +50,6 @@
     <% else %>
       <th>&nbsp;</th>
     <% end %>
-  <% else %>
-    <th>&nbsp;</th>
   <% end %>
 
   <% @status_columns.each do |cols| %>
@@ -92,7 +90,6 @@
     
   <% else %>
     <tr id="task_board_bugs">
-      <td><strong>Bugs</strong></td>
       <% @status_columns.each do |k| %>
         <% default = @status_grouped[k][:default] %>
         <td id="<%= task_board_dom_id(nil, default) %>"> <!-- class="<%= cycle('odd', 'even') %>"> -->
