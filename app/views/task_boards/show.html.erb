@@ -63,7 +63,7 @@
   <tbody>
   <% if @featured %>
     <% @features.each do |feature| %>
-      <% color = cycle('E6E6E6', 'FFFFFF') %>
+      <% color = cycle('F0F0F0', 'FFFFFF') %>
       <tr style="background:#<%= color %>">
       <%= render :partial => "row", :locals => { :feature => feature, :color => color } %>
       <% children = feature.version_children.reject {|f| f unless f.task_parent? } %>
