@@ -1,6 +1,5 @@
-<tr style="background:#<%= color.to_s(16) %>;">
 <% unless feature.task_parent? %>
-    <td class="task_board_feature" style="border: 1px solid #<%= color.to_s(16) %>; border-bottom: 1px solid #ddd;">
+    <td class="task_board_feature" style="border: 1px solid #<%= color %>; border-bottom: 1px solid #ddd;">
     <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag">
       <div class="issue_number"><%= link_to_issue(feature) %></div>
       <p class="assignee <%= "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to %></p>
@@ -15,7 +14,7 @@
 
   <% @status_columns.each do |k| %>
     <% default = @status_grouped[k][:default] %>
-    <td id="<%= task_board_dom_id(feature, default) %>"> <!-- class="<%= cycle('odd', 'even') %>"> -->
+    <td id="<%= task_board_dom_id(feature, default) %>">
     <ul id="<%= task_board_dom_id(feature, default, 'list') %>">
       <% @status_grouped[k][:statuses].each do |status| %>
         <% if feature.task_parent? %>

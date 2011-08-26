@@ -63,15 +63,18 @@
   <tbody>
   <% if @featured %>
     <% @features.each do |feature| %>
-      <%= render :partial => "row", :locals => { :feature => feature, :color => 16777215 } %>
+      <% color = cycle('E6E6E6', 'FFFFFF') %>
+      <tr style="background:#<%= color %>">
+      <%= render :partial => "row", :locals => { :feature => feature, :color => color } %>
       <% children = feature.version_children.reject {|f| f unless f.task_parent? } %>
       <% Array(children).each do |child| %>
-        <%= render :partial => "row", :locals => { :feature => child, :color => 16777215 } %>
+        <tr style="background:#<%= color %>">
+        <%= render :partial => "row", :locals => { :feature => child, :color => color } %>
       <% end %>
     <% end %>
     
     <% unless @tasks.empty? %>
-      <tr id="other_issues">
+      <tr id="other_issues" style="background: #cacaca">
         <td><strong>Other Issues</strong></td>
         <% @status_columns.each do |k| %>
           <% default = @status_grouped[k][:default] %>

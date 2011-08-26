@@ -1,4 +1,3 @@
-<%# if !issue.children_here? %>
 <div style='width: 100%; padding: 0; margin: 0;' >
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%>">
   <div class="issue_number">
@@ -6,10 +5,8 @@
     <%= link_to_issue issue %></div>
   <div class="initial_controls" style="display: none;">
     <div class="edit" title="Edit">Edit</div>
-    <div class="toggle_details maximized" title="Show Details">Show Details</div>
+    <div class="toggle_details" title="Show Details">Show Details</div>
   </div>
-
-  <%# link_to "Show Children", "##{dom_id(issue)}_parent", :class => "has_subtasks", :title => "This issue has sub-issues" if issue.children_here? %>
 
   <div class="current_data">
     <p class="estimate"><%= issue.remaining_effort ? issue.remaining_effort : '' %></p>
@@ -19,6 +16,16 @@
     <p><%= truncate(issue.subject, :length => 50) %></p>
     <%= progress_bar issue.done_ratio, :width =>'100%' %>
   </div>
+
+<script type='text/javascript'>
+  if (jQuery("#toggle_all").is(":checked")){
+    jQuery('.toggle_details').addClass("maximized").removeClass("minimized");
+    jQuery('.current_data').show();
+  }else{
+    jQuery('.toggle_details').addClass("minimized").removeClass("maximized");
+    jQuery('.current_data').hide();
+  }
+</script>
 
   <div class="edit_here" style="display:none;">
     <div class="cancel" title="Cancel">Cancel</div>

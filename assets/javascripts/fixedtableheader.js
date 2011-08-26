@@ -23,6 +23,7 @@ jQuery(function( $ ){
      //jToggleDetails.css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
   }
  });
+ 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
 
