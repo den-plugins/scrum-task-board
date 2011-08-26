@@ -75,7 +75,7 @@
         <td><strong>Other Issues</strong></td>
         <% @status_columns.each do |k| %>
           <% default = @status_grouped[k][:default] %>
-          <td id="<%= task_board_dom_id(nil, default) %>" class="<%= cycle('odd', 'even') %>">
+          <td id="<%= task_board_dom_id(nil, default) %>"> <!-- class="<%= cycle('odd', 'even') %>"> -->
           <ul id="<%= task_board_dom_id(nil, default, 'list') %>">
             <% @status_grouped[k][:statuses].each do |status| %>
               <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[status]) %>
@@ -92,7 +92,7 @@
       <td><strong>Bugs</strong></td>
       <% @status_columns.each do |k| %>
         <% default = @status_grouped[k][:default] %>
-        <td id="<%= task_board_dom_id(nil, default) %>" class="<%= cycle('odd', 'even') %>">
+        <td id="<%= task_board_dom_id(nil, default) %>"> <!-- class="<%= cycle('odd', 'even') %>"> -->
         <ul id="<%= task_board_dom_id(nil, default, 'list') %>">
           <% @status_grouped[k][:statuses].each do |status| %>
             <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>

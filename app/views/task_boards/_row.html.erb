@@ -15,11 +15,11 @@
 
   <% @status_columns.each do |k| %>
     <% default = @status_grouped[k][:default] %>
-    <td id="<%= task_board_dom_id(feature, default) %>" class="<%= cycle('odd', 'even') %>">
+    <td id="<%= task_board_dom_id(feature, default) %>"> <!-- class="<%= cycle('odd', 'even') %>"> -->
     <ul id="<%= task_board_dom_id(feature, default, 'list') %>">
       <% @status_grouped[k][:statuses].each do |status| %>
         <% if feature.task_parent? %>
-          <%= render :partial => 'issue', :collection => Array(feature.version_descendants(true).group_by(&:status)[status]) %>
+          <%= render :partial => 'issue', :collection => Array(feature.version_descendants(true).group_by(&:status)[status]), :locals => {:descendant => true} %>
         <% else %>
           <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]).reject {|c| c if c.task_parent?} %>
         <% end %>
