@@ -1,7 +1,7 @@
-<% border = feature.task_parent? ? "border-bottom: 2px solid #DDD" : "border-bottom: 1px dashed #DDD" %>
+<% border = feature.task_parent? ? "border-top: 1px dashed #DDD" : "border-top: 2px solid #DDD" %>
 <% unless feature.task_parent? %>
     <td class="task_board_feature" style="<%= border %>">
-    <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag">
+    <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag" id="<%= dom_id(feature) %>">
       <div class="issue_number"><%= link_to_issue(feature) %></div>
       <p class="assignee <%= "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to %></p>
       <p class="issue_subject"><%= feature.subject %></p>

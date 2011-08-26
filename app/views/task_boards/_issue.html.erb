@@ -1,7 +1,8 @@
 <div style='width: 100%; padding: 0; margin: 0;' >
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%>">
   <div class="issue_number">
-    <small><%= "#{issue.parent.issue_from_id} > " if not defined?(descendant).nil? %></small>  
+    <%= link_to "#{issue.parent.issue_from_id} &raquo; ", "##{dom_id(issue.parent.issue_from)}", 
+                            :class => "to_parent", :style => "color: orange;", :title => "Jump to parent." if not defined?(descendant).nil? %> 
     <%= link_to_issue issue %></div>
   <div class="initial_controls" style="display: none;">
     <div class="edit" title="Edit">Edit</div>
