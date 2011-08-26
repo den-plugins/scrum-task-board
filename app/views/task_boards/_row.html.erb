@@ -3,11 +3,32 @@
     <td class="task_board_feature" style="<%= border %>">
     <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag" id="<%= dom_id(feature) %>">
       <div class="issue_number"><%= link_to_issue(feature) %></div>
-      <p class="assignee <%= "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to %></p>
-      <p class="issue_subject"><%= feature.subject %></p>
-      <hr/>
-      <%= progress_bar feature.done_ratio, :width => '100%'%>
-    </div>
+      <div class="initial_controls" style="display: none;">
+        <div class="edit" title="Edit">Edit</div>
+        <div class="toggle_details" title="Show Details">Show Details</div>
+      </div>
+      <div class="current_data">
+        <p class="estimate"><%= feature.remaining_effort ? feature.remaining_effort : '' %></p>
+        <p class="assignee <%= "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to ? feature.assigned_to : '' %></p>
+        <p class="status"><%= feature.status.name %></p>
+        <hr/>
+        <p><%= truncate(feature.subject, :length => 50) %></p>
+        <%= progress_bar feature.done_ratio, :width =>'100%' %>
+      </div>
+      <div class="edit_here" style="display:none;">
+        <div class="cancel" title="Cancel">Cancel</div>
+        <div class="submit_link" title="Save">Save</div>
+        <% remote_form_for(:issue, feature, :url => {:controller => 'task_boards', :action => 'update_feature', :id => feature.id}, :method => :post) do |f| %>
+          <%= select_assigned_to f, feature %>
+          <% @allowed_statuses = feature.new_statuses_allowed_to(User.current) %>
+          <%= f.select :status_id, (@allowed_statuses.collect {|p| [p.name, p.id]}) %>
+        <% end %>
+      </div>
+      
+<script type="text/javascript">
+  sticky_note("<%= dom_id(feature) %>", "<%= feature.assigned_to ? feature.assigned_to : '' %>", "<%= feature.status.id %>");
+</script>
+
   </td>
 <% else %>
   <td style="<%= border %>">&nbsp;</td>
@@ -28,6 +49,4 @@
     <%= task_board_drop_receiving_element(task_board_dom_id(feature, default), default) %>
     </td>
   <% end %>
-  
 </tr>
-    

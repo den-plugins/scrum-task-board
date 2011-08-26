@@ -28,10 +28,6 @@ class TaskBoardsController < ApplicationController
       #This part needs to be optimized
       @features = @version.features
       @tasks = @version.tasks
-      
-      @features.delete_if.each do |f|
-        @tasks << f if f.version_descendants.empty?
-      end
 
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
@@ -107,6 +103,18 @@ class TaskBoardsController < ApplicationController
       page.select("##{dom_id(@issue)} .current_data .status").first.update("#{@issue.status}")
       page.select("##{dom_id(@issue)} .edit").first.update("Edit")
       page[dom_id(@issue).to_sym].className = "#{status_classes_for(@issue, User.current)} task_board_data #{ task_board_border_class(@issue) }"
+      page.visual_effect(:highlight, "#{dom_id(@issue)}")
+    end
+  end
+  
+  def update_feature
+    #TODO Permissions trapping - view
+    @issue = Issue.find(params[:id])
+    @issue.update_attributes(params[:issue])
+    render :update do |page|
+      page.select("##{dom_id(@issue)} .current_data .assignee").first.update("#{@issue.assigned_to}")
+      page.select("##{dom_id(@issue)} .current_data .status").first.update("#{@issue.status}")
+      page.select("##{dom_id(@issue)} .edit").first.update("Edit")
       page.visual_effect(:highlight, "#{dom_id(@issue)}")
     end
   end
