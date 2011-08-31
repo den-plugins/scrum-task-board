@@ -6,7 +6,6 @@ module IssueExtn
     base.send(:include, InstanceMethods)
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
-      has_many :remaining_effort_entries, :dependent => :destroy
     end
   end
   
@@ -15,15 +14,6 @@ module IssueExtn
   
   module InstanceMethods
   
-    def remaining_effort=(value)
-      self.remaining_effort_entries.build(:remaining_effort => value, :created_on => Date.today)
-    end
-    
-    def remaining_effort
-      entry = RemainingEffortEntry.find(:last, :conditions => ["issue_id = #{self.id}"]) unless self.new_record?
-      return entry.nil? ? nil : entry.remaining_effort
-    end
-    
     def version_children
       fixed_children = self.children.delete_if { |c| c unless c.fixed_version_id.eql? self.fixed_version_id and !c.support? and !c.bug? }
     end
