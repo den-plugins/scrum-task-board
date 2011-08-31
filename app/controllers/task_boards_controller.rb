@@ -99,6 +99,7 @@ class TaskBoardsController < ApplicationController
     render :update do |page|
       page.remove dom_id(@issue)
       story = @issue.task_parent unless @issue.parent.nil?
+      story = story.parent.issue_from if !story.nil? and story.bug? and !story.parent.nil?
       page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue
     end
   end

@@ -93,7 +93,7 @@
   <% else %>
     <% unless @parent_bugs.compact.empty? %>
       <% @parent_bugs.compact.each do |bug| %>
-      <tr id="task_board_bugs" class="<%= cycle('odd', 'even') %>">
+      <tr class="<%= cycle('odd', 'even') %>">
         <% @status_columns.each do |k| %>
           <% default = @status_grouped[k][:default] %>
           <td id="<%= task_board_dom_id(bug, default) %>">
