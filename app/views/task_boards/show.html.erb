@@ -78,9 +78,11 @@
           <% default = @status_grouped[k][:default] %>
           <td id="<%= task_board_dom_id(nil, default) %>"> <!-- class="<%= cycle('odd', 'even') %>"> -->
           <ul id="<%= task_board_dom_id(nil, default, 'list') %>">
+            <div style='width: 100%; padding: 0; margin: 0;' >
             <% @status_grouped[k][:statuses].each do |status| %>
               <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[status]) %>
             <% end %>
+            </div>
           </ul>
           <%= task_board_drop_receiving_element(task_board_dom_id(nil, default), default) %>
           </td>
@@ -112,9 +114,11 @@
         <% default = @status_grouped[k][:default] %>
         <td id="<%= task_board_dom_id(nil, default) %>">
         <ul id="<%= task_board_dom_id(nil, default, 'list') %>">
+          <div style='width: 100%; padding: 0; margin: 0;' >
           <% @status_grouped[k][:statuses].each do |status| %>
             <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>
           <% end %>
+          </div>
         </ul>
         <%= task_board_drop_receiving_element(task_board_dom_id(nil, default), default) %>
         </td>

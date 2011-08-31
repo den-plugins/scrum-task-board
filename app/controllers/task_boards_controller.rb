@@ -3,7 +3,7 @@ class TaskBoardsController < ApplicationController
   menu_item :task_board
   layout 'base'
   before_filter :get_project, :authorize, :only => [:index, :show]
-  
+
   def index
   end
 
@@ -107,23 +107,14 @@ class TaskBoardsController < ApplicationController
     #TODO Permissions trapping - view
     @issue = Issue.find(params[:id])
     @issue.update_attributes(params[:issue])
+    @issue.init_journal(User.current, "Automated status change from the Task Board")
     render :update do |page|
+      page.select("#stickynotejs_#{@issue.id}").first.update("sticky_note('#{dom_id(@issue)}', '#{@issue.assigned_to_id}', '#{@issue.status_id}')")
+      page.select("##{dom_id(@issue)} .current_data .estimate").first.update("#{@issue.remaining_effort}")
       page.select("##{dom_id(@issue)} .current_data .assignee").first.update("#{@issue.assigned_to}")
       page.select("##{dom_id(@issue)} .current_data .status").first.update("#{@issue.status}")
       page.select("##{dom_id(@issue)} .edit").first.update("Edit")
-      page[dom_id(@issue).to_sym].className = "#{status_classes_for(@issue, User.current)} task_board_data #{ task_board_border_class(@issue) }"
-      page.visual_effect(:highlight, "#{dom_id(@issue)}")
-    end
-  end
-  
-  def update_feature
-    #TODO Permissions trapping - view
-    @issue = Issue.find(params[:id])
-    @issue.update_attributes(params[:issue])
-    render :update do |page|
-      page.select("##{dom_id(@issue)} .current_data .assignee").first.update("#{@issue.assigned_to}")
-      page.select("##{dom_id(@issue)} .current_data .status").first.update("#{@issue.status}")
-      page.select("##{dom_id(@issue)} .edit").first.update("Edit")
+      page[dom_id(@issue).to_sym].className = "#{status_classes_for(@issue, User.current)} task_board_data #{ task_board_border_class(@issue) }" unless @issue.feature?
       page.visual_effect(:highlight, "#{dom_id(@issue)}")
     end
   end

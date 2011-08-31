@@ -22,15 +22,11 @@
       <div class="edit_here" style="display:none;">
         <div class="cancel" title="Cancel">Cancel</div>
         <div class="submit_link" title="Save">Save</div>
-        <% remote_form_for(:issue, feature, :url => {:controller => 'task_boards', :action => 'update_feature', :id => feature.id}, :method => :post) do |f| %>
-          <%= select_assigned_to f, feature %>
-          <% @allowed_statuses = feature.new_statuses_allowed_to(User.current) %>
-          <%= f.select :status_id, (@allowed_statuses.collect {|p| [p.name, p.id]}) if @allowed_statuses.present? %>
-        <% end %>
+          <%= render :partial => 'edit_form', :locals => {:issue => feature} %>
       </div>
-      
-<script type="text/javascript">
-  sticky_note("<%= dom_id(feature) %>", "<%= feature.assigned_to ? feature.assigned_to : '' %>", "<%= feature.status.id %>");
+
+<script type="text/javascript" id="stickynotejs_<%= feature.id %>"  class="stickynotejs" >
+  sticky_note("<%= dom_id(feature) %>", "<%= feature.assigned_to_id %>", "<%= feature.status_id %>");
 </script>
 
   </td>
@@ -42,6 +38,7 @@
     <% default = @status_grouped[k][:default] %>
     <td id="<%= task_board_dom_id(feature, default) %>" style="<%= border %>">
     <ul id="<%= task_board_dom_id(feature, default, 'list') %>">
+      <div style='width: 100%; padding: 0; margin: 0;' >
       <% @status_grouped[k][:statuses].each do |status| %>
         <% if feature.task_parent? %>
           <%= render :partial => 'issue', :collection => Array(feature.version_descendants(true).group_by(&:status)[status]), :locals => {:descendant => true} %>
@@ -49,6 +46,7 @@
           <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]).reject {|c| c if c.task_parent? or c.feature? } %>
         <% end %>
       <% end %>
+      </div>
     </ul>
     <%= task_board_drop_receiving_element(task_board_dom_id(feature, default), default) %>
     </td>

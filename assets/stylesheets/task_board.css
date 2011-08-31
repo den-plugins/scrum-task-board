@@ -191,11 +191,27 @@
   height: 12px;
 }
 
+.assignee select {
+  background: #d0d0d0;
+  font-weight: bold;
+  height: 17px;
+  border: 0;
+  display: inline-block;
+}
+
 .current_data .status {
   font-style: italic;
 }
 
-.current_data .estimate {
+.status select {
+  border: 0;
+  margin-top: 2px;
+  display: inline-block;
+  width: 100%;
+  height: 17px;
+}
+
+.current_data .estimate, .estimate input {
   background-color: #b5b5b5;
   height: 12px;
   position: absolute;
@@ -203,7 +219,7 @@
   text-align: center;
   width: 40px;
 }
- 
+
 .task_board_data .current_is_assigned {
   background: #65A7D7;
   color: #f1f1f1;

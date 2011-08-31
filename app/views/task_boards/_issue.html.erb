@@ -1,4 +1,3 @@
-<div style='width: 100%; padding: 0; margin: 0;' >
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%>">
   <div class="issue_number">
     <%= link_to "#{issue.parent.issue_from_id} &raquo; ", "##{dom_id(issue.parent.issue_from)}", 
@@ -31,19 +30,16 @@
   <div class="edit_here" style="display:none;">
     <div class="cancel" title="Cancel">Cancel</div>
     <div class="submit_link" title="Save">Save</div>
-    <% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue', :id => issue.id}, :method => :post) do |f| %>
-      <%= select_assigned_to f, issue %>
-      <%= select_status f, issue if issue.version_descendants.empty? %>
-    <% end %>
+    <div style="width: 100%; margin: 0; padding: 0;">
+      <%= render :partial => 'edit_form', :locals => {:issue => issue}%>
+    </div>
   </div>
 </li>
-</div>
 
 <% if issue.version_descendants.empty? %>
   <%= draggable_element(dom_id(issue), :revert => '"failure"', :constraint => "'horizontal'")%>
 <% end %>
 
-<script type="text/javascript">
-  sticky_note("<%= dom_id(issue) %>", "<%= issue.assigned_to ? issue.assigned_to : '' %>", "<%= issue.status.id %>");
+<script type="text/javascript" id="stickynotejs_<%= issue.id %>" class="stickynotejs">
+  sticky_note('<%= dom_id(issue) %>', '<%= issue.assigned_to_id %>', '<%= issue.status_id %>');
 </script>
-<%# end %>
