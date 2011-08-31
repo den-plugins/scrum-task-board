@@ -89,10 +89,28 @@
     <% end %>
     
   <% else %>
-    <tr id="task_board_bugs">
+    <% unless @parent_bugs.compact.empty? %>
+      <% @parent_bugs.compact.each do |bug| %>
+      <tr id="task_board_bugs" class="<%= cycle('odd', 'even') %>">
+        <% @status_columns.each do |k| %>
+          <% default = @status_grouped[k][:default] %>
+          <td id="<%= task_board_dom_id(bug, default) %>">
+          <ul id="<%= task_board_dom_id(bug, default, 'list') %>">
+            <% @status_grouped[k][:statuses].each do |status| %>
+              <%= render :partial => 'issue', :collection => Array(bug.version_descendants(true).group_by(&:status)[status]), 
+                             :locals => {:descendant => true} %>
+            <% end %>
+          </ul>
+          <%= task_board_drop_receiving_element(task_board_dom_id(bug, default), default) %>
+          </td>
+        <% end %>
+      </tr>
+      <% end %>
+    <% end %>
+    <tr id="task_board_bugs" class="<%= cycle('odd', 'even') %>">
       <% @status_columns.each do |k| %>
         <% default = @status_grouped[k][:default] %>
-        <td id="<%= task_board_dom_id(nil, default) %>"> <!-- class="<%= cycle('odd', 'even') %>"> -->
+        <td id="<%= task_board_dom_id(nil, default) %>">
         <ul id="<%= task_board_dom_id(nil, default, 'list') %>">
           <% @status_grouped[k][:statuses].each do |status| %>
             <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>

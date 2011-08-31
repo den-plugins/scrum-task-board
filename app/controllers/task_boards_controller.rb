@@ -64,6 +64,15 @@ class TaskBoardsController < ApplicationController
       @status_grouped = IssueStatusGroup::BUG_GROUPED
       @status_columns = ordered_keys(@status_grouped)
       @bugs = @version.bugs
+      
+      @parent_bugs = @bugs.map do |b|
+        b if !b.version_descendants.empty? and b.parent.nil?
+      end
+#      puts @parent_bugs.inspect
+      @bugs.reject!.each do |b|
+        b if !b.version_descendants.empty? or !b.parent.nil?
+      end
+      
       @bugged = @bugs.empty? ? false : true
       @error_msg = "There are no Bugs for this version." if not @bugged
     end
