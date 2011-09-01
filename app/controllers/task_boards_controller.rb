@@ -67,11 +67,13 @@ class TaskBoardsController < ApplicationController
     @issue.init_journal(User.current, "Automated status change from the Task Board")
 
     attrs = {:status_id => @status.id}
-    #attrs.merge!(:assigned_to_id => User.current.id) unless @issue.assigned_to_id?
     @issue.update_attributes(attrs)
-    
+    if @issue.parent
+      parent = @issue.parent.other_issue(@issue)
+      parent.update_parent_status
+    end
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
-    
+
     render :update do |page|
       page.remove dom_id(@issue)
       story = @issue.task_parent unless @issue.parent.nil?
@@ -81,6 +83,7 @@ class TaskBoardsController < ApplicationController
         descendant = {:descendant => true} unless story.feature?
       end
       page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => descendant
+      page.update_sticky_note dom_id(parent), parent
     end
   end
   
@@ -91,13 +94,7 @@ class TaskBoardsController < ApplicationController
     @issue.update_attributes(params[:issue])
     
     render :update do |page|
-      page.select("#stickynotejs_#{@issue.id}").first.update("sticky_note('#{dom_id(@issue)}', '#{@issue.assigned_to_id}', '#{@issue.status_id}')")
-      page.select("##{dom_id(@issue)} .current_data .estimate").first.update("#{@issue.remaining_effort}")
-      page.select("##{dom_id(@issue)} .current_data .assignee").first.update("#{@issue.assigned_to}")
-      page.select("##{dom_id(@issue)} .current_data .status").first.update("#{@issue.status}")
-      page.select("##{dom_id(@issue)} .edit").first.update("Edit")
-      page[dom_id(@issue).to_sym].className = "#{status_classes_for(@issue, User.current)} task_board_data #{ task_board_border_class(@issue) }" unless @issue.feature?
-      page.visual_effect(:highlight, "#{dom_id(@issue)}")
+      page.update_sticky_note dom_id(@issue), @issue
     end
   end
     

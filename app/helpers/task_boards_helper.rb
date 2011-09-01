@@ -83,15 +83,19 @@ module TaskBoardsHelper
           <% end %>
 =end
           str += "</tr>"
-          
-          
-          
-          
           str += get_children(child, color, group + " #{child.id}_p")
         end
       end
       str
   end
   
-  
+  def update_sticky_note container, issue
+    page.select("#stickynotejs_#{issue.id}").first.update("sticky_note('#{container}', '#{issue.assigned_to_id}', '#{issue.status_id}')")
+    page.select("##{container} .current_data .estimate").first.update("#{issue.remaining_effort}")
+    page.select("##{container} .current_data .assignee").first.update("#{issue.assigned_to}")
+    page.select("##{container} .current_data .status").first.update("#{issue.status}")
+    page.select("##{container} .edit").first.update("Edit")
+    page[container.to_sym].className = "#{status_classes_for(issue, User.current)} task_board_data #{ task_board_border_class(issue) }" unless issue.feature?
+    page.visual_effect(:highlight, "#{container}")
+  end
 end
