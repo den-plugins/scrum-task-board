@@ -34,7 +34,7 @@
 
 <h2>
   <%= @version.nil? ? "Product Backlog" : @version.name %> Task Board 
-  <span style="float:right"><%= "Effective Date: " + format_date(@version.effective_date) unless @version.effective_date.nil? %></span>
+  <span style="float:right"><%= "Target Date: " + format_date(@version.effective_date) unless @version.effective_date.nil? %></span>
 </h2>
 
 <input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
