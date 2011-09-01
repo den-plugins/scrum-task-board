@@ -5,6 +5,7 @@ class TaskBoardsController < ApplicationController
   before_filter :get_project, :authorize, :only => [:index, :show]
 
   def index
+    @versions = @project.versions.all(:order => "effective_date DESC nulls last")
   end
 
   def show
@@ -74,7 +75,12 @@ class TaskBoardsController < ApplicationController
     render :update do |page|
       page.remove dom_id(@issue)
       story = @issue.task_parent unless @issue.parent.nil?
-      page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue
+      descendant = {}
+      if !story.nil?
+        story = story.parent.issue_from if story.bug? and !story.parent.nil?
+        descendant = {:descendant => true} unless story.feature?
+      end
+      page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => descendant
     end
   end
   
