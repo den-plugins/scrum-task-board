@@ -58,7 +58,12 @@ module IssueExtn
   end
   
   def version_descendants_filtered
-    version_descendants(true).reject{|c| c if c.feature? or c.task_parent.feature? or (c.feature_child? and !c.parent.issue_from.task_parent?)}
+    descendants = version_descendants(true)
+    rejects = []
+    descendants.select {|d| d.feature?}.each do |x|
+      rejects += x.version_descendants(true)
+    end
+    descendants - rejects
   end
   
   def feature_child?
