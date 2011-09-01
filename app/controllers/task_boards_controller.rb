@@ -5,7 +5,7 @@ class TaskBoardsController < ApplicationController
   before_filter :get_project, :authorize, :only => [:index, :show]
 
   def index
-    @versions = @project.versions.all(:order => "effective_date DESC NULLS LAST")
+    @versions = @project.versions.all(:order => 'effective_date IS NULL, effective_date DESC')
   end
 
   def show
