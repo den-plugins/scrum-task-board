@@ -7,12 +7,14 @@
 <div id="version_container">
 <% unless @project.versions.empty? %>
 <ul class="version_holder">
-  <% @project.versions.sort! { |a,b| a.name.downcase <=> b.name.downcase }.each do |v| %>
+  <% @versions.each do |v| %>
 
   <li>
     <span><strong><%= v.name %></strong></span>
     <br/>
-    <span>Issues: <strong><%= v.fixed_issues.count %></strong></span>
+    <span>Date: <strong><%= v.effective_date.nil? ? 'none' : format_date(v.effective_date) %></strong></span>
+    <br/>
+    <span>Issues: <strong><%= v.fixed_issues.count %></strong></span> 
     <br/>
     
     <%= link_to "Features: <span style='color: #0EA94B'>#{v.feature_count}</span><br/>Tasks: <span style='color:#5081AA'>#{v.task_count}</span>",

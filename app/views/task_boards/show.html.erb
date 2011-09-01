@@ -1,4 +1,4 @@
-<% html_title "#{@version.nil? ? "Issues with no version" : @version.name} - Task board" -%>
+<%# html_title "#{@version.nil? ? "Issues with no version" : @version.name} - Task board" -%>
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
@@ -32,7 +32,11 @@
 <% end %>
 
 
-<h2><%= @version.nil? ? "Product Backlog" : @version.name %> Task Board</h2>
+<h2>
+  <%= @version.nil? ? "Product Backlog" : @version.name %> Task Board 
+  <span style="float:right"><%= "Effective Date: " + format_date(@version.effective_date) unless @version.effective_date.nil? %></span>
+</h2>
+
 <input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
 <div id="bdchart"></div>
 <div id="fixed_table_header"></div>
