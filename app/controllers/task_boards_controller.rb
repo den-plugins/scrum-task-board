@@ -22,11 +22,11 @@ class TaskBoardsController < ApplicationController
 
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
-          p = f.parent.other_issue(f)
+          p = f.parent.issue_from
           if p.feature? or p.support?
             f
           elsif p.task? and p.version_child?(@version)
-            pp = p.parent.other_issue(p)
+            pp = p.parent.issue_from
             f if pp.feature? or pp.task? or pp.support?
           end
         end
@@ -69,14 +69,14 @@ class TaskBoardsController < ApplicationController
     attrs = {:status_id => @status.id}
     @issue.update_attributes(attrs)
     if @issue.parent
-      parent = @issue.parent.other_issue(@issue)
+      parent = @issue.parent.issue_from
       parent.update_parent_status
     end
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
 
     render :update do |page|
       page.remove dom_id(@issue)
-      story = @issue.task_parent unless @issue.parent.nil?
+      story = @issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent unless @issue.parent.nil?
       descendant = {}
       if !story.nil?
         story = story.parent.issue_from if story.bug? and !story.parent.nil?

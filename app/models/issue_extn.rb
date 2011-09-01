@@ -35,16 +35,16 @@ module IssueExtn
     end
     
     def version_child?(version)
-      not parent.nil? and parent.other_issue(self).fixed_version_id == version.id
+      not parent.nil? and parent.issue_from.fixed_version_id == version.id
     end
     
     def task_parent?
-      not version_descendants.empty? and !parent.nil? and parent.other_issue(self).parent.nil?
+      not version_descendants.empty? and !parent.nil? and parent.issue_from.parent.nil?
     end
     
     def task_parent
-      return parent.other_issue(self) if parent.other_issue(self).parent.nil? and version_descendants.empty?
-      task_parent? ? self : parent.other_issue(self).task_parent
+      return parent.issue_from if parent.issue_from.parent.nil? and version_descendants.empty?
+      task_parent? ? self : parent.issue_from.task_parent
     end
     
     def version_descendants(include_self=false)
@@ -56,6 +56,15 @@ module IssueExtn
       descendants
     end
   end
+  
+  def version_descendants_filtered
+    version_descendants(true).reject{|c| c if c.feature? or c.task_parent.feature? or (c.feature_child? and !c.parent.issue_from.task_parent?)}
+  end
+  
+  def feature_child?
+    parent.issue_from.feature?
+  end
+  
 end
 
 # Add module to Issue
