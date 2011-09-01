@@ -52,43 +52,6 @@ module TaskBoardsHelper
     link_to "#{issue.id}", {:controller => "issues", :action => "show", :id => issue}, options
   end
   
-  def get_children(parent, color, group)
-      str = ""
-      color = color - (1118481 * 2)
-      parent.children.each do |child|
-        if child.fixed_version_id == @version.id and not child.version_children(@version.id).empty?
-          str += "<tr style='background: ##{color.to_s(16)};' class='#{group}'><td>&nbsp;</td><td>
-            <p> #{link_to_issue(child)} </p>
-            <p>#{child.subject}</p>
-            <p style='align:right'><a title='#{child.id}_p' class='show_subtasks'>Show Subtasks w/ children</a></p>
-          </td>"
-=begin
-          <% @statuses.each do |status| %>
-          str += "<td id='"
-          str += task_board_dom_id(feature, status) 
-          str += "' class='"
-          str += cycle('odd', 'even')
-          str += "'>"
-          str += "<ul id='"  
-          str += task_board_dom_id(feature, status, 'list')  
-          str += "'>"  
-             
-          str += render(:partial => 'task_boards/_issue.html.erb', :collection => Array(feature.version_children(@version.id).group_by(&:status)[status]), :layout => false  )
-
-
-
-          str += "</ul>"  
-          str += task_board_drop_receiving_element(task_board_dom_id(feature, status), status)
-          str += "</td>"
-          <% end %>
-=end
-          str += "</tr>"
-          str += get_children(child, color, group + " #{child.id}_p")
-        end
-      end
-      str
-  end
-  
   def update_sticky_note container, issue
     page.select("#stickynotejs_#{issue.id}").first.update("sticky_note('#{container}', '#{issue.assigned_to_id}', '#{issue.status_id}')")
     page.select("##{container} .current_data .estimate").first.update("#{issue.remaining_effort}")

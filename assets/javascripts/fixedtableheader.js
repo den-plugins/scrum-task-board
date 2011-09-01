@@ -7,26 +7,22 @@ function th_resize(count)
 }
 
 jQuery(function( $ ){
- // jQuery("#task_board ul").each(function(){jQuery(this).find("li:eq(0)").css("margin-top", 0)});
  jToggleDetails = jQuery('.toggle_details');
  jQuery("#toggle_all").click(function(){
   if(jQuery(this).is(":checked"))
   {
      jQuery(".current_data").show();
-     if (jToggleDetails.hasClass("minimized")) jToggleDetails.removeClass("minimized").addClass("maximized");
-     //jToggleDetails.css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_out.png')");
+     if (jToggleDetails.hasClass("minimized")) 
+      jToggleDetails.removeClass("minimized").addClass("maximized");
   }
   else
   {
      jQuery(".current_data").hide();
-     if (jToggleDetails.hasClass("maximized")) jToggleDetails.removeClass("maximized").addClass("minimized");
-     //jToggleDetails.css('background-image', "url('/plugin_assets/scrum_task_board/images/zoom_in.png')");
+     if (jToggleDetails.hasClass("maximized")) 
+      jToggleDetails.removeClass("maximized").addClass("minimized");
   }
  });
- 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
-
+// 'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
   var $mark = jQuery( "#task_board thead" );
   var $header = jQuery( "#fixed_table_header" );
   
@@ -47,11 +43,10 @@ jQuery(function( $ ){
   function first_item_padding() { $first_item.css('padding-right', '0'); }
     
   first_item_padding();
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
   var $view = $( window );
- 
-  function th_adjust() //Basically adjusts the fixed header;call this when window is resized or when a DOM element is inserted or removed
+// Adjusts the fixed header;call this when window is resized or when a DOM element is inserted or removed 
+  function th_adjust() 
   {
     var count = 0
     jQuery("#task_board th").each(function(){
@@ -62,9 +57,7 @@ jQuery(function( $ ){
     first_item_padding();
   }
 
-// Bind to the window scroll and resize events.
-// Remember, resizing can also change the scroll
-// of the page.
+// Bind to the window scroll and resize events. Remember, resizing can also change the scroll of the page.
   $view.bind(
     "scroll resize",
     function(){
@@ -73,19 +66,17 @@ jQuery(function( $ ){
 // Get the current scroll of the window.
       var viewTop = $view.scrollTop();
  
-// Check to see if the view had scroll down
-// past the top of the marker
+// Check to see if the view had scroll down past the top of the marker
       if (viewTop > markTop)
       {
         $header.show();
-// Check to see if the view has scroll back up
-// above the message
       } 
+// Check to see if the view has scroll back up above the message
       else if (viewTop <= markTop)
       {
         $header.hide(); 
       }
-//Allow the fixed header to scroll horizontally      
+// Allow the fixed header to scroll horizontally      
       $header.offset({
         left: leftInit + 12
       });
@@ -110,46 +101,9 @@ $view.resize(function(){
   }, 200);
   });
 
-////DOM element is inserted or removed 
-///http://stackoverflow.com/questions/4979738/fire-jquery-event-on-div-change 
+// DOM element is inserted or removed(http://stackoverflow.com/questions/4979738/fire-jquery-event-on-div-change) 
   jQuery("#task_board").bind('DOMNodeInserted DOMNodeRemoved', function(event) {
     th_adjust();
   }); 
 });
 // script modified from http://www.bennadel.com/blog/1810-Creating-A-Sometimes-Fixed-Position-Element-With-jQuery.htm
-
-
-/*
-////////////////////////////////////////////////////////////http://stackoverflow.com/questions/3233991/jquery-watch-div/3234646#3234646
-///This plugin detects changes made to an element
-  jQuery.fn.contentChange = function(callback){
-    var elms = jQuery(this);
-    elms.each(
-      function(i){
-        var elm = jQuery(this);
-        elm.data("lastContents", elm.html());
-        window.watchContentChange = window.watchContentChange ? window.watchContentChange : [];
-        window.watchContentChange.push({"element": elm, "callback": callback});
-      }
-    )
-    return elms;
-  }
-  setInterval(function(){
-    if(window.watchContentChange){
-      for( i in window.watchContentChange){
-        if(window.watchContentChange[i].element.data("lastContents") != window.watchContentChange[i].element.html()){
-          window.watchContentChange[i].callback.apply(window.watchContentChange[i].element);
-          window.watchContentChange[i].element.data("lastContents", window.watchContentChange[i].element.html())
-        };
-      }
-    }
-  },500);
-*/
-
-
-
-//#jQuery("#task_board").contentChange(function(){th_adjust();});
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
