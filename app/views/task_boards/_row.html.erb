@@ -36,19 +36,18 @@
 
   <% @status_columns.each do |k| %>
     <% default = @status_grouped[k][:default] %>
+    <% statuses = @status_grouped[k][:statuses] %>
     <td id="<%= task_board_dom_id(feature, default) %>" style="<%= border %>">
     <ul id="<%= task_board_dom_id(feature, default, 'list') %>">
-      <div style='width: 100%; padding: 0; margin: 0;' >
-      <% @status_grouped[k][:statuses].each do |status| %>
+      <% statuses.each do |status| %>
         <% if feature.task_parent? %>
           <%= render :partial => 'issue', :collection => Array(feature.version_descendants(true).group_by(&:status)[status]), :locals => {:descendant => true} %>
         <% else %>
           <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]).reject {|c| c if c.task_parent? or c.feature? } %>
         <% end %>
       <% end %>
-      </div>
     </ul>
-    <%= task_board_drop_receiving_element(task_board_dom_id(feature, default), default) %>
+    <%= task_board_drop_receiving_element(task_board_dom_id(feature, default), default, statuses) %>
     </td>
   <% end %>
 </tr>
