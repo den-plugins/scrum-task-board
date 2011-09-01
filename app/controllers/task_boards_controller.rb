@@ -10,16 +10,6 @@ class TaskBoardsController < ApplicationController
   def show
     @statuses = IssueStatus.all(:order => "position asc")
     @version = Version.find params[:version_id]
-    #@task_cols = {"Todo" => [], "Assigned" => [],
-    #                             "In Progress" => [], "For Verification" => [],
-    #                             "Feedback" => [], "Done" => []}
-    #@task_cols = ActiveSupport::OrderedHash.new
-    #@task_cols["Todo"] = IssueStatus.all(:conditions => "name = 'New' or name = 'Assigned' ") << "New"
-    #@task_cols["In Progress"] = IssueStatus.all(:conditions => "name = 'In Progress'")
-    #@task_cols["For Verification"] = IssueStatus.all(:conditions => "name = 'Resolved' or name = 'Not a Defect' or name = 'Cannot Reproduce'") << "Resolved"
-    #@task_cols["Feedback"] = IssueStatus.all(:conditions => "name = 'Feedback' or name = 'For Review' or name = 'For Monitoring'") << "Feedback"
-    #@task_cols["Done"] = IssueStatus.all(:conditions => "name = 'Closed'")
-    
 
     if params[:board].to_i.eql? 1
       @status_grouped = IssueStatusGroup::TASK_GROUPED
@@ -40,22 +30,6 @@ class TaskBoardsController < ApplicationController
           end
         end
       end
-      
-      #@tasks.reject!.each do |f|
-      #  unless f.parent.nil?
-      #     #EDIT: check for consistency here (up to 2 levels up)
-      #     #Dirty checking...feel free to optimize
-      #    p = Issue.find f.parent.issue_from_id
-      #      if p.fixed_version_id == @version.id
-      #        if p.feature?
-      #          f #reject if parent is a feature
-      #        elsif p.task? and not p.parent.nil?
-      #          pp = Issue.find p.parent.issue_from_id
-      #          f if (pp.feature? or pp.task?) and pp.fixed_version.id == @version.id
-      #        end               
-      #      end
-      #  end
-      #end
         
       @featured = true
       @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
@@ -68,7 +42,8 @@ class TaskBoardsController < ApplicationController
       @parent_bugs = @bugs.map do |b|
         b if !b.version_descendants.empty? and b.parent.nil?
       end
-#      puts @parent_bugs.inspect
+      
+      # puts @parent_bugs.inspect
       @bugs.reject!.each do |b|
         b if !b.version_descendants.empty? or !b.parent.nil?
       end
@@ -106,8 +81,9 @@ class TaskBoardsController < ApplicationController
   def update_issue
     #TODO Permissions trapping - view
     @issue = Issue.find(params[:id])
+    @issue.init_journal(User.current, "Automated issue update from Task Board")
     @issue.update_attributes(params[:issue])
-    @issue.init_journal(User.current, "Automated status change from the Task Board")
+    
     render :update do |page|
       page.select("#stickynotejs_#{@issue.id}").first.update("sticky_note('#{dom_id(@issue)}', '#{@issue.assigned_to_id}', '#{@issue.status_id}')")
       page.select("##{dom_id(@issue)} .current_data .estimate").first.update("#{@issue.remaining_effort}")
