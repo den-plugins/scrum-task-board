@@ -77,7 +77,7 @@ class TaskBoardsController < ApplicationController
     render :update do |page|
       page.remove dom_id(@issue)
       story = @issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent unless @issue.parent.nil?
-      story = nil if @issue.parent.nil? or (!@issue.parent.nil? and @issue.parent.issue_from.fixed_version_id = @issue.fixed_version_id)
+      story = nil if @issue.parent.nil? or (!@issue.parent.nil? and @issue.parent.issue_from.fixed_version_id != @issue.fixed_version_id)
       descendant = {}
 
       if !story.nil?
