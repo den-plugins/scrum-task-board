@@ -76,14 +76,16 @@ class TaskBoardsController < ApplicationController
 
     render :update do |page|
       page.remove dom_id(@issue)
-      story = (@issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent) unless @issue.parent.nil? #or !@issue.parent.issue_from.version_child?(@issue.fixed_version) or !@issue.task_parent.version_child?(@issue.fixed_version)
+      story = @issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent unless @issue.parent.nil?
+      story = nil if @issue.parent.nil? or (!@issue.parent.nil? and @issue.parent.issue_from.fixed_version_id = @issue.fixed_version_id)
       descendant = {}
+
       if !story.nil?
         story = story.parent.issue_from if story.bug? and !story.parent.nil?
         descendant = {:descendant => true} unless story.feature?
+        page.update_sticky_note dom_id(parent), parent
       end
       page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => descendant
-      page.update_sticky_note dom_id(parent), parent unless parent.nil?
     end
   end
   
