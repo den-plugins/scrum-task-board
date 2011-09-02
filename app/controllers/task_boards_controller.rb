@@ -46,7 +46,7 @@ class TaskBoardsController < ApplicationController
       
       # puts @parent_bugs.inspect
       @bugs.reject!.each do |b|
-        b if !b.version_descendants.empty? or (!b.parent.nil? and not (b.parent.issue_from.feature? or b.parent.issue_from.task?))
+        b if !b.version_descendants.empty? or !b.parent.nil? #and not (b.parent.issue_from.feature? or b.parent.issue_from.task?)
       end
       
       @bugged = @bugs.empty? ? false : true
@@ -68,7 +68,7 @@ class TaskBoardsController < ApplicationController
 
     attrs = {:status_id => @status.id}
     @issue.update_attributes(attrs)
-    if @issue.parent
+    if @issue.parent #and @issue.parent.issue_from.version_child?(@issue.fixed_version)
       parent = @issue.parent.issue_from
       parent.update_parent_status
     end
@@ -76,7 +76,7 @@ class TaskBoardsController < ApplicationController
 
     render :update do |page|
       page.remove dom_id(@issue)
-      story = (@issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent) unless @issue.parent.nil?
+      story = (@issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent) unless @issue.parent.nil? #or !@issue.parent.issue_from.version_child?(@issue.fixed_version) or !@issue.task_parent.version_child?(@issue.fixed_version)
       descendant = {}
       if !story.nil?
         story = story.parent.issue_from if story.bug? and !story.parent.nil?
