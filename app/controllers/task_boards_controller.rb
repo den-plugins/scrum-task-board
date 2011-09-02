@@ -70,7 +70,7 @@ class TaskBoardsController < ApplicationController
     @issue.update_attributes(attrs)
     if @issue.parent #and @issue.parent.issue_from.version_child?(@issue.fixed_version)
       parent = @issue.parent.issue_from
-      parent.update_parent_status
+      parent.in_progress_parent
     end
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
 

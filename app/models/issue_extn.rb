@@ -69,6 +69,18 @@ module IssueExtn
   def feature_child?
     parent.issue_from.feature?
   end
+
+  def in_progress_parent
+    in_progress_issues = self.children.collect{|x| !x.closed? and !x.status.name.eql? "New"}
+    if in_progress_issues.include? true
+      self.status = IssueStatus.find_by_name("In Progress")
+      if self.save
+        updated_on_will_change!
+      end
+    else
+      self.update_parent_status
+    end
+  end
   
 end
 
