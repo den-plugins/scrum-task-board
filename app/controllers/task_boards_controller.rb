@@ -82,17 +82,17 @@ class TaskBoardsController < ApplicationController
         story = story.parent.issue_from if story.bug? and !story.parent.nil?
         descendant = {:descendant => true} unless story.feature?
         parents.each do |parent|
-          if params[:board].to_i.eql? 1
-            if parent.task_parent?
+#          if params[:board].to_i.eql? 1
+            unless parent.nil? or parent.feature?
               page.remove dom_id(parent)
-              page.insert_html :top, task_board_dom_id(parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
+              page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
             else
               page.update_sticky_note dom_id(parent), parent
             end
-          elsif params[:board].to_i.eql? 2
-            page.remove dom_id(parent)
-            page.insert_html :top, task_board_dom_id(@issue.super_parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
-          end
+#          elsif params[:board].to_i.eql? 2
+#            page.remove dom_id(parent)
+#            page.insert_html :top, task_board_dom_id(@issue.super_parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
+#          end
         end
       end
       page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => descendant
