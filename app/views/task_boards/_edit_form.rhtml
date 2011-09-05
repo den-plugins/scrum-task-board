@@ -1,6 +1,8 @@
-<% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue', :id => issue.id}, :method => :post) do |f| %>
+<div id = "taskboard-edit-form-<%= dom_id(issue) %>">
+<% remote_form_for(:issue, issue, :url => {:controller => 'task_boards', :action => 'update_issue', :issue_id => issue.id, :id => @project, :board => params[:board]}, 
+                                                               :method => :post) do |f| %>
   <span class='assignee'><%= select_assigned_to f, issue %></span>
-  <span class='estimate'><%= f.text_field :remaining_effort %>
+  <span class='estimate'><%= f.text_field :remaining_effort %></span>
   
   <span class='status'>
   <% if issue.feature? %>
@@ -12,3 +14,4 @@
   </span>
   
 <% end %>
+</div>

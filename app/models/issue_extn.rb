@@ -47,6 +47,10 @@ module IssueExtn
       task_parent? ? self : parent.issue_from.task_parent
     end
     
+    def super_parent
+      parent.nil? ? self : parent.issue_from.super_parent
+    end
+    
     def version_descendants(include_self=false)
       descendants = include_self ? Array(self) : []
       self.children.each do |child|
@@ -70,6 +74,17 @@ module IssueExtn
     parent.issue_from.feature?
   end
   
+  def update_parents
+    parents = []
+    if parent
+      p = parent.issue_from
+      parents << p
+      p.update_parent_status
+      parents += p.update_parents
+    end
+    parents
+  end
+
 end
 
 # Add module to Issue

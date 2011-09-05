@@ -64,26 +64,36 @@ class TaskBoardsController < ApplicationController
     get_project
     @status = IssueStatus.find(params[:status_id])
     @issue = Issue.find(params[:issue_id])
-    @issue.init_journal(User.current, "Automated status change from the Task Board")
+    @issue.init_journal(User.current, "Automated issue update from the Task Board")
 
     attrs = {:status_id => @status.id}
     @issue.update_attributes(attrs)
-    if @issue.parent #and @issue.parent.issue_from.version_child?(@issue.fixed_version)
-      parent = @issue.parent.issue_from
-      parent.update_parent_status
-    end
+    parents = @issue.update_parents
+    
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
-
+    
     render :update do |page|
       page.remove dom_id(@issue)
       story = @issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent unless @issue.parent.nil?
-      story = nil if @issue.parent.nil? or (!@issue.parent.nil? and @issue.parent.issue_from.fixed_version_id = @issue.fixed_version_id)
+      story = nil if @issue.parent.nil? or (!@issue.parent.nil? and @issue.parent.issue_from.fixed_version_id != @issue.fixed_version_id)
       descendant = {}
 
       if !story.nil?
         story = story.parent.issue_from if story.bug? and !story.parent.nil?
         descendant = {:descendant => true} unless story.feature?
-        page.update_sticky_note dom_id(parent), parent
+        parents.each do |parent|
+          if params[:board].to_i.eql? 1
+            if parent.task_parent?
+              page.remove dom_id(parent)
+              page.insert_html :top, task_board_dom_id(parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
+            else
+              page.update_sticky_note dom_id(parent), parent
+            end
+          elsif params[:board].to_i.eql? 2
+            page.remove dom_id(parent)
+            page.insert_html :top, task_board_dom_id(@issue.super_parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
+          end
+        end
       end
       page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => descendant
     end
@@ -91,12 +101,31 @@ class TaskBoardsController < ApplicationController
   
   def update_issue
     #TODO Permissions trapping - view
-    @issue = Issue.find(params[:id])
+      get_project
+    @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, "Automated issue update from Task Board")
     @issue.update_attributes(params[:issue])
     
+    parents = @issue.update_parents
+    @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
+    
     render :update do |page|
       page.update_sticky_note dom_id(@issue), @issue
+      parents.each do |parent|
+        if params[:board].to_i.eql? 1
+          if parent.version_descendants.present? and !parent.feature?
+            descendant = {:descendant => true} unless parent.feature?
+            page.remove dom_id(parent)
+            page.insert_html :top, task_board_dom_id(parent.task_parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
+          else
+            page.update_sticky_note dom_id(parent), parent
+          end
+        elsif params[:board].to_i.eql? 2
+          story = @issue.super_parent
+          page.remove dom_id(parent)
+          page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
+        end
+      end
     end
   end
     

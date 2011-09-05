@@ -55,12 +55,12 @@ module TaskBoardsHelper
   end
   
   def update_sticky_note container, issue
-    page.select("#stickynotejs_#{issue.id}").first.update("sticky_note('#{container}', '#{issue.assigned_to_id}', '#{issue.status_id}')")
-    page.select("##{container} .current_data .estimate").first.update("#{issue.remaining_effort}")
-    page.select("##{container} .current_data .assignee").first.update("#{issue.assigned_to}")
-    page.select("##{container} .current_data .status").first.update("#{issue.status}")
-    page.select("##{container} .edit").first.update("Edit")
-    page[container.to_sym].className = "#{status_classes_for(issue, User.current)} task_board_data #{ task_board_border_class(issue) }" unless issue.feature?
+    if issue.feature?
+      page.replace_html "#{container}", :partial => 'feature', :locals => {:feature => issue } 
+    else
+      page.replace_html "#{container}", :partial => 'issue_show', :locals => {:issue => issue}
+      page[container.to_sym].className = "#{status_classes_for(issue, User.current)} task_board_data #{ task_board_border_class(issue) }"
+    end
     page.visual_effect(:highlight, "#{container}")
   end
 end
