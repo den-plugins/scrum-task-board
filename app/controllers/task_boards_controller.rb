@@ -11,13 +11,19 @@ class TaskBoardsController < ApplicationController
   def show
     @statuses = IssueStatus.all(:order => "position asc")
     @version = Version.find params[:version_id]
+    @teams = CustomField.first(:conditions => "type = 'IssueCustomField' and name = 'Assigned Dev Team'")
+    @selected_team = params[:selected_team] ? params[:selected_team] : ""
+    @board = params[:board]
 
-    if params[:board].to_i.eql? 1
+    if @board.to_i.eql? 1
       @status_grouped = IssueStatusGroup::TASK_GROUPED
       @status_columns = ordered_keys(@status_grouped)
       
       #This part needs to be optimized
       @features = @version.features
+      unless ["", "All", "---select a team---"].member? @selected_team
+        @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
+      end
       @tasks = @version.tasks
 
       @tasks.reject!.each do |f|
@@ -35,10 +41,13 @@ class TaskBoardsController < ApplicationController
       @featured = true
       @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
      
-    elsif params[:board].to_i.eql? 2
+    elsif @board.to_i.eql? 2
       @status_grouped = IssueStatusGroup::BUG_GROUPED
       @status_columns = ordered_keys(@status_grouped)
       @bugs = @version.bugs
+      unless ["", "All", "---select a team---"].member? @selected_team
+        @bugs = @bugs.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
+      end
       
       @parent_bugs = @bugs.map do |b|
         b if !b.version_descendants.empty? and b.parent.nil?
