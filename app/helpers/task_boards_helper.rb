@@ -6,10 +6,8 @@ module TaskBoardsHelper
   end
 
   def task_board_drop_receiving_element(dom_id, status, statuses)
-    accepted_statuses = []
-    statuses.each {|s| accepted_statuses << s.class_name }
     drop_receiving_element(dom_id,
-      :accept => accepted_statuses,
+      :accept => statuses.collect {|s| s.class_name},
       :hoverclass => 'hovered',
       :url => {:controller => 'task_boards', :action => 'update_issue_status'},
       :with => "'issue_id=' + (element.id.split('_').last()) + '&status_id=#{status.id}&id=#{@project.id}&board=#{params[:board]}'")
