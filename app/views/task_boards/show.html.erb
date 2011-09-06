@@ -38,18 +38,6 @@
 </h2>
 
 <input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
-<% if @teams.projects.member? @project %>
-  <span style="float:right;">
-    Sort by Team: 
-    <% form_for :team_filter, :url => {:controller => "task_boards", :action => "show", :version_id => @version.id, 
-                   :board => @board, :id => @project.id}, :html => {:id => "form_sort_team"} do |f| %>
-    <% blank = (@selected_team.empty? or @selected_team.eql?("All"))? ["---select a team---"] : ["All"] %>
-    <%= select_tag "selected_team", options_for_select(blank + @teams.possible_values, @selected_team), 
-                        :onchange => "$('form_sort_team').submit()" %>
-    <% end %>
-  </span>
-<% end %>
-
 <div id="bdchart"></div>
 <div id="fixed_table_header"></div>
 
