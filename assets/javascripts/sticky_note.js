@@ -15,6 +15,8 @@ function sticky_note(issue, assigned_to, status_id)
   });
         
   jQuery("#" + issue + " .cancel").click(function(){
+    jQuery("#" + issue + " #issue_assigned_to_id").val(assigned_to);
+    jQuery("#" + issue + " #issue_status_id").val(status_id);
     jQuery("#" + issue + " .edit_here").hide();
     jQuery("#" + issue + " .initial_controls").show();
     if ( jQuery("#" + issue + " .toggle_details").hasClass('maximized'))
