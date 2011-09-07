@@ -107,7 +107,7 @@ class TaskBoardsController < ApplicationController
     #TODO Permissions trapping - view
       get_project
     @issue = Issue.find(params[:issue_id])
-    @issue.init_journal(User.current, "Automated issue update from Task Board")
+    @issue.init_journal(User.current, '')
     @issue.update_attributes(params[:issue])
     
     parents = @issue.update_parents
