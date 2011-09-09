@@ -67,6 +67,7 @@ class TaskBoardsController < ApplicationController
     #    if !@version.effective_date.nil?
     #      @chart_data = BurndownChart.new(@version).data_and_dates
     #    end
+    
   end
   
   def update_issue_status
@@ -115,6 +116,7 @@ class TaskBoardsController < ApplicationController
     
     render :update do |page|
       page.update_sticky_note dom_id(@issue), @issue
+      page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version } 
       parents.each do |parent|
         if params[:board].to_i.eql? 1
           if parent.version_descendants.present? and !parent.feature?

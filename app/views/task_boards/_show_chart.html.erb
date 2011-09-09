@@ -1,0 +1,5 @@
+<script type="text/javascript">
+  jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
+      plot_chart(<%= version.chart_data %>);
+  }});
+</script>

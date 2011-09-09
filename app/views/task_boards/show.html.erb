@@ -1,6 +1,7 @@
 <%# html_title "#{@version.nil? ? "Issues with no version" : @version.name} - Task board" -%>
 
 <% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'colorbox', :plugin => 'scrum_task_board' %>
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
   <style type="text/css">
     .clearfix:after {
@@ -37,9 +38,9 @@
   <span style="float:right"><%= "Target Date: " + format_date(@version.effective_date) unless @version.effective_date.nil? %></span>
 </h2>
 
-<input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
+<div style="float:left; width: 70%; padding: 10px;">
 <% if @teams.projects.member? @project %>
-  <span style="float:right;">
+  <span style="padding-right:20px;">
     Sort by Team: 
     <% form_for :team_filter, :url => {:controller => "task_boards", :action => "show", :version_id => @version.id, 
                    :board => @board, :id => @project.id}, :html => {:id => "form_sort_team"} do |f| %>
@@ -49,6 +50,18 @@
     <% end %>
   </span>
 <% end %>
+<input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
+</div>
+<div style="float:right; width: 80px; padding: 10px;">
+  <span>
+  <%= image_tag("/plugin_assets/redmine_burndown/chart.png", :size => "20x20") %>
+  </span>
+  <span style="float: right; padding-top: 3px;">
+  <%= link_to "Show Chart", { :controller => 'burndowns', :action => 'chart', 
+                                              :project_id => @version.project_id, 
+                                              :id => @version.id }, :id => 'showchart' %>
+  </span>
+</div>
 
 <div id="bdchart"></div>
 <div id="fixed_table_header"></div>
@@ -143,8 +156,12 @@
   <% end %>
   </tbody>
 </table>
-<%= javascript_include_tag  'fixedtableheader', :plugin => 'scrum_task_board', :cache => true %>
+<%= javascript_include_tag  'fixedtableheader', 'jquery.colorbox-min.js', :plugin => 'scrum_task_board', :cache => true %>
 <%= javascript_include_tag 'jquery.jqplot.js', 'plugins/jqplot.canvasTextRenderer.min.js',  'plugins/jqplot.canvasAxisLabelRenderer.min.js', 'plugins/jqplot.cursor.min.js', 'plugins/jqplot.dateAxisRenderer.min.js', 'plugins/jqplot.highlighter.min.js', 'chart.js', :plugin => 'redmine_burndown', :cache => "burndown_chart" %>
+
+<div id="chart_panel">
+<%= render :partial => "show_chart", :locals => {:version => @version} %>
+</div>
 <% else %>
   <h3><%= @error_msg %></h3>
 <% end %>

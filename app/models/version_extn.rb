@@ -45,6 +45,10 @@ module VersionExtn
     def selected_issue_count tracker
       Issue.count(:all, :select => "id", :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker])
     end
+
+    def chart_data
+      @chart_data = (BurndownChart.sprint_has_started(id))? BurndownChart.new(self).data_and_dates : []
+    end
     
   end
 end
