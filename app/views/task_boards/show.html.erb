@@ -156,8 +156,15 @@
   <% end %>
   </tbody>
 </table>
-<%= javascript_include_tag  'fixedtableheader', 'jquery.colorbox-min.js', :plugin => 'scrum_task_board', :cache => true %>
-<%= javascript_include_tag 'jquery.jqplot.js', 'plugins/jqplot.canvasTextRenderer.min.js',  'plugins/jqplot.canvasAxisLabelRenderer.min.js', 'plugins/jqplot.cursor.min.js', 'plugins/jqplot.dateAxisRenderer.min.js', 'plugins/jqplot.highlighter.min.js', 'chart.js', :plugin => 'redmine_burndown', :cache => "burndown_chart" %>
+<%= javascript_include_tag 'fixedtableheader', :plugin => 'scrum_task_board', :cache => true %>
+<%= javascript_include_tag 'jquery.colorbox-min.js', :plugin => 'scrum_task_board' %>
+<%= javascript_include_tag 'jquery.jqplot.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.canvasTextRenderer.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.canvasAxisLabelRenderer.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.cursor.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.dateAxisRenderer.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'plugins/jqplot.highlighter.min.js', :plugin => 'redmine_burndown' %>
+<%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
 
 <script type="text/javascript">
   jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
