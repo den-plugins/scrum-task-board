@@ -63,11 +63,6 @@ class TaskBoardsController < ApplicationController
     end
     
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
-
-    #    if !@version.effective_date.nil?
-    #      @chart_data = BurndownChart.new(@version).data_and_dates
-    #    end
-    
   end
   
   def update_issue_status
@@ -122,7 +117,6 @@ class TaskBoardsController < ApplicationController
           if parent.version_descendants.present? and !parent.feature?
             descendant = {:descendant => true} unless parent.feature?
             page.remove dom_id(parent)
-            page.insert_html :top, task_board_dom_id(parent.task_parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
           else
             page.update_sticky_note dom_id(parent), parent
           end
