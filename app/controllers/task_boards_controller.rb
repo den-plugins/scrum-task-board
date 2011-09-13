@@ -40,7 +40,7 @@ class TaskBoardsController < ApplicationController
         
       @featured = true
       @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
-     
+#      @all_issues = @features + @tasks
     elsif @board.to_i.eql? 2
       @status_grouped = IssueStatusGroup::BUG_GROUPED
       @status_columns = ordered_keys(@status_grouped)
@@ -60,6 +60,7 @@ class TaskBoardsController < ApplicationController
       
       @bugged = @bugs.empty? ? false : true
       @error_msg = "There are no Bugs for this version." if not @bugged
+#      @all_issues = @parent_bugs + @bugs
     end
     
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
