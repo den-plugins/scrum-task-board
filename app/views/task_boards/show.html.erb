@@ -59,7 +59,7 @@
   <span style="float: right; padding-top: 3px;">
   <%= link_to "Show Chart", { :controller => 'burndowns', :action => 'chart', 
                                               :project_id => @version.project_id, 
-                                              :id => @version.id }, :id => 'showchart' %>
+                                              :id => @version.id, :issues => @all_issues }, :id => 'showchart' %>
   </span>
 </div>
 

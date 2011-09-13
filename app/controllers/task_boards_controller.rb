@@ -25,7 +25,7 @@ class TaskBoardsController < ApplicationController
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
       end
       @tasks = @version.tasks
-
+      @all_issues = (@features + @tasks).compact.map {|i| i.id}
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
           p = f.parent.issue_from
@@ -40,7 +40,6 @@ class TaskBoardsController < ApplicationController
         
       @featured = true
       @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
-#      @all_issues = @features + @tasks
     elsif @board.to_i.eql? 2
       @status_grouped = IssueStatusGroup::BUG_GROUPED
       @status_columns = ordered_keys(@status_grouped)
@@ -48,6 +47,7 @@ class TaskBoardsController < ApplicationController
       unless ["", "All", "---select a team---"].member? @selected_team
         @bugs = @bugs.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
       end
+      @all_issues = @bugs.compact.map {|i| i.id}
       
       @parent_bugs = @bugs.map do |b|
         b if !b.version_descendants.empty? and b.parent.nil?
@@ -60,7 +60,6 @@ class TaskBoardsController < ApplicationController
       
       @bugged = @bugs.empty? ? false : true
       @error_msg = "There are no Bugs for this version." if not @bugged
-#      @all_issues = @parent_bugs + @bugs
     end
     
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
@@ -112,7 +111,7 @@ class TaskBoardsController < ApplicationController
     
     render :update do |page|
       page.update_sticky_note dom_id(@issue), @issue
-      page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version } 
+#      page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version } 
       parents.each do |parent|
         if params[:board].to_i.eql? 1
           if parent.version_descendants.present? and !parent.feature?
