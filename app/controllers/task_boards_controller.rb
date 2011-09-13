@@ -21,10 +21,11 @@ class TaskBoardsController < ApplicationController
       
       #This part needs to be optimized
       @features = @version.features
+      @tasks = @version.tasks
       unless ["", "All", "---select a team---"].member? @selected_team
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
+        @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
       end
-      @tasks = @version.tasks
       @all_issues = (@features + @tasks).compact.map {|i| i.id}
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
@@ -44,10 +45,12 @@ class TaskBoardsController < ApplicationController
       @status_grouped = IssueStatusGroup::BUG_GROUPED
       @status_columns = ordered_keys(@status_grouped)
       @bugs = @version.bugs
+      @descendant_bugs = []
       unless ["", "All", "---select a team---"].member? @selected_team
-        @bugs = @bugs.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
+        @bugs = @bugs.select {|b| not b.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
+        @descendant_bugs = @bugs.map { |b| b.version_descendants }.flatten
       end
-      @all_issues = @bugs.compact.map {|i| i.id}
+      @all_issues = (@descendant_bugs + @bugs).map {|i| i.id}
       
       @parent_bugs = @bugs.map do |b|
         b if !b.version_descendants.empty? and b.parent.nil?
