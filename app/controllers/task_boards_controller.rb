@@ -21,11 +21,12 @@ class TaskBoardsController < ApplicationController
       
       #This part needs to be optimized
       @features = @version.features
+      @tasks = @version.tasks
       unless ["", "All", "---select a team---"].member? @selected_team
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
+        @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
       end
-      @tasks = @version.tasks
-
+      @all_issues = (@features + @tasks).compact.map {|i| i.id}
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
           p = f.parent.issue_from
@@ -40,14 +41,16 @@ class TaskBoardsController < ApplicationController
         
       @featured = true
       @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
-     
     elsif @board.to_i.eql? 2
       @status_grouped = IssueStatusGroup::BUG_GROUPED
       @status_columns = ordered_keys(@status_grouped)
       @bugs = @version.bugs
+      @descendant_bugs = []
       unless ["", "All", "---select a team---"].member? @selected_team
-        @bugs = @bugs.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
+        @bugs = @bugs.select {|b| not b.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
+        @descendant_bugs = @bugs.map { |b| b.version_descendants }.flatten
       end
+      @all_issues = (@descendant_bugs + @bugs).map {|i| i.id}
       
       @parent_bugs = @bugs.map do |b|
         b if !b.version_descendants.empty? and b.parent.nil?
@@ -111,7 +114,7 @@ class TaskBoardsController < ApplicationController
     
     render :update do |page|
       page.update_sticky_note dom_id(@issue), @issue
-      page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version } 
+#      page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version } 
       parents.each do |parent|
         if params[:board].to_i.eql? 1
           if parent.version_descendants.present? and !parent.feature?
