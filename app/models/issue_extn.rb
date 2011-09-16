@@ -79,7 +79,6 @@ module IssueExtn
     if parent
       p = parent.issue_from
       parents << p
-      p.update_parent_status
       parents += p.update_parents
     end
     parents
