@@ -76,10 +76,9 @@ module IssueExtn
   
   def update_parents
     parents = []
-    if parent
-      p = parent.issue_from
-      parents << p
-      parents += p.update_parents
+    unless parent.nil?
+      parents << parent_issue
+      parents += parent_issue.update_parents
     end
     parents
   end
