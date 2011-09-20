@@ -1,6 +1,6 @@
 <% border = feature.task_parent? ? "border-top: 1px dashed #DDD" : "border-top: 2px solid #DDD" %>
 <% unless feature.task_parent? %>
-    <td class="task_board_feature" style="<%= border %>">
+  <td class="task_board_feature" style="<%= border %>">
     <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag" id="<%= dom_id(feature) %>">
       <%= render :partial => 'feature', :locals => {:feature => feature } %>
     </div>

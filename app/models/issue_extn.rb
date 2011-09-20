@@ -39,7 +39,7 @@ module IssueExtn
     end
     
     def task_parent?
-      not version_descendants.empty? and !parent.nil? and parent.issue_from.parent.nil?
+      not version_descendants.empty? and !parent.nil? and parent.issue_from.parent.nil? and task?
     end
     
     def task_parent
