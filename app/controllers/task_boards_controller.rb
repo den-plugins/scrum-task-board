@@ -20,7 +20,7 @@ class TaskBoardsController < ApplicationController
       @status_columns = ordered_keys(@status_grouped)
       
       #This part needs to be optimized
-      @features = @version.features
+      @features = @version.features.select {|f| f.parent.nil?}
       @tasks = @version.tasks
       unless ["", "All", "---select a team---"].member? @selected_team
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }

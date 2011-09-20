@@ -39,7 +39,7 @@ module IssueExtn
     end
     
     def task_parent?
-      not version_descendants.empty? and !parent.nil? and parent.issue_from.parent.nil? and !feature?
+      not version_descendants.empty? and !parent.nil? and parent.issue_from.parent.nil? #and !feature?
     end
     
     def task_parent
@@ -65,7 +65,7 @@ module IssueExtn
     descendants = version_descendants(true)
     rejects = []
     descendants.select {|d| d.feature?}.each do |x|
-      rejects += x.version_descendants(true)
+      rejects += (x.task_parent? ? [x] : x.version_descendants(true))
     end
     descendants - rejects
   end
