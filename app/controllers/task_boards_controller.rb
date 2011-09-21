@@ -22,6 +22,7 @@ class TaskBoardsController < ApplicationController
       #This part needs to be optimized
       @features = @version.features.select {|f| f.parent.nil?}
       @tasks = @version.tasks
+      @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
       unless ["", "All", "---select a team---"].member? @selected_team
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
@@ -39,13 +40,14 @@ class TaskBoardsController < ApplicationController
         end
       end
         
-      @featured = true
-      @error_msg = "There are no Features/Tasks for this version." if @features.empty? and @tasks.empty?
+      @featured = (@features.empty? and @tasks.empty?)? false : true
+      @error_msg = "There are no Features/Tasks." if not @featured
     elsif @board.to_i.eql? 2
       @status_grouped = IssueStatusGroup::BUG_GROUPED
       @status_columns = ordered_keys(@status_grouped)
       @bugs = @version.bugs
       @descendant_bugs = []
+      @nodata_to_filter = (@bugs.empty?)? true : false
       unless ["", "All", "---select a team---"].member? @selected_team
         @bugs = @bugs.select {|b| not b.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         @descendant_bugs = @bugs.map { |b| b.version_descendants }.flatten
@@ -62,7 +64,7 @@ class TaskBoardsController < ApplicationController
       end
       
       @bugged = @bugs.empty? ? false : true
-      @error_msg = "There are no Bugs for this version." if not @bugged
+      @error_msg = "There are no Bugs." if not @bugged
     end
     
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?

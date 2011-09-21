@@ -37,7 +37,7 @@
   <%= @version.nil? ? "Product Backlog" : @version.name %> Task Board 
   <span style="float:right"><%= "Target Date: " + format_date(@version.effective_date) unless @version.effective_date.nil? %></span>
 </h2>
-
+<% unless @nodata_to_filter %>
 <div style="float:left; width: 70%; padding: 10px;">
 <% if @teams.projects.member? @project %>
   <span style="padding-right:20px;">
@@ -50,6 +50,7 @@
     <% end %>
   </span>
 <% end %>
+<% unless @error_msg %>
 <input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
 </div>
 <div style="float:right; width: 80px; padding: 10px;">
@@ -61,8 +62,10 @@
                                               :project_id => @version.project_id, 
                                               :id => @version.id, :issues => @all_issues }, :id => 'showchart' %>
   </span>
+<% end %>
 </div>
-
+<div class="clear"></div>
+<% end %>
 <div id="bdchart"></div>
 <div id="fixed_table_header"></div>
 
@@ -173,5 +176,5 @@
 </script>
 
 <% else %>
-  <h3><%= @error_msg %></h3>
+  <p class="nodata"><%= @error_msg %></p>
 <% end %>
