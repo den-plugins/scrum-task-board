@@ -2,6 +2,7 @@
 
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'colorbox', :plugin => 'scrum_task_board' %>
+  <!-- <link type="text/css" media="screen" rel="stylesheet" href="http://dl.getdropbox.com/u/2863383/js/colorbox132/example5/colorbox.css" /> -->
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
   <style type="text/css">
     .clearfix:after {
@@ -70,7 +71,7 @@
 <div id="fixed_table_header"></div>
 
 <% if @featured or @bugged %>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
+  <%= javascript_include_tag  'jquery.min.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag  'sticky_note', :plugin => 'scrum_task_board' %>
 
 <table id="task_board" cellspacing="0">
@@ -170,7 +171,7 @@
 <%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
 
 <script type="text/javascript">
-  jQuery("#showchart").colorbox({opacity: 0.7, onComplete:function(){
+  jQuery("#showchart").colorbox({opacity: 0.5, onComplete:function(){
       plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
   }});
 </script>
