@@ -20,7 +20,7 @@ class TaskBoardsController < ApplicationController
       @status_columns = ordered_keys(@status_grouped)
       
       #This part needs to be optimized
-      @features = @version.features.select {|f| f.parent.nil?}
+      @features = @version.features #.select {|f| f.parent.nil?}
       @tasks = @version.tasks
       @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
       unless ["", "All", "---select a team---"].member? @selected_team
