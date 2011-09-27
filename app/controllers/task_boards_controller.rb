@@ -27,7 +27,7 @@ class TaskBoardsController < ApplicationController
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
       end
-      @all_issues = (@features + @tasks).compact.map {|i| i.id}
+      @all_issues = (@tasks).compact.map {|i| i.id}
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
           p = f.parent.issue_from

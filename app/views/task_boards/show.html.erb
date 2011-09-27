@@ -59,7 +59,7 @@
   <%= image_tag("/plugin_assets/redmine_burndown/chart.png", :size => "20x20") %>
   </span>
   <span style="float: right; padding-top: 3px;">
-  <%= link_to "Show Chart", { :controller => 'burndowns', :action => 'chart', 
+  <%= link_to_if_authorized "Show Chart", { :controller => 'burndowns', :action => 'chart', 
                                               :project_id => @version.project_id, 
                                               :id => @version.id, :issues => @all_issues }, :id => 'showchart' %>
   </span>
