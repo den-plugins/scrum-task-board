@@ -9,7 +9,7 @@
 </div>
 <div class="current_data">
   <p class="estimate" style="right: 2px;"><%= feature.remaining_effort ? feature.remaining_effort : '' %></p>
-  <p class="assignee <%= "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to ? feature.assigned_to : '' %></p>
+  <p class="assignee <%# "current_is_assigned" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to ? feature.assigned_to : '' %></p>
   <p class="status"><%= feature.status.name %></p>
   <hr/>
   <p><%= truncate(feature.subject, :length => 50) %></p>

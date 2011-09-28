@@ -80,6 +80,11 @@
   border: 1px solid #0EA94B;
 }
 
+.task_board_feature_parent_current_is_assigned {
+  border: 3px solid #FFCC33;
+/*  padding: 2px;*/
+}
+
 #task_board .task_board_task_parent {
   border: 1px solid #5081AA;
 }
@@ -185,10 +190,14 @@
   width: 40px;
 }
 
-.task_board_data .current_is_assigned {
-  background: #65A7D7;
-  color: #f1f1f1;
+.current_is_assigned {
+  border: 2px solid #FFCC33;
+/*  color: #f1f1f1;*/
 }
+
+/*.task_board_feature.current_is_assigned {*/
+/*  background-color: #FFCC33;*/
+/*}*/
  
 #task_board .task_board_closed {
   color: #ff0000;
@@ -276,4 +285,3 @@
   z-index: 100;
   border-bottom: 1px dashed #ccc;
 }
-

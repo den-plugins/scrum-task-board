@@ -26,7 +26,7 @@ module TaskBoardsHelper
     elsif issue.bug? : klass = "task_board_bug_data"
     elsif issue.support? : klass = "task_board_support_data" 
     end
-    klass += " no_drag" unless issue.version_descendants.empty?
+    klass += " no_drag" if !issue.version_descendants.empty? or issue.feature?
     klass
   end
   
@@ -55,10 +55,16 @@ module TaskBoardsHelper
   def update_sticky_note container, issue
     if issue.feature?
       page.replace_html "#{container}", :partial => 'feature', :locals => {:feature => issue } 
+      classname = "task_board_data #{ task_board_border_class(issue) } task_board_feature_parent"
     else
       page.replace_html "#{container}", :partial => 'issue_show', :locals => {:issue => issue}
-      page[container.to_sym].className = "#{status_classes_for(issue, User.current)} task_board_data #{ task_board_border_class(issue) }"
+      classname = "#{status_classes_for(issue, User.current)} task_board_data #{ task_board_border_class(issue) } "
     end
+    if issue.assigned_to.eql? User.current
+      classname += '_' if issue.feature?
+      classname += 'current_is_assigned'
+    end
+    page[container.to_sym].className = classname
     page.visual_effect(:highlight, "#{container}")
   end
 end
