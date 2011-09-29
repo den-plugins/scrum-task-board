@@ -286,14 +286,15 @@
   border-bottom: 1px dashed #ccc;
 }
 
-
 div.tooltip:hover span.tip{
-display:inline;
 position:absolute;
 top:12px; left:24px;
 border:1px solid #555;
 background-color:#fff;
-padding: 4px;
+padding: 4px; width:200px;
 font-size: 0.8em;
 color:#505050;
 }
+
+.tooltip { display: inline; }
+
