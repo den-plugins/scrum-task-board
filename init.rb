@@ -1,5 +1,5 @@
 require 'redmine'
-
+require 'custom_issue_patch'
 require 'scrum_alliance/redmine/issue_status_extensions'
 require 'scrum_alliance/redmine/project_extensions'
 

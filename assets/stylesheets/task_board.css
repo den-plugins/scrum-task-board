@@ -288,7 +288,7 @@
 
 
 div.tooltip:hover span.tip{
-display:block;
+display:inline;
 position:absolute;
 top:12px; left:24px;
 border:1px solid #555;
