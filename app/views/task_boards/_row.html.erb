@@ -1,8 +1,14 @@
 <% border = feature.task_parent? ? "border-top: 1px dashed #DDD" : "border-top: 2px solid #DDD" %>
+
 <% unless feature.task_parent? %>
   <td class="task_board_feature" style="<%= border %>">
+    <div class="tooltip">
     <div class="task_board_data task_board_feature_data task_board_feature_parent<%= '_current_is_assigned' if feature.assigned_to.eql? User.current %> no_drag" id="<%= dom_id(feature) %>">
       <%= render :partial => 'feature', :locals => {:feature => feature } %>
+    </div>
+      <span class="tip">
+        <%= task_board_tooltip(feature) %>
+      </span>
     </div>
   </td>
 <% else %>
