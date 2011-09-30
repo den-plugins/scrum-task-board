@@ -21,7 +21,7 @@ Redmine::Plugin.register :scrum_task_board do
     permission :update_task_boards, :task_boards => :update_status
   end
   
-  menu :project_menu, :task_board, {:controller => 'task_boards', :action => 'index'}, :after => :pm_dashboards, :caption => 'Task Board'
+  menu :project_menu, :task_board, {:controller => 'task_boards', :action => 'index'}, :after => :treeview, :caption => 'Task Board'
 end
 
 require File.dirname(__FILE__) + '/app/models/issue_extn.rb'
