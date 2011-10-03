@@ -51,9 +51,9 @@ jQuery(".tooltip").hover(function(){
   var tipVisY = jQuery(window).height() - (e.pageY + tipHeight);
 
   if ( tipVisX < 20 ) { //If tooltip exceeds the X coordinate of viewport
-      x = x - tipWidth;
+      x = x - tipWidth - 30;
   } if ( tipVisY < 20 ) { //If tooltip exceeds the Y coordinate of viewport
-      y = y - tipHeight;
+      y = y - tipHeight - 20;
   }
   //Absolute position the tooltip according to mouse position
   tip.css({  top: y, left: x, display: "inline" });
