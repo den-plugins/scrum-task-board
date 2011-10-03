@@ -286,9 +286,10 @@
   border-bottom: 1px dashed #ccc;
 }
 
-div.tooltip:hover span.tip{
-position:absolute;
-top:12px; left:24px;
+div.tooltip span.tip{
+position: absolute; z-index: 1000;
+display: none;
+/*top:12px; left:24px;*/
 border:1px solid #555;
 background-color:#fff;
 padding: 4px; width:200px;

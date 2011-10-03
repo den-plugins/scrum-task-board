@@ -69,8 +69,13 @@ module TaskBoardsHelper
   end
   
   def task_board_tooltip(ticket)
-    "<strong>#{l(:field_description)}</strong>: #{ticket.description}<br />" +
+    content = "<strong>#{l(:field_description)}</strong>: #{ticket.description}<br />" +
     "<strong>#{l(:field_assigned_to)}</strong>: #{ticket.assigned_to}<br />" +
-    "<strong>#{l(:field_remaining_effort)}</strong>: #{ticket.remaining_effort ? ticket.remaining_effort : 0} #{l(:field_sp_hours)}<br />"
+    "<strong>#{l(:field_remaining_effort)}</strong>: #{ticket.remaining_effort ? ticket.remaining_effort : 0} #{l(:field_sp_hours)}<br />" +
+    "<strong>#{l(:field_comments)}</strong>: <br /> <ul>"
+    ticket.time_entries.each do |t|
+      content += "<li>#{t.comments}</li>"
+    end
+    content += "</ul>"
   end
 end
