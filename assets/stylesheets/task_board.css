@@ -292,10 +292,18 @@ display: none;
 /*top:12px; left:24px;*/
 border:1px solid #555;
 background-color:#fff;
-padding: 4px; width:230px;
+padding: 4px; width:300px;
 font-size: 0.8em;
 color:#505050;
 }
 
 .tooltip { display: inline; }
+
+div.tooltip span.tip pre, div.tooltip span.tip li pre{
+  width: 290px;
+  height: 50px;
+  overflow: hidden;
+  background-color: #FAFAFA;
+  border: 1px solid #DADADA;
+}
 
