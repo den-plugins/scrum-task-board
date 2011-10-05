@@ -113,7 +113,7 @@
           <% default = @status_grouped[k][:default] %>
           <% statuses = @status_grouped[k][:statuses] %>
           <td id="<%= task_board_dom_id(nil, default) %>">
-          <ul id="<%= task_board_dom_id(nil, default, 'list') %>">
+          <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list">
             <% statuses.each do |status| %>
               <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[status]) %>
             <% end %>
@@ -132,7 +132,7 @@
           <% default = @status_grouped[k][:default] %>
           <% statuses = @status_grouped[k][:statuses] %>
           <td id="<%= task_board_dom_id(bug, default) %>">
-          <ul id="<%= task_board_dom_id(bug, default, 'list') %>">
+          <ul id="<%= task_board_dom_id(bug, default, 'list') %>" class="taskboard_issues_list">
             <% statuses.each do |status| %>
               <%= render :partial => 'issue', :collection => Array(bug.version_descendants(true).group_by(&:status)[status]),
                              :locals => {:descendant => true} %>
@@ -149,7 +149,7 @@
         <% default = @status_grouped[k][:default] %>
         <% statuses = @status_grouped[k][:statuses] %>
         <td id="<%= task_board_dom_id(nil, default) %>">
-        <ul id="<%= task_board_dom_id(nil, default, 'list') %>">
+        <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list">
           <% statuses.each do |status| %>
             <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>
           <% end %>

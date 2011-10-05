@@ -76,7 +76,7 @@ class TaskBoardsController < ApplicationController
     get_project
     @status = IssueStatus.find(params[:status_id])
     @issue = Issue.find(params[:issue_id])
-    @issue.init_journal(User.current, "Automated issue update from the Task Board")
+    @issue.init_journal(User.current, "")
 
     attrs = {:status_id => @status.id}
     @issue.update_attributes(attrs)

@@ -14,12 +14,16 @@ jQuery(function( $ ){
      jQuery(".current_data").show();
      if (jToggleDetails.hasClass("minimized")) 
       jToggleDetails.removeClass("minimized").addClass("maximized");
+//      jQuery("#task_board ul.taskboard_issues_list").removeClass("min_ul");
+//      jQuery("#task_board ul.taskboard_issues_list li.task_board_data").removeClass("min_li");
   }
   else
   {
      jQuery(".current_data").hide();
      if (jToggleDetails.hasClass("maximized")) 
       jToggleDetails.removeClass("maximized").addClass("minimized");
+//      jQuery("#task_board .taskboard_issues_list").addClass("min_ul");
+//      jQuery("#task_board .taskboard_issues_list li.task_board_data").addClass("min_li");
   }
  });
 // 'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
