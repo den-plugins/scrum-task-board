@@ -135,6 +135,17 @@ class TaskBoardsController < ApplicationController
       end
     end
   end
+
+  def add_comment
+    get_project
+    @issue = Issue.find(params[:issue_id])
+    @issue.init_journal(User.current, params[:comment])
+    @issue.update_attributes(params[:issue])
+    render :update do |page|
+      page.replace_html "#{@issue.id}_discussion".to_sym, :partial => "discussion", :locals => {:issue => @issue}
+      page.replace_html "#{@issue.id}_tip".to_sym, page.task_board_tooltip(@issue)
+    end
+  end
     
 private
   def get_project

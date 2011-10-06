@@ -1,0 +1,7 @@
+<% journals = get_journals(issue) %>
+<% journals.each do |journal| %>
+  <div class="comment">
+    <h5><%= journal.user %><span class="time_ago"><%= time_tag journal.created_on %> ago</span></h5>
+    <%= textilizable(journal, :notes) %>
+  </div>
+<% end %>

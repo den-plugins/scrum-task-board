@@ -270,6 +270,7 @@
 #task_board .talk_here .discussion {
   overflow: auto;
   height: 150px;
+  background-color: #ccc;
 }
 
 div.discussion .time_ago {
