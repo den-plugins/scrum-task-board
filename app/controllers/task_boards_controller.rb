@@ -9,6 +9,7 @@ class TaskBoardsController < ApplicationController
   end
 
   def show
+    @condensed = params[:condensed] ? true : false
     @statuses = IssueStatus.all(:order => "position asc")
     @version = Version.find params[:version_id]
     @teams = CustomField.first(:conditions => "type = 'IssueCustomField' and name = 'Assigned Dev Team'")
@@ -27,7 +28,7 @@ class TaskBoardsController < ApplicationController
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
       end
-#      @all_issues = (@tasks).compact.map {|i| i.id}
+      #@all_issues = (@tasks).compact.map {|i| i.id}
       @tracker = 4
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
@@ -51,16 +52,16 @@ class TaskBoardsController < ApplicationController
       @nodata_to_filter = (@bugs.empty?)? true : false
       unless ["", "All", "---select a team---"].member? @selected_team
         @bugs = @bugs.select {|b| not b.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
-#        @descendant_bugs = @bugs.map { |b| b.version_descendants }.flatten
+        #@descendant_bugs = @bugs.map { |b| b.version_descendants }.flatten
          @team = @selected_team
       end
-#      @all_issues = (@descendant_bugs + @bugs).map {|i| i.id}
+      #@all_issues = (@descendant_bugs + @bugs).map {|i| i.id}
       @tracker = 1
       @parent_bugs = @bugs.map do |b|
         b if !b.version_descendants.empty? and b.parent.nil?
       end
       
-      # puts @parent_bugs.inspect
+      #puts @parent_bugs.inspect
       @bugs.reject!.each do |b|
         b if !b.version_descendants.empty? or !b.parent.nil? #and not (b.parent.issue_from.feature? or b.parent.issue_from.task?)
       end
@@ -77,6 +78,7 @@ class TaskBoardsController < ApplicationController
     @status = IssueStatus.find(params[:status_id])
     @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, "")
+    @condensed = params[:condensed] ? true : false
 
     attrs = {:status_id => @status.id}
     @issue.update_attributes(attrs)
@@ -118,7 +120,7 @@ class TaskBoardsController < ApplicationController
     
     render :update do |page|
       page.update_sticky_note dom_id(@issue), @issue
-#      page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version } 
+      #page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version }
       parents.each do |parent|
         if params[:board].to_i.eql? 1
           if parent.version_descendants.present? and !parent.feature?

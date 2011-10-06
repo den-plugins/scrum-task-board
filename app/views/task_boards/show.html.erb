@@ -48,11 +48,22 @@
     <% blank = (@selected_team.empty? or @selected_team.eql?("All"))? ["---select a team---"] : ["All"] %>
     <%= select_tag "selected_team", options_for_select(blank + @teams.possible_values, @selected_team), 
                         :onchange => "$('form_sort_team').submit()" %>
+    <%= check_box_tag 'condensed', @condensed, @condensed, :hidden => true %>
     <% end %>
   </span>
 <% end %>
 <% unless @error_msg %>
-<input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
+
+<% unless @condensed %>
+  <input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
+<% end %>
+
+<% form_tag({:action => 'show', :id => @project.id, :version_id =>@version.id, :board => @board},
+                         :id => 'condensed_view_form') do %>
+  <%= check_box_tag 'condensed', !@condensed, @condensed, :onchange => "$('condensed_view_form').submit();" %>
+  <%= label_tag 'Condensed View' %>
+<% end %>
+
 </div>
 <div style="float:right; min-width: 90px; padding: 10px;">
   
@@ -113,7 +124,7 @@
           <% default = @status_grouped[k][:default] %>
           <% statuses = @status_grouped[k][:statuses] %>
           <td id="<%= task_board_dom_id(nil, default) %>">
-          <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list">
+          <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list <%= @condensed ? 'condensed' : '' %>">
             <% statuses.each do |status| %>
               <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[status]) %>
             <% end %>
@@ -132,7 +143,7 @@
           <% default = @status_grouped[k][:default] %>
           <% statuses = @status_grouped[k][:statuses] %>
           <td id="<%= task_board_dom_id(bug, default) %>">
-          <ul id="<%= task_board_dom_id(bug, default, 'list') %>" class="taskboard_issues_list">
+          <ul id="<%= task_board_dom_id(bug, default, 'list') %>" class="taskboard_issues_list <%= @condensed ? 'condensed' : '' %>">
             <% statuses.each do |status| %>
               <%= render :partial => 'issue', :collection => Array(bug.version_descendants(true).group_by(&:status)[status]),
                              :locals => {:descendant => true} %>
@@ -149,7 +160,7 @@
         <% default = @status_grouped[k][:default] %>
         <% statuses = @status_grouped[k][:statuses] %>
         <td id="<%= task_board_dom_id(nil, default) %>">
-        <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list">
+        <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list <%= @condensed ? 'condensed' : '' %>">
           <% statuses.each do |status| %>
             <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>
           <% end %>

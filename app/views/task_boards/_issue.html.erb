@@ -1,5 +1,3 @@
-<div style='width: 100%; padding: 0; margin: 0;' >
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%> <%= 'current_is_assigned' if issue.assigned_to.eql? User.current %>">
   <%= render :partial => 'issue_show', :locals => {:issue => issue } %>
 </li>
-</div>

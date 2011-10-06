@@ -9,7 +9,7 @@ module TaskBoardsHelper
     drop_receiving_element(dom_id,
       :accept => statuses.collect {|s| s.class_name},
       :hoverclass => 'hovered',
-      :url => {:controller => 'task_boards', :action => 'update_issue_status'},
+      :url => {:controller => 'task_boards', :action => 'update_issue_status', :condensed => (@condensed ? @condensed : nil)},
       :with => "'issue_id=' + (element.id.split('_').last()) + '&status_id=#{status.id}&id=#{@project.id}&board=#{params[:board]}'")
   end
   

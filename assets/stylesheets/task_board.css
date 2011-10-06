@@ -121,7 +121,6 @@
   -moz-box-shadow: 2px 2px 2px #818181;
   -webkit-box-shadow: 2px 2px 2px #818181;
   box-shadow: 2px 2px 2px #818181;
-  margin: 6px 2px;
   cursor: move;
   opacity: 0.9;
 }
@@ -333,3 +332,5 @@ div.tooltip span.tip pre, div.tooltip span.tip li pre{
   float: left;
 }
 
+ul.condensed { display: inline-block; }
+ul.condensed li {display: inline-block; margin-right: 1px; }
