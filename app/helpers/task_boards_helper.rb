@@ -73,10 +73,14 @@ module TaskBoardsHelper
     "<strong>#{l(:field_assigned_to)}</strong>: #{ticket.assigned_to}<br />" +
     "<strong>#{l(:field_remaining_effort)}</strong>: #{ticket.remaining_effort ? ticket.remaining_effort : 0} #{l(:field_sp_hours)}<br />" +
     "<strong>#{l(:field_comments)}</strong>: <br /> <ul>"
-    journals = ticket.journals.find(:all, :include => [:user], :conditions => "notes <> ''", :order => "created_on DESC", :limit => 5)
+    journals = get_journals(ticket).take(5)
     journals.reverse.each do |j|
       content += "<li style='padding-left: 4px; margin: 0;'>&raquo; #{j.notes}</li>"
     end
     content += "</ul>"
+  end
+
+  def get_journals(ticket)
+    ticket.journals.find(:all, :include => [:user], :conditions => "notes <> ''", :order => "created_on DESC")
   end
 end

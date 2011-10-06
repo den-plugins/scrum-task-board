@@ -4,7 +4,7 @@ function sticky_note(issue, assigned_to, status_id)
 {
   jQuery("#" + issue + "").hover(
     function(){
-      if(!jQuery("#" + issue + " .edit_here").is(":visible"))
+      if(!jQuery("#" + issue + " .edit_here").is(":visible") && !jQuery("#" + issue + " .talk_here").is(":visible"))
         jQuery("#" + issue + " .initial_controls").show();
       },
     function(){jQuery("#" + issue + " .initial_controls").hide();});
@@ -13,11 +13,17 @@ function sticky_note(issue, assigned_to, status_id)
     jQuery("#" + issue + " .current_data, #" + issue + " .initial_controls").hide();
     jQuery("#" + issue + " .edit_here").show();
   });
+
+  jQuery("#" + issue + " .talk").click(function(){
+    jQuery("#" + issue + " .current_data, #" + issue + " .initial_controls").hide();
+    jQuery("#" + issue + " .talk_here").show();
+  });
         
   jQuery("#" + issue + " .cancel").click(function(){
     jQuery("#" + issue + " #issue_assigned_to_id").val(assigned_to);
     jQuery("#" + issue + " #issue_status_id").val(status_id);
     jQuery("#" + issue + " .edit_here").hide();
+    jQuery("#" + issue + " .talk_here").hide();
     jQuery("#" + issue + " .initial_controls").show();
     if ( jQuery("#" + issue + " .toggle_details").hasClass('maximized'))
       jQuery("#" + issue + " .current_data").show();

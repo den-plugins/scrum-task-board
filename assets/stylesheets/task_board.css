@@ -204,7 +204,7 @@
   text-align: right;
 }
 
-#task_board .edit, #task_board .submit_link, #task_board .cancel, #task_board .toggle_details, #task_board .has_subtasks {
+#task_board .edit, #task_board .submit_link, #task_board .cancel, #task_board .toggle_details, #task_board .has_subtasks, #task_board .talk {
   cursor: pointer;
   position: absolute;
   background: #fff;
@@ -228,6 +228,13 @@
 #task_board .cancel {
   background: transparent url('../images/false.png') no-repeat;
   left: 2px;
+}
+
+#task_board .talk {
+  background: transparent url('../images/talk.png') no-repeat;
+  height: 15px; width: 15px;
+  left: 50px;
+  top: 2px;
 }
 
 #task_board .submit_link {
@@ -254,10 +261,19 @@
   outline: 0;
 }
 
-#task_board .current_data, #task_board .edit_here {
+#task_board .current_data, #task_board .edit_here, #task_board .current_data, #task_board .talk_here {
   min-height:80px;
   font-family: sans, Arial;
   font-size: 12px;
+}
+
+#task_board .talk_here .discussion {
+  overflow: auto;
+  height: 150px;
+}
+
+div.discussion .time_ago {
+  float: right;
 }
 
 #task_board .issue_subject {
@@ -307,12 +323,12 @@ div.tooltip span.tip pre, div.tooltip span.tip li pre{
   border: 1px solid #DADADA;
 }
 
-/*#task_board .min_ul {*/
-/*  width: 100%;*/
-/*}*/
+#task_board .min_ul {
+  width: 100%;
+}
 
-/*#task_board .min_ul .min_li {*/
-/*  width: 20%;*/
-/*  float: left;*/
-/*}*/
+#task_board .min_ul .min_li {
+  width: 20%;
+  float: left;
+}
 
