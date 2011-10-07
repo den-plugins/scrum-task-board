@@ -4,7 +4,7 @@
                             :class => "to_parent", :style => "color: orange;", :title => "Jump to parent." if (!issue.parent.nil? and !issue.parent.issue_from.feature?) and not issue.task_parent? and !@condensed  %>
   <% elsif params[:board].to_i.eql? 2 %>
     <%= link_to "#{issue.parent.issue_from_id} &raquo; ", "##{dom_id(issue.parent.issue_from)}",
-                            :class => "to_parent", :style => "color: orange;", :title => "Jump to parent." if !issue.parent.nil? %>
+                            :class => "to_parent", :style => "color: orange;", :title => "Jump to parent." if !issue.parent.nil? and !@condensed %>
   <% end %>
   <div class="tooltip">
     <%= link_to_issue issue %><span id="<%= issue.id %>_tip" class="tip"><%= task_board_tooltip(issue) %></span>
