@@ -334,3 +334,37 @@ div.tooltip span.tip pre, div.tooltip span.tip li pre{
 
 ul.condensed { display: inline-block; }
 ul.condensed li {display: inline-block; margin-right: 1px; }
+
+.comment_form textarea {
+  border: none;
+  background-color: #fff;
+  display: inline;
+  float: left;
+  width: 90%;
+  height: 45px;
+  max-width: 90%;
+  max-height: 45px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  resize: none;
+}
+
+.comment_form .add {
+  border: 1px solid #030303;
+  height: 47px;
+  width: 15px;
+  display: inline;
+  float: right;
+  padding: 0px;
+  vertical-align: center;
+  margin-right: 1px;
+  background-color: #82C3F2;
+}
+
+.comment_form .add:hover {
+  background-color: #40A2FD;
+}
+
+.comment_form, .comment_form_panel {
+  padding: 0px;
+}

@@ -28,11 +28,14 @@
 
   <div class="talk_here" style="display:none">
     <div class="cancel" title="Cancel">Cancel</div>
+    <div class="comment_form_panel">
     <% remote_form_for :issue, feature, :url => {:action => "add_comment", :controller => "task_boards", 
-                            :id => @project, :issue_id => feature }, :complete => "$('text_comment_#{feature.id}').clear(); " do |f| %>
-      <%= text_area_tag "comment", nil, :style => "width: 96%;", :id => "text_comment_#{feature.id}" %>
-      <%= f.submit "add", :style => "float:right;" %><div class="clear"></div>
+                            :id => @project, :issue_id => feature }, :html => {:id => "#{feature.id}_comment_form", :class => "comment_form"},
+                            :complete => "$('text_comment_#{feature.id}').clear(); " do |f| %>
+      <%= text_area_tag "comment", nil, :id => "text_comment_#{feature.id}" %>
+      <%= f.submit "+", :class => "add" %><div class="clear"></div>
     <% end %>
+    </div>
     <div id="<%= feature.id %>_discussion" class="discussion">
       <%= render :partial => "discussion", :locals => {:issue => feature} %>
     </div>
