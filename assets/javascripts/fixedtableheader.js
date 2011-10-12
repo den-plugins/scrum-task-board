@@ -26,6 +26,16 @@ jQuery(function( $ ){
 //      jQuery("#task_board .taskboard_issues_list li.task_board_data").addClass("min_li");
   }
  });
+
+   //show/hide bugs
+    jQuery("#show_bugs").click(function() {
+        if (jQuery(this).is(":checked")) {
+            jQuery('div#showBugsDiv').show();
+        }
+        else {
+            jQuery('div#showBugsDiv').hide();
+        }
+    });
 // 'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
   var $mark = jQuery( "#task_board thead" );
   var $header = jQuery( "#fixed_table_header" );
