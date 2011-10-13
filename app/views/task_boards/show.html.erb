@@ -56,7 +56,7 @@
 
 <% unless @condensed %>
   <input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
-  <% if @featured%>
+  <% if @featured and !@bugs.empty? %>
      <input type="checkbox" id="show_bugs" checked/><label>Show Bugs</label>
   <% end %>
 <% end %>

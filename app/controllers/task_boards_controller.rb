@@ -31,19 +31,17 @@ class TaskBoardsController < ApplicationController
         b if !b.version_descendants.empty? or !b.parent.nil? #and not (b.parent.issue_from.feature? or b.parent.issue_from.task?)
       end
 
-      @bugged = @bugs.empty? ? false : true
-      @error_msg = "There are no Bugs for this version." if not @bugged
+#      @bugged = @bugs.empty? ? false : true
+#      @error_msg = "There are no Bugs for this version." if not @bugged
       #modifications end
       
-      #This part needs to be optimized
-      @features = @version.features #.select {|f| f.parent.nil?}
+      @features = @version.features
       @tasks = @version.tasks
       @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
       unless ["", "All", "---select a team---"].member? @selected_team
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
       end
-      #@all_issues = (@tasks).compact.map {|i| i.id}
       @tracker = 4
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
