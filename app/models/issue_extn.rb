@@ -64,10 +64,19 @@ module IssueExtn
   def version_descendants_filtered
     descendants = version_descendants(true)
     rejects = []
-    descendants.select {|d| d.feature?}.each do |x|
+    descendants.select {|d| d.feature? or d.bug? }.each do |x|
       rejects += (x.task_parent? ? [x] : x.version_descendants(true))
     end
     descendants - rejects
+  end
+
+  def version_descendants_bugs
+    descendants = version_descendants(true)
+    bugs = []
+    descendants.select {|d| d.bug? }.each do |x|
+      bugs += (x.task_parent? ? [x] : x.version_descendants(true))
+    end
+    bugs
   end
   
   def feature_child?
