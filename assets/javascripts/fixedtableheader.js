@@ -29,11 +29,14 @@ jQuery(function( $ ){
 
    //show/hide bugs
     jQuery("#show_bugs").click(function() {
+       console.log("show_bugs_clicked");
         if (jQuery(this).is(":checked")) {
             jQuery('div#showBugsDiv').show();
+            console.log("show_bugs_clicked");
         }
         else {
             jQuery('div#showBugsDiv').hide();
+            console.log("hide_bugs_clicked");
         }
     });
 // 'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
