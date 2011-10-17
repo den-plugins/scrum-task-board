@@ -30,6 +30,7 @@ jQuery(function( $ ){
 
    //show/hide bugs
     jQuery("#show_bugs").click(function() {
+       console.log("show_bugs_clicked");
         if (jQuery(this).is(":checked")) {
             jQuery('.isBug').show();
         }

@@ -31,8 +31,8 @@ class TaskBoardsController < ApplicationController
         b if !b.version_descendants.empty? or !b.parent.nil? #and not (b.parent.issue_from.feature? or b.parent.issue_from.task?)
       end
 
-#      @bugged = @bugs.empty? ? false : true
-#      @error_msg = "There are no Bugs for this version." if not @bugged
+      @bugged = @bugs.empty? ? false : true
+      @error_msg = "There are no Bugs for this version." if not @bugged
       #modifications end
       
       @features = @version.features
