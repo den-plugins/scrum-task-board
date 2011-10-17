@@ -76,7 +76,7 @@ module IssueExtn
     descendants.select {|d| d.bug? }.each do |x|
       bugs += (x.task_parent? ? [x] : x.version_descendants(true))
     end
-    bugs
+    bugs.uniq
   end
   
   def feature_child?
