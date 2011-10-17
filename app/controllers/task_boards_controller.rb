@@ -109,11 +109,11 @@ class TaskBoardsController < ApplicationController
         story = story.parent.issue_from if story.bug? and !story.parent.nil?
         show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
         parents.each do |parent|
-          unless parent.nil? or parent.feature?
+          unless parent.nil? or parent.feature? or (params[:board].to_i.eql?(1) and parent.bug?)
             page.remove dom_id(parent)
             page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent
           else
-            page.update_sticky_note dom_id(parent), parent
+            page.update_sticky_note dom_id(parent), parent, params[:board].to_i
           end
         end
       end
@@ -138,12 +138,12 @@ class TaskBoardsController < ApplicationController
       #page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version }
       parents.each do |parent|
         if params[:board].to_i.eql? 1
-          if parent.version_descendants.present? and !parent.feature?
+          if parent.version_descendants.present? and !parent.feature? and !(params[:board].to_i.eql?(1) and parent.bug?)
 #            descendant = {:descendant => true} unless parent.feature?
             page.remove dom_id(parent)
             page.insert_html :top, task_board_dom_id(parent.task_parent, parent.status, "list"), :partial => "issue", :object => parent
           else
-            page.update_sticky_note dom_id(parent), parent
+            page.update_sticky_note dom_id(parent), parent, params[:board].to_i
           end
         elsif params[:board].to_i.eql? 2
           story = @issue.super_parent

@@ -27,7 +27,7 @@
         <% if feature.task_parent? %>
           <%= render :partial => 'issue', :collection => Array(feature.version_descendants_filtered.group_by(&:status)[status]) %>
           <!--<div id="showBugsDiv" style="display: none;" >-->
-              <%= render :partial => 'issue', :collection => Array(feature.version_descendants_bugs.group_by(&:status)[status]), :locals => {:bug => true} %>
+          <%= render :partial => 'issue', :collection => Array(feature.version_descendants_bugs.group_by(&:status)[status]), :locals => {:bug => true} %>
           <!--</div>-->
         <% else %>
           <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]).reject {|c| c if c.task_parent? or c.feature? } %>
