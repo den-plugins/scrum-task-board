@@ -7,6 +7,7 @@ function th_resize(count)
 }
 
 jQuery(function( $ ){
+
  jToggleDetails = jQuery('.toggle_details');
  jQuery("#toggle_all").click(function(){
   if(jQuery(this).is(":checked"))
@@ -30,10 +31,10 @@ jQuery(function( $ ){
    //show/hide bugs
     jQuery("#show_bugs").click(function() {
         if (jQuery(this).is(":checked")) {
-            jQuery('div#showBugsDiv').show();
+            jQuery('.isBug').show();
         }
         else {
-            jQuery('div#showBugsDiv').hide();
+            jQuery('.isBug').hide();
         }
     });
 // 'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width

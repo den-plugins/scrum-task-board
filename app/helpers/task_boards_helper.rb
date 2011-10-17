@@ -52,7 +52,7 @@ module TaskBoardsHelper
     link_to "#{issue.id}", {:controller => "issues", :action => "show", :id => issue}, options
   end
   
-  def update_sticky_note container, issue
+  def update_sticky_note container, issue, board=nil
     if issue.feature?
       page.replace_html "#{container}", :partial => 'feature', :locals => {:feature => issue } 
       classname = "task_board_data #{ task_board_border_class(issue) } task_board_feature_parent"
@@ -63,6 +63,9 @@ module TaskBoardsHelper
     if issue.assigned_to.eql? User.current
       classname += '_' if issue.feature?
       classname += 'current_is_assigned'
+    end
+    if board and issue.bug? and board.eql?(1)
+      classname += " isBug"
     end
     page[container.to_sym].className = classname
     page.visual_effect(:highlight, "#{container}")

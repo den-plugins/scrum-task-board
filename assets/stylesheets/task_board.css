@@ -368,3 +368,7 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
 .comment_form, .comment_form_panel {
   padding: 0px;
 }
+
+.isBug {
+  display: none;
+}

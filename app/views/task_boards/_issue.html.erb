@@ -1,3 +1,12 @@
-<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%> <%= 'current_is_assigned' if issue.assigned_to.eql? User.current %>">
+<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%> <%= 'current_is_assigned' if issue.assigned_to.eql? User.current %> <%= 'isBug' if defined?(bug) %>">
   <%= render :partial => 'issue_show', :locals => {:issue => issue } %>
 </li>
+
+<script type="text/javascript">
+  if (jQuery("#show_bugs").is(":checked")) {
+      jQuery('.isBug').show();
+  }
+  else {
+      jQuery('.isBug').hide();
+  }
+</script>

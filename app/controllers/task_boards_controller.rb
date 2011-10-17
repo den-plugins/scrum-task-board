@@ -107,17 +107,18 @@ class TaskBoardsController < ApplicationController
 
       if !story.nil?
         story = story.parent.issue_from if story.bug? and !story.parent.nil?
-        descendant = {:descendant => true} unless story.feature?
+        show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
         parents.each do |parent|
           unless parent.nil? or parent.feature?
             page.remove dom_id(parent)
-            page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
+            page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent
           else
             page.update_sticky_note dom_id(parent), parent
           end
         end
       end
-      page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => descendant
+      page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => show_bug
+#      page.complete "Element.show('#{task_board_dom_id(story, @status, 'list')}')"
     end
   end
   
@@ -132,20 +133,22 @@ class TaskBoardsController < ApplicationController
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
     
     render :update do |page|
-      page.update_sticky_note dom_id(@issue), @issue
+      page.update_sticky_note dom_id(@issue), @issue, params[:board].to_i
+#      show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
       #page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version }
       parents.each do |parent|
         if params[:board].to_i.eql? 1
           if parent.version_descendants.present? and !parent.feature?
-            descendant = {:descendant => true} unless parent.feature?
+#            descendant = {:descendant => true} unless parent.feature?
             page.remove dom_id(parent)
+            page.insert_html :top, task_board_dom_id(parent.task_parent, parent.status, "list"), :partial => "issue", :object => parent
           else
             page.update_sticky_note dom_id(parent), parent
           end
         elsif params[:board].to_i.eql? 2
           story = @issue.super_parent
           page.remove dom_id(parent)
-          page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent, :locals => descendant
+          page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent #, :locals => descendant
         end
       end
     end
