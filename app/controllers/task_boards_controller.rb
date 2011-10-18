@@ -100,16 +100,17 @@ class TaskBoardsController < ApplicationController
 
       if !story.nil?
         story = story.parent.issue_from if story.bug? and !story.parent.nil?
-        show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
         parents.each do |parent|
-          unless parent.nil? or parent.feature? or (params[:board].to_i.eql?(1) and parent.bug?)
+          unless parent.nil? or parent.feature? #or (params[:board].to_i.eql?(1) and parent.bug?)
+            show_bug = {:bug => true} if parent.bug? and params[:board].to_i.eql?(1)
             page.remove dom_id(parent)
-            page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent
+            page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent, :locals => show_bug
           else
             page.update_sticky_note dom_id(parent), parent, params[:board].to_i
           end
         end
       end
+      show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
       page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => show_bug
 #      page.complete "Element.show('#{task_board_dom_id(story, @status, 'list')}')"
     end
@@ -131,10 +132,10 @@ class TaskBoardsController < ApplicationController
       #page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version }
       parents.each do |parent|
         if params[:board].to_i.eql? 1
-          if parent.version_descendants.present? and !parent.feature? and !(params[:board].to_i.eql?(1) and parent.bug?)
-#            descendant = {:descendant => true} unless parent.feature?
+          if parent.version_descendants.present? and !parent.feature? #and !(params[:board].to_i.eql?(1) and parent.bug?)
+            show_bug = {:bug => true} if parent.bug? and params[:board].to_i.eql?(1)
             page.remove dom_id(parent)
-            page.insert_html :top, task_board_dom_id(parent.task_parent, parent.status, "list"), :partial => "issue", :object => parent
+            page.insert_html :top, task_board_dom_id(parent.task_parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => show_bug
           else
             page.update_sticky_note dom_id(parent), parent, params[:board].to_i
           end
