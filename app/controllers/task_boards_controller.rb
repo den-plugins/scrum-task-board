@@ -26,11 +26,6 @@ class TaskBoardsController < ApplicationController
         b if b.parent and !b.super_parent.bug?
       end
 
-<<<<<<< HEAD
-      @bugged = @bugs.empty? ? false : true
-      @error_msg = "There are no Bugs for this version." if not @bugged
-=======
->>>>>>> dev
       #modifications end
       
       @features = @version.features
