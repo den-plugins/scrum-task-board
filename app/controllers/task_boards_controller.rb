@@ -22,17 +22,10 @@ class TaskBoardsController < ApplicationController
 
       #modifications start adding of bugs in features selection
       @bugs = @version.bugs
-      @parent_bugs = @bugs.map do |b|
-        b if !b.version_descendants.empty? and b.parent.nil?
-      end
-
-      # puts @parent_bugs.inspect
       @bugs.reject!.each do |b|
-        b if !b.version_descendants.empty? or !b.parent.nil? #and not (b.parent.issue_from.feature? or b.parent.issue_from.task?)
+        b if b.parent and !b.super_parent.bug?
       end
 
-#      @bugged = @bugs.empty? ? false : true
-#      @error_msg = "There are no Bugs for this version." if not @bugged
       #modifications end
       
       @features = @version.features
