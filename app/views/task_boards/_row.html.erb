@@ -31,6 +31,7 @@
           <!--</div>-->
         <% else %>
           <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]).reject {|c| c if c.task_parent? or c.feature? } %>
+          <%= render :partial => 'issue', :collection => Array(feature.version_descendants_bugs.group_by(&:status)[status]), :locals => {:bug => true} %>
         <% end %>
       <% end %>
     </ul>
