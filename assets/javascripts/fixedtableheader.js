@@ -124,4 +124,3 @@ $view.resize(function(){
 });
 // script modified from http://www.bennadel.com/blog/1810-Creating-A-Sometimes-Fixed-Position-Element-With-jQuery.htm
 
-

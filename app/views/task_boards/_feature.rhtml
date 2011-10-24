@@ -31,13 +31,18 @@
     <div class="comment_form_panel">
     <% remote_form_for :issue, feature, :url => {:action => "add_comment", :controller => "task_boards", 
                             :id => @project, :issue_id => feature }, :html => {:id => "#{feature.id}_comment_form", :class => "comment_form"},
-                            :complete => "$('text_comment_#{feature.id}').clear(); " do |f| %>
-      <%= text_area_tag "comment", nil, :id => "text_comment_#{feature.id}" %>
+                            :complete => "$('text_comment_#{feature.id}').clear(); 
+                            var barheight = getbarHeight(jQuery('##{feature.id}_discussion'), 30);
+                            jQuery('.slimScrollBar').css({height: barheight + 'px'});
+                            " do |f| %>
+      <%= text_area_tag "comment", "Type your comment here...", :id => "text_comment_#{feature.id}" %>
       <%= f.submit "+", :class => "add" %><div class="clear"></div>
     <% end %>
     </div>
-    <div id="<%= feature.id %>_discussion" class="discussion">
-      <%= render :partial => "discussion", :locals => {:issue => feature} %>
+    <div class="discussion">
+      <div id="<%= feature.id %>_discussion">
+        <%= render :partial => "discussion", :locals => {:issue => feature} %>
+      </div>
     </div>
   </div>
 
@@ -50,5 +55,16 @@
       jQuery('.toggle_details').addClass("minimized").removeClass("maximized");
       jQuery('.current_data').hide();
     }
+    jQuery(function(){
+      jQuery("#<%= feature.id %>_discussion").slimScroll({
+        height: '150px',
+      });
+    });
+    jQuery("#text_comment_<%= feature.id %>").focusout(function(){
+      if(jQuery(this).val() == "") jQuery(this).val("Type your comment here...");
+    });
+    jQuery("#text_comment_<%= feature.id %>").focusin(function(){
+      if(jQuery(this).val() == "Type your comment here...") jQuery(this).val("");
+    });
   </script>
 <% end%>

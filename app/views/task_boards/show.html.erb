@@ -87,8 +87,10 @@
 <div id="fixed_table_header"></div>
 
 <% if @featured or @bugged %>
-  <%= javascript_include_tag  'jquery.min.js', :plugin => 'scrum_task_board' %>
-  <%= javascript_include_tag  'sticky_note', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag 'jquery.min.js', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag 'sticky_note', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag 'jquery-ui-1.8.16.custom.js', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
 
 <table id="task_board" cellspacing="0">
   <thead>
@@ -191,6 +193,16 @@
   jQuery("#showchart").colorbox({opacity: 0.5, onComplete:function(){
       plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
   }});
+  /*jQuery(function(){
+    jQuery('.discussion').hover(function(){
+      if(!jQuery(this).hasClass("custom_scroll")){
+        jQuery(this).addClass("custom_scroll");
+        jQuery(".custom_scroll").slimScroll({
+            height: '150px'
+        });
+      }
+    });
+  });*/
 </script>
 <script type='text/javascript'>
   //===========TOOLTIP===========

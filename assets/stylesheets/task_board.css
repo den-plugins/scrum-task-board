@@ -267,7 +267,7 @@
 }
 
 #task_board .talk_here .discussion {
-  overflow: auto;
+/*  overflow: auto;*/
   height: 150px;
   background-color: #ccc;
 }
@@ -347,6 +347,7 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
   margin-top: 0px;
   margin-bottom: 0px;
   resize: none;
+  overflow: hidden;
 }
 
 .comment_form .add {
@@ -368,6 +369,8 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
 .comment_form, .comment_form_panel {
   padding: 0px;
 }
+
+.slimScrollDiv { border: 1px solid #ccc; }
 
 .isBug {
   display: none;

@@ -50,18 +50,34 @@
     <div class="comment_form_panel">
     <% remote_form_for :issue, issue, :url => {:action => "add_comment", :controller => "task_boards", 
                             :id => @project, :issue_id => issue }, :html => {:id => "#{issue.id}_comment_form", :class => "comment_form"},
-                            :complete => "$('text_comment_#{issue.id}').clear(); " do |f| %>
-      <%= text_area_tag "comment", nil, :id => "text_comment_#{issue.id}" %>
+                            :complete => "jQuery('#text_comment_#{issue.id}').val('Type your comment here...'); 
+                            var barheight = getbarHeight(jQuery('##{issue.id}_discussion'), 30);
+                            jQuery('.slimScrollBar').css({height: barheight + 'px'});
+                            " do |f| %>
+      <%= text_area_tag "comment", "Type your comment here...", :id => "text_comment_#{issue.id}" %>
       <%= f.submit "+", :class => "add" %><div class="clear"></div>
     <% end %>
     </div>
-    <div id="<%= issue.id %>_discussion" class="discussion">
-      <%= render :partial => "discussion", :locals => {:issue => issue} %>
+    <div class="discussion">
+      <div id="<%= issue.id %>_discussion">
+        <%= render :partial => "discussion", :locals => {:issue => issue} %>
+      </div>
     </div>
   </div>
 
   <script type="text/javascript" id="stickynotejs_<%= issue.id %>" class="stickynotejs">
     sticky_note('<%= dom_id(issue) %>', '<%= issue.assigned_to_id %>', '<%= issue.status_id %>');
+    jQuery(function(){
+      jQuery("#<%= issue.id %>_discussion").slimScroll({
+        height: '150px'
+      });
+      jQuery("#text_comment_<%= issue.id %>").focusout(function(){
+        if(jQuery(this).val() == "") jQuery(this).val("Type your comment here...");
+      });
+      jQuery("#text_comment_<%= issue.id %>").focusin(function(){
+        if(jQuery(this).val() == "Type your comment here...") jQuery(this).val("");
+      });
+    });
   </script>
 <% end %>
 
