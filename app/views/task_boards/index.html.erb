@@ -11,6 +11,7 @@
 
   <li>
     <span><strong><%= v.name %></strong></span>
+    <span><strong><%= "<br/>Due in " + get_due(v.effective_date).to_s if !v.effective_date.nil? %></strong></span>
     <br/>
     <span>Date: <strong><%= v.effective_date.nil? ? 'none' : format_date(v.effective_date) %></strong></span>
     <br/>
