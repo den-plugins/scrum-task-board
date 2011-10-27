@@ -10,8 +10,7 @@
   <% @versions.each do |v| %>
 
   <li>
-    <span><strong><%= v.name %></strong></span>
-
+    <span><strong><%= v.name %></strong></span><br/>
     <% if v.completed? %>
       <span><strong><%= format_date(v.effective_date) %></strong></span>
     <% elsif v.effective_date %>
