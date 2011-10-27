@@ -11,7 +11,12 @@
 
   <li>
     <span><strong><%= v.name %></strong></span>
-    <span><strong><%= "<br/>" + due_date_distance_in_words(v.effective_date) if !v.effective_date.nil? %><br/></strong></span>
+
+    <% if v.completed? %>
+      <span><strong><%= format_date(v.effective_date) %></strong></span>
+    <% elsif v.effective_date %>
+      <span><strong><%= "<br/>" + due_date_distance_in_words(v.effective_date) if !v.effective_date.nil? %><br/></strong></span>
+    <% end %>
     <span>Date: <strong><%= v.effective_date.nil? ? 'none' : format_date(v.effective_date) %></strong></span>
     <br/>
     <span>Issues: <strong><%= v.fixed_issues.count %></strong></span> 

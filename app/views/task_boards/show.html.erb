@@ -38,7 +38,11 @@
   <%= @version.nil? ? "Product Backlog" : @version.name %> Task Board 
   <span style="float:right"><%= "Target Date: " + format_date(@version.effective_date) unless @version.effective_date.nil? %></span>
 </h2>
-  <h4><%= due_date_distance_in_words(@version.effective_date) if !@version.effective_date.nil? %></h4>
+<% if @version.completed? %>
+  <p><%= format_date(@version.effective_date) %></p>
+<% elsif @version.effective_date %>
+  <h4 style="border-bottom:none;margin-top:-10px;"><%= due_date_distance_in_words(@version.effective_date) if !@version.effective_date.nil? %></h4>
+<% end %>
 <% unless @nodata_to_filter %>
 <div style="float:left; width: 70%; padding: 10px;">
 <% if @teams.projects.member? @project %>
