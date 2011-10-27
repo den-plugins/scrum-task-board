@@ -36,9 +36,9 @@
 
 <h2>
   <%= @version.nil? ? "Product Backlog" : @version.name %> Task Board 
-  <%= "<br/>Due in " + get_due(@version.effective_date).to_s if !@version.effective_date.nil? %>
   <span style="float:right"><%= "Target Date: " + format_date(@version.effective_date) unless @version.effective_date.nil? %></span>
 </h2>
+  <h4><%= due_date_distance_in_words(@version.effective_date) if !@version.effective_date.nil? %></h4>
 <% unless @nodata_to_filter %>
 <div style="float:left; width: 70%; padding: 10px;">
 <% if @teams.projects.member? @project %>

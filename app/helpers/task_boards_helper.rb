@@ -89,29 +89,4 @@ module TaskBoardsHelper
     ticket.journals.find(:all, :include => [:user], :conditions => "notes <> ''", :order => "created_on DESC")
   end
 
-  def get_due(edate)
-    effective_date = edate
-    date_today = Date.today
-    z = effective_date - date_today
-    if z > 30
-      z = z / 30
-      z = z.to_i
-     
-      if z > 1 
-        mo ="months"
-      else
-        mo = "month"
-      end
-      due_date = z.to_s + " " + mo
-    else
-      if z > 1 
-        dy ="days"
-      else
-        dy = "day"
-      end
-      due_date = z.to_s + " " + dy
-    end
-    return due_date
-  end
-
 end
