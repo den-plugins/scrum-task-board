@@ -9,7 +9,8 @@ module TaskBoardsHelper
     drop_receiving_element(dom_id,
       :accept => statuses.collect {|s| s.class_name},
       :hoverclass => 'hovered',
-      :url => {:controller => 'task_boards', :action => 'update_issue_status', :condensed => (@condensed ? @condensed : nil)},
+      :url => {:controller => 'task_boards', :action => 'update_issue_status', :selected_resource => @selected_resource, 
+      :condensed => (@condensed ? @condensed : nil)},
       :with => "'issue_id=' + (element.id.split('_').last()) + '&status_id=#{status.id}&id=#{@project.id}&board=#{params[:board]}'")
   end
   
@@ -55,10 +56,10 @@ module TaskBoardsHelper
   def update_sticky_note container, issue, board=nil
     if issue.feature?
       page.replace_html "#{container}", :partial => 'feature', :locals => {:feature => issue } 
-      classname = "task_board_data #{ task_board_border_class(issue) } task_board_feature_parent"
+      classname = "task_board_data #{ task_board_border_class(issue) } task_board_feature_parent assigned_to_#{issue.assigned_to_id}"
     else
       page.replace_html "#{container}", :partial => 'issue_show', :locals => {:issue => issue}
-      classname = "#{status_classes_for(issue, User.current)} task_board_data #{ task_board_border_class(issue) } "
+      classname = "#{status_classes_for(issue, User.current)} task_board_data assigned_to_#{issue.assigned_to_id} #{ task_board_border_class(issue) } "
     end
     if issue.assigned_to.eql? User.current
       classname += '_' if issue.feature?

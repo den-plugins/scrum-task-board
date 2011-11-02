@@ -17,6 +17,7 @@ function sticky_note(issue, assigned_to, status_id)
   jQuery("#" + issue + " .talk").click(function(){
     jQuery("#" + issue + " .current_data, #" + issue + " .initial_controls").hide();
     jQuery("#" + issue + " .talk_here").show();
+    jQuery("#" + issue + " .talk_here textarea").val("Type your comment here...");
   });
         
   jQuery("#" + issue + " .cancel").click(function(){
@@ -24,6 +25,7 @@ function sticky_note(issue, assigned_to, status_id)
     jQuery("#" + issue + " #issue_status_id").val(status_id);
     jQuery("#" + issue + " .edit_here").hide();
     jQuery("#" + issue + " .talk_here").hide();
+    jQuery("#" + issue + " .talk_here textarea").val("");
     jQuery("#" + issue + " .initial_controls").show();
     if ( jQuery("#" + issue + " .toggle_details").hasClass('maximized'))
       jQuery("#" + issue + " .current_data").show();

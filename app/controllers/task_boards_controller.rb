@@ -14,6 +14,7 @@ class TaskBoardsController < ApplicationController
     @version = Version.find params[:version_id]
     @teams = CustomField.first(:conditions => "type = 'IssueCustomField' and name = 'Assigned Dev Team'")
     @selected_team = params[:selected_team] ? params[:selected_team] : ""
+    @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
     @board = params[:board]
 
     if @board.to_i.eql? 1
@@ -35,6 +36,10 @@ class TaskBoardsController < ApplicationController
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
       end
+#      unless ["", "All", "---select a resource---"].member? @selected_resource
+#        @features = @features.select {|f| (f.assigned_to and f.assigned_to_id == @selected_resource.to_i) }
+#        @tasks.reject!.each { |t| t if (t.assigned_to and t.assigned_to_id != @selected_resource.to_i) }
+#      end
       @tracker = 4
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
@@ -85,6 +90,7 @@ class TaskBoardsController < ApplicationController
     @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, "")
     @condensed = params[:condensed] ? true : false
+    @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
 
     attrs = {:status_id => @status.id}
     @issue.update_attributes(attrs)
@@ -122,6 +128,7 @@ class TaskBoardsController < ApplicationController
     @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, '')
     @issue.update_attributes(params[:issue])
+    @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
     
     parents = @issue.update_parents
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)

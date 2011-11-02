@@ -45,13 +45,19 @@
 <div style="float:left; width: 70%; padding: 10px;">
 <% if @teams.projects.member? @project %>
   <span style="padding-right:20px;">
-    Sort by Team: 
     <% form_for :team_filter, :url => {:controller => "task_boards", :action => "show", :version_id => @version.id, 
                    :board => @board, :id => @project.id}, :html => {:id => "form_sort_team"} do |f| %>
-    <% blank = (@selected_team.empty? or @selected_team.eql?("All"))? ["---select a team---"] : ["All"] %>
-    <%= select_tag "selected_team", options_for_select(blank + @teams.possible_values, @selected_team), 
-                        :onchange => "$('form_sort_team').submit()" %>
+    <% team_blank = (["", "All", "---select a team---"].member? @selected_team)? ["---select a team---"] : ["All"] %>
+    <% resource_blank = (["", "All", "---select a resource---"].member? @selected_resource)? ["---select a resource---"] : ["All"] %>
+    <%= select_tag "selected_team", options_for_select(team_blank + @teams.possible_values, @selected_team), 
+                        :onchange => "$('filter_button').show();" %>
     <%= check_box_tag 'condensed', @condensed, @condensed, :hidden => true %>
+    <%= select_tag "selected_resource", 
+                        "<option value='#{resource_blank}'>
+                          #{resource_blank}
+                        </option>" + options_from_collection_for_select(@project.members.sort_by(&:name), "user_id", "name", @selected_resource.to_i), 
+                        :onchange => "$('filter_button').show();" %>
+    <%= submit_tag 'Filter', :id => "filter_button", :style => "display: none;" %>
     <% end %>
   </span>
 <% end %>
