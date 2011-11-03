@@ -43,14 +43,16 @@
 <% end %>
 <% unless @nodata_to_filter %>
 <div style="float:left; width: 70%; padding: 10px;">
-<% if @teams.projects.member? @project %>
+
   <span style="padding-right:20px;">
     <% form_for :team_filter, :url => {:controller => "task_boards", :action => "show", :version_id => @version.id, 
                    :board => @board, :id => @project.id}, :html => {:id => "form_sort_team"} do |f| %>
+    <% if @teams.projects.member? @project %>
     <% team_blank = (["", "All", "Select a team..."].member? @selected_team)? ["Select a team..."] : ["All"] %>
-    <% resource_blank = (["", "All", "Select a resource..."].member? @selected_resource)? ["Select a resource..."] : ["All"] %>
     <%= select_tag "selected_team", options_for_select(team_blank + @teams.possible_values, @selected_team), 
                         :onchange => "$('filter_button').show();" %>
+    <% end %>
+    <% resource_blank = (["", "All", "Select a resource..."].member? @selected_resource)? ["Select a resource..."] : ["All"] %>
     <%= check_box_tag 'condensed', @condensed, @condensed, :hidden => true %>
     <%= select_tag "selected_resource", 
                         "<option value='#{resource_blank}'>
@@ -60,7 +62,7 @@
     <%= submit_tag 'Filter', :id => "filter_button", :style => "display: none;" %>
     <% end %>
   </span>
-<% end %>
+
 <% unless @error_msg %>
 
 <% unless @condensed %>
