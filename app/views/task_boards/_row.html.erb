@@ -40,7 +40,7 @@
   <% end %>
 </tr>
 <script type="text/javascript">
-  <% if (feature.assigned_to_id == @selected_resource.to_i) or ["", "All", "---select a resource---"].member?(@selected_resource) %>
+  <% if (feature.assigned_to_id == @selected_resource.to_i) or ["", "All", "Select a resource..."].member?(@selected_resource) %>
     jQuery('.assigned_to_<%= feature.assigned_to_id %>').show();
   <% else %>
     jQuery('.assigned_to_<%= feature.assigned_to_id %>').hide();

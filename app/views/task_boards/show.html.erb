@@ -47,8 +47,8 @@
   <span style="padding-right:20px;">
     <% form_for :team_filter, :url => {:controller => "task_boards", :action => "show", :version_id => @version.id, 
                    :board => @board, :id => @project.id}, :html => {:id => "form_sort_team"} do |f| %>
-    <% team_blank = (["", "All", "---select a team---"].member? @selected_team)? ["---select a team---"] : ["All"] %>
-    <% resource_blank = (["", "All", "---select a resource---"].member? @selected_resource)? ["---select a resource---"] : ["All"] %>
+    <% team_blank = (["", "All", "Select a team..."].member? @selected_team)? ["Select a team..."] : ["All"] %>
+    <% resource_blank = (["", "All", "Select a resource..."].member? @selected_resource)? ["Select a resource..."] : ["All"] %>
     <%= select_tag "selected_team", options_for_select(team_blank + @teams.possible_values, @selected_team), 
                         :onchange => "$('filter_button').show();" %>
     <%= check_box_tag 'condensed', @condensed, @condensed, :hidden => true %>

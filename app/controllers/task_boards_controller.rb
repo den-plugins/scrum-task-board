@@ -32,14 +32,10 @@ class TaskBoardsController < ApplicationController
       @features = @version.features
       @tasks = @version.tasks
       @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
-      unless ["", "All", "---select a team---"].member? @selected_team
+      unless ["", "All", "Select a team..."].member? @selected_team
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
       end
-#      unless ["", "All", "---select a resource---"].member? @selected_resource
-#        @features = @features.select {|f| (f.assigned_to and f.assigned_to_id == @selected_resource.to_i) }
-#        @tasks.reject!.each { |t| t if (t.assigned_to and t.assigned_to_id != @selected_resource.to_i) }
-#      end
       @tracker = 4
       @tasks.reject!.each do |f|
         if f.version_child?(@version)
@@ -61,7 +57,7 @@ class TaskBoardsController < ApplicationController
       @bugs = @version.bugs
       @descendant_bugs = []
       @nodata_to_filter = (@bugs.empty?)? true : false
-      unless ["", "All", "---select a team---"].member? @selected_team
+      unless ["", "All", "Select a team..."].member? @selected_team
         @bugs = @bugs.select {|b| not b.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         #@descendant_bugs = @bugs.map { |b| b.version_descendants }.flatten
          @team = @selected_team
