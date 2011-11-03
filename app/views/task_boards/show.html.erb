@@ -67,11 +67,12 @@
 
 <% unless @condensed %>
   <input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
-  <% if @featured and !@bugs.empty? %>
-     <input type="checkbox" id="show_bugs" /><label>Show Bugs</label>
-  <% end %>
 <% end %>
 
+<% if @featured and !@bugs.empty? %>
+   <input type="checkbox" id="show_bugs" /><label>Show Bugs</label>
+<% end %>
+  
 <% form_tag({:action => 'show', :id => @project.id, :version_id =>@version.id, :board => @board},
                          :id => 'condensed_view_form') do %>
   <%= check_box_tag 'condensed', !@condensed, @condensed, :onchange => "$('condensed_view_form').submit();" %>
