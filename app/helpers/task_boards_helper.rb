@@ -32,7 +32,8 @@ module TaskBoardsHelper
   end
   
   def select_assigned_to f, issue
-    f.select :assigned_to_id, (@project.members.collect {|p| [p.name, p.user.id]}), :selected => (issue.assigned_to.nil? ? '' : issue.assigned_to.id), :include_blank => true
+    members = @project.members.find(:all, :include => [:user], :order => "users.firstname ASC")
+    f.select :assigned_to_id, (members.collect {|p| [p.name, p.user.id]}), :selected => (issue.assigned_to.nil? ? '' : issue.assigned_to.id), :include_blank => true
   end
   
   def select_status f, issue
@@ -76,8 +77,8 @@ module TaskBoardsHelper
     content = "<strong>#{l(:field_subject)}</strong>: #{ticket.subject}<br />" +
     "<strong>#{l(:field_description)}</strong>: #{ticket.description}<br />" +
     "<strong>#{l(:field_assigned_to)}</strong>: #{ticket.assigned_to}<br />" +
-    "<strong>#{l(:field_estimated_hours)}</strong>: #{ticket.estimated_hours ? ticket.estimated_hours : 0} #{l(:field_sp_hours)}<br />" +
-    "<strong>#{l(:field_remaining_effort)}</strong>: #{ticket.remaining_effort ? ticket.remaining_effort : 0} #{l(:field_sp_hours)}<br />" +
+    ((ticket.feature? or ticket.children.any?) ? "" : "<strong>#{l(:field_estimated_hours)}</strong>: #{ticket.estimated_hours ? ticket.estimated_hours : 0} #{l(:field_sp_hours)}<br />") +
+    ((ticket.feature? or ticket.children.any?) ? "" : "<strong>#{l(:field_remaining_effort)}</strong>: #{ticket.remaining_effort ? ticket.remaining_effort : 0} #{l(:field_sp_hours)}<br />") +
     "<strong>#{l(:field_comments)}</strong>: <br /> <ul>"
     journals = get_journals(ticket).take(5)
     journals.reverse.each do |j|
