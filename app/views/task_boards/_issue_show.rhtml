@@ -54,7 +54,7 @@
                             var barheight = getbarHeight(jQuery('##{issue.id}_discussion'), 30);
                             jQuery('.slimScrollBar').css({height: barheight + 'px'});
                             " do |f| %>
-      <%= text_area_tag "comment", "Type your comment here...", :id => "text_comment_#{issue.id}" %>
+      <%= text_area_tag "comment", nil, :id => "text_comment_#{issue.id}" %>
       <%= f.submit "+", :class => "add" %><div class="clear"></div>
     <% end %>
     </div>

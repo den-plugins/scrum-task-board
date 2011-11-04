@@ -53,27 +53,36 @@
 </div>
 <% unless @nodata_to_filter %>
 <div style="float:left; width: 70%; padding: 10px;">
-<% if @teams.projects.member? @project %>
+
   <span style="padding-right:20px;">
-    Sort by Team: 
     <% form_for :team_filter, :url => {:controller => "task_boards", :action => "show", :version_id => @version.id, 
                    :board => @board, :id => @project.id}, :html => {:id => "form_sort_team"} do |f| %>
-    <% blank = (@selected_team.empty? or @selected_team.eql?("All"))? ["---select a team---"] : ["All"] %>
-    <%= select_tag "selected_team", options_for_select(blank + @teams.possible_values, @selected_team), 
-                        :onchange => "$('form_sort_team').submit()" %>
+    <% if @teams.projects.member? @project %>
+    <% team_blank = (["", "All", "Select a team..."].member? @selected_team)? ["Select a team..."] : ["All"] %>
+    <%= select_tag "selected_team", options_for_select(team_blank + @teams.possible_values, @selected_team), 
+                        :onchange => "$('filter_button').show();" %>
+    <% end %>
+    <% resource_blank = (["", "All", "Select a resource..."].member? @selected_resource)? ["Select a resource..."] : ["All"] %>
     <%= check_box_tag 'condensed', @condensed, @condensed, :hidden => true %>
+    <%= select_tag "selected_resource", 
+                        "<option value='#{resource_blank}'>
+                          #{resource_blank}
+                        </option>" + options_from_collection_for_select(@project.members.sort_by(&:name), "user_id", "name", @selected_resource.to_i), 
+                        :onchange => "$('filter_button').show();" %>
+    <%= submit_tag 'Filter', :id => "filter_button", :style => "display: none;" %>
     <% end %>
   </span>
-<% end %>
+
 <% unless @error_msg %>
 
 <% unless @condensed %>
   <input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
-  <% if @featured and !@bugs.empty? %>
-     <input type="checkbox" id="show_bugs" /><label>Show Bugs</label>
-  <% end %>
 <% end %>
 
+<% if @featured and !@bugs.empty? %>
+   <input type="checkbox" id="show_bugs" /><label>Show Bugs</label>
+<% end %>
+  
 <% form_tag({:action => 'show', :id => @project.id, :version_id =>@version.id, :board => @board},
                          :id => 'condensed_view_form') do %>
   <%= check_box_tag 'condensed', !@condensed, @condensed, :onchange => "$('condensed_view_form').submit();" %>

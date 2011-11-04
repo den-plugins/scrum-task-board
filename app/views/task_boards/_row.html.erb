@@ -2,14 +2,14 @@
 
 <% unless feature.task_parent? %>
   <td class="task_board_feature" style="<%= border %>">
-    <div class="task_board_data task_board_feature_data task_board_feature_parent<%= '_current_is_assigned' if feature.assigned_to.eql? User.current %> no_drag" id="<%= dom_id(feature) %>">
+    <div class="task_board_data task_board_feature_data task_board_feature_parent<%= '_current_is_assigned' if feature.assigned_to.eql? User.current %> no_drag assigned_to_<%= feature.assigned_to_id %>" id="<%= dom_id(feature) %>">
       <%= render :partial => 'feature', :locals => {:feature => feature } %>
     </div>
   </td>
 <% else %>
   <td style="<%= border %>">
     <% if feature.feature? %>
-      <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag" id="<%= dom_id(feature) %>">
+      <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag assigned_to_<%= feature.assigned_to_id %>" id="<%= dom_id(feature) %>">
         <%= render :partial => 'feature', :locals => {:feature => feature } %>
       </div>
     <% else %>
@@ -39,3 +39,10 @@
     </td>
   <% end %>
 </tr>
+<script type="text/javascript">
+  <% if (feature.assigned_to_id == @selected_resource.to_i) or ["", "All", "Select a resource..."].member?(@selected_resource) %>
+    jQuery('.assigned_to_<%= feature.assigned_to_id %>').show();
+  <% else %>
+    jQuery('.assigned_to_<%= feature.assigned_to_id %>').hide();
+  <% end %>
+</script>

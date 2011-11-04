@@ -1,4 +1,4 @@
-<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%> <%= 'current_is_assigned' if issue.assigned_to.eql? User.current %> <%= 'isBug' if defined?(bug) %>">
+<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%> <%= 'current_is_assigned' if issue.assigned_to.eql? User.current %> <%= 'isBug' if defined?(bug) %> assigned_to_<%= issue.assigned_to_id %>">
   <%= render :partial => 'issue_show', :locals => {:issue => issue } %>
 </li>
 
@@ -9,4 +9,10 @@
   else {
       jQuery('.isBug').hide();
   }
+  <% if (issue.assigned_to_id == @selected_resource.to_i) or ["", "All", "Select a resource..."].member?(@selected_resource) %>
+    jQuery('.assigned_to_<%= issue.assigned_to_id %>').show();
+  <% else %>
+    jQuery('.assigned_to_<%= issue.assigned_to_id %>').hide();
+  <% end %>
 </script>
+

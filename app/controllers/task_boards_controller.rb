@@ -14,6 +14,7 @@ class TaskBoardsController < ApplicationController
     @version = Version.find params[:version_id]
     @teams = CustomField.first(:conditions => "type = 'IssueCustomField' and name = 'Assigned Dev Team'")
     @selected_team = params[:selected_team] ? params[:selected_team] : ""
+    @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
     @board = params[:board]
 
     if @board.to_i.eql? 1
@@ -31,7 +32,7 @@ class TaskBoardsController < ApplicationController
       @features = @version.features
       @tasks = @version.tasks
       @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
-      unless ["", "All", "---select a team---"].member? @selected_team
+      unless ["", "All", "Select a team..."].member? @selected_team
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
       end
@@ -56,7 +57,7 @@ class TaskBoardsController < ApplicationController
       @bugs = @version.bugs
       @descendant_bugs = []
       @nodata_to_filter = (@bugs.empty?)? true : false
-      unless ["", "All", "---select a team---"].member? @selected_team
+      unless ["", "All", "Select a team..."].member? @selected_team
         @bugs = @bugs.select {|b| not b.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
         #@descendant_bugs = @bugs.map { |b| b.version_descendants }.flatten
          @team = @selected_team
@@ -85,6 +86,7 @@ class TaskBoardsController < ApplicationController
     @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, "")
     @condensed = params[:condensed] ? true : false
+    @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
 
     attrs = {:status_id => @status.id}
     @issue.update_attributes(attrs)
@@ -122,6 +124,7 @@ class TaskBoardsController < ApplicationController
     @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, '')
     @issue.update_attributes(params[:issue])
+    @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
     
     parents = @issue.update_parents
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
