@@ -11,7 +11,7 @@
     border: 1px solid #004480;
     padding: 10px;
     margin: 10px;
-    height: 140px;
+    height: relative;
     background: #F9F9F9;
     list-style: none;
     -moz-border-radius: 8px;
