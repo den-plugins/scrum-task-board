@@ -41,6 +41,16 @@
 <% if @version.completed? %><% elsif @version.effective_date %>
   <h4 style="border-bottom:none;margin-top:-10px;"><%= due_date_distance_in_words(@version.effective_date) if !@version.effective_date.nil? %></h4>
 <% end %>
+<div style="float: left;margin-left: 700px;position: absolute;margin-top: -50px;">
+  <%= link_to "Features: ", :controller => "task_boards",:action => "show", :version_id => @version.id, :board => 1,:id => @project.id %>
+  <%= "<span style='color: #0EA94B'>#{@version.feature_count_open} open / #{@version.feature_count_closed} closed</span></br>" %>
+  <%= link_to "Tasks: ", :controller => "task_boards",:action => "show", :version_id => @version.id, :board => 1,:id => @project.id %>
+  <%= "<span style='color:#5081AA'>#{@version.task_count_open} open / #{@version.task_count_closed} closed</span>" %><br/>
+  <%= link_to "Bugs: ",:controller => "task_boards",:action => "show",:version_id => @version.id,:board => 2, :id => @project.id %>
+  <%= "<span style='color: red'>#{@version.bug_count_open} open / #{@version.bug_count_closed} closed</span><br/>" %>
+  <%= "Total Estimated Effort: #{@version.count_total_estimated_effort}"%> </br>
+  <%= "Total Remaining Effort: #{@version.count_total_remaining_effort}"%> </br>
+</div>
 <% unless @nodata_to_filter %>
 <div style="float:left; width: 70%; padding: 10px;">
 <% if @teams.projects.member? @project %>
