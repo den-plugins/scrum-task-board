@@ -41,7 +41,7 @@
 <% if @version.completed? %><% elsif @version.effective_date %>
   <h4 style="border-bottom:none;margin-top:-10px;"><%= due_date_distance_in_words(@version.effective_date) if !@version.effective_date.nil? %></h4>
 <% end %>
-<div style="float: left;margin-left: 700px;position: absolute;margin-top: -50px;">
+<div style="display:none;float:left;position: absolute;margin-top:5px;padding-bottom:20px;">
   <%= link_to "Features: ", :controller => "task_boards",:action => "show", :version_id => @version.id, :board => 1,:id => @project.id %>
   <%= "<span style='color: #0EA94B'>#{@version.feature_count_open} open / #{@version.feature_count_closed} closed</span></br>" %>
   <%= link_to "Tasks: ", :controller => "task_boards",:action => "show", :version_id => @version.id, :board => 1,:id => @project.id %>
