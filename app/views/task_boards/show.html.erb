@@ -88,7 +88,8 @@
                                             { :controller => 'burndowns', :action => 'chart', 
                                               :project_id => @version.project_id, 
                                               :id => @version.id, 
-                                              :issue_filter => {:tracker => @tracker, :team => @team} }, :id => 'showchart' %>
+                                              :issue_filter => {:tracker => @tracker, :team => @team} }, 
+                                              :id => 'showchart', :style => "display: hidden;" %>
 
 <% end %>
 </div>
@@ -201,19 +202,12 @@
 <%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
 
 <script type="text/javascript">
+  jQuery(document).ready(function(){
+    jQuery("#showchart").show();
+  });
   jQuery("#showchart").colorbox({opacity: 0.5, onComplete:function(){
       plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
   }});
-  /*jQuery(function(){
-    jQuery('.discussion').hover(function(){
-      if(!jQuery(this).hasClass("custom_scroll")){
-        jQuery(this).addClass("custom_scroll");
-        jQuery(".custom_scroll").slimScroll({
-            height: '150px'
-        });
-      }
-    });
-  });*/
 </script>
 <script type='text/javascript'>
   //===========TOOLTIP===========
