@@ -37,9 +37,9 @@
                     :board => 2,
                     :id => @project.id %>       
     </br>
-    <%= "Total Estimated Effort: #{v.count_total_estimated_effort}"%> 
+    <span>Total Estimated Effort: <strong><%= v.count_total_estimated_effort%></strong> <%= l(:field_sp_hours) %></span>
     </br>
-    <%= "Total Remaining Effort: #{v.count_total_remaining_effort}"%>         
+    <span>Total Remaining Effort: <strong><%= v.count_total_remaining_effort%></strong> <%= l(:field_sp_hours) %></span>
   </li>
 
 
