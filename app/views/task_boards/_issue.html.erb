@@ -3,12 +3,12 @@
 </li>
 
 <script type="text/javascript">
-  if (jQuery("#show_bugs").is(":checked")) {
+ /* if (jQuery("#show_bugs").is(":checked")) {
       jQuery('.isBug').show();
   }
   else {
       jQuery('.isBug').hide();
-  }
+  } */
   <% if (issue.assigned_to_id == @selected_resource.to_i) or ["", "All", "Select a resource..."].member?(@selected_resource) %>
     jQuery('.assigned_to_<%= issue.assigned_to_id %>').show();
   <% else %>

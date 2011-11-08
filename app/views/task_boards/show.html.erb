@@ -48,8 +48,8 @@
   <%= "<span style='color:#5081AA'>#{@version.task_count_open} open / #{@version.task_count_closed} closed</span>" %><br/>
   <%= link_to "Bugs: ",:controller => "task_boards",:action => "show",:version_id => @version.id,:board => 2, :id => @project.id %>
   <%= "<span style='color: red'>#{@version.bug_count_open} open / #{@version.bug_count_closed} closed</span><br/>" %>
-  <%= "<span style='font-weight: normal;color: #666;font-size: 95%;'>Total Estimated Effort:</span> <b>#{@version.count_total_estimated_effort}"%></b> Story Points/ Hours</br>
-  <%= "<span style='font-weight: normal;color: #666;font-size: 95%;'>Total Remaining Effort:</span> <b>#{@version.count_total_remaining_effort}"%></b> Story Points/ Hours</br>
+  <span style='font-weight: normal;color: #666;font-size: 95%;'>Total Estimated Effort:</span> <strong><%= @version.count_total_estimated_effort%></strong> <%= l(:field_sp_hours) %></br>
+  <span style='font-weight: normal;color: #666;font-size: 95%;'>Total Remaining Effort:</span> <strong><%= @version.count_total_remaining_effort %></strong> <%= l(:field_sp_hours) %></br>
 </div>
 <% unless @nodata_to_filter %>
 <div style="float:left; width: 70%; padding: 10px;">
@@ -99,7 +99,8 @@
                                             { :controller => 'burndowns', :action => 'chart', 
                                               :project_id => @version.project_id, 
                                               :id => @version.id, 
-                                              :issue_filter => {:tracker => @tracker, :team => @team} }, :id => 'showchart' %>
+                                              :issue_filter => {:tracker => @tracker, :team => @team} }, 
+                                              :id => 'showchart', :style => "display: none;" %>
 
 <% end %>
 </div>
@@ -212,19 +213,18 @@
 <%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
 
 <script type="text/javascript">
+  jQuery(document).ready(function(){
+    jQuery("#showchart").show();
+    if (jQuery("#show_bugs").is(":checked")) {
+      jQuery('.isBug').show();
+    }
+    else {
+        jQuery('.isBug').hide();
+    }
+  });
   jQuery("#showchart").colorbox({opacity: 0.5, onComplete:function(){
       plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
   }});
-  /*jQuery(function(){
-    jQuery('.discussion').hover(function(){
-      if(!jQuery(this).hasClass("custom_scroll")){
-        jQuery(this).addClass("custom_scroll");
-        jQuery(".custom_scroll").slimScroll({
-            height: '150px'
-        });
-      }
-    });
-  });*/
 </script>
 <script type='text/javascript'>
   //===========TOOLTIP===========

@@ -37,8 +37,8 @@
                     :board => 2,
                     :id => @project.id %>       
     </br>
-    <%= "<span style='font-weight: normal;color: #666;font-size: 95%;'>Total Estimated Effort:</span> <b>#{v.count_total_estimated_effort}"%> Story Points/ Hours</br>
-    <%= "<span style='font-weight: normal;color: #666;font-size: 95%;'>Total Remaining Effort:</span> <b>#{v.count_total_remaining_effort}"%> Story Points/ Hours
+    <span style='font-weight: normal;color: #666;font-size: 95%;'>Total Estimated Effort:</span> <strong><%= v.count_total_estimated_effort%></strong> <%= l(:field_sp_hours) %></br>
+    <span style='font-weight: normal;color: #666;font-size: 95%;'>Total Remaining Effort:</span> <strong><%= v.count_total_remaining_effort%></strong> <%= l(:field_sp_hours) %>
   </li>
 
 
