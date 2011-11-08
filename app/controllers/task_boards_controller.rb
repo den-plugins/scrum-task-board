@@ -22,10 +22,10 @@ class TaskBoardsController < ApplicationController
       @status_columns = ordered_keys(@status_grouped)
 
       #modifications start adding of bugs in features selection
-      @bugs = @version.bugs
-      @bugs.reject!.each do |b|
-        b if b.parent and !b.super_parent.bug?
-      end
+#      @bugs = @version.bugs
+#      @bugs.reject!.each do |b|
+#        b if b.parent and !b.super_parent.bug?
+#      end
 
       #modifications end
       
