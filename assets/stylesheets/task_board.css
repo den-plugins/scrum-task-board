@@ -197,6 +197,11 @@
 /*.task_board_feature.current_is_assigned {*/
 /*  background-color: #FFCC33;*/
 /*}*/
+
+.task_board_data .assigned_to_current {
+  background: #65A7D7;
+  color: #f1f1f1;
+}
  
 #task_board .task_board_closed {
   color: #ff0000;
