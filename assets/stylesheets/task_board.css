@@ -375,3 +375,5 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
 .isBug {
   display: none;
 }
+
+.effortLabel { font-weight: normal;color: #666;font-size: 95%; }
