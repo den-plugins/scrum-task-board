@@ -10,6 +10,7 @@ class TaskBoardsController < ApplicationController
 
   def show
     @condensed = params[:condensed] ? true : false
+    @show_bugs = params[:show_bugs] ? true : false
     @statuses = IssueStatus.all(:order => "position asc")
     @version = Version.find params[:version_id]
     @teams = CustomField.first(:conditions => "type = 'IssueCustomField' and name = 'Assigned Dev Team'")
@@ -22,10 +23,12 @@ class TaskBoardsController < ApplicationController
       @status_columns = ordered_keys(@status_grouped)
 
       #modifications start adding of bugs in features selection
-#      @bugs = @version.bugs
-#      @bugs.reject!.each do |b|
-#        b if b.parent and !b.super_parent.bug?
-#      end
+      if @show_bugs
+        @bugs = @version.bugs
+        @bugs.reject!.each do |b|
+          b if b.parent and !b.super_parent.bug?
+        end
+      end
 
       #modifications end
       

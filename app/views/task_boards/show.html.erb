@@ -87,6 +87,10 @@
                          :id => 'condensed_view_form') do %>
   <%= check_box_tag 'condensed', !@condensed, @condensed, :onchange => "$('condensed_view_form').submit();" %>
   <%= label_tag 'Condensed View' %>
+  <% if @featured and ((!@bugs.nil? and !@bugs.empty?) or @bugs.nil?) %>
+    <%= check_box_tag 'show_bugs', !@show_bugs, @show_bugs, :id => "show_bugs", :onchange => (@bugs.nil? ? "$('condensed_view_form').submit();" : "") %>
+    <%= label_tag 'Show Bugs' %>
+  <% end %>
 <% end %>
 
 </div>
@@ -155,7 +159,9 @@
           <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list <%= @condensed ? 'condensed' : '' %>">
             <% statuses.each do |status| %>
               <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[status]) %>
-              <%# render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]), :locals => {:bug => true} %>
+              <% if @show_bugs %>
+                <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]), :locals => {:bug => true} %>
+              <% end %>
             <% end %>
           </ul>
           <%= task_board_drop_receiving_element(task_board_dom_id(nil, default), default, statuses) %>
