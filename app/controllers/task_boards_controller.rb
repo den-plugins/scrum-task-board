@@ -48,7 +48,8 @@ class TaskBoardsController < ApplicationController
           end
         end
       end
-        
+      
+      @features = parented_sort  @features
       @featured = (@features.empty? and @tasks.empty?)? false : true
       @error_msg = "There are no Features/Tasks." if not @featured
     elsif @board.to_i.eql? 2
@@ -114,7 +115,7 @@ class TaskBoardsController < ApplicationController
       end
       show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
       page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => show_bug
-#      page.complete "Element.show('#{task_board_dom_id(story, @status, 'list')}')"
+      #page.complete "Element.show('#{task_board_dom_id(story, @status, 'list')}')"
     end
   end
   
@@ -131,7 +132,7 @@ class TaskBoardsController < ApplicationController
     
     render :update do |page|
       page.update_sticky_note dom_id(@issue), @issue, params[:board].to_i
-#      show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
+      #show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
       #page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version }
       parents.each do |parent|
         if params[:board].to_i.eql? 1
@@ -173,5 +174,19 @@ private
   
   def ordered_keys(values)
     values.keys.sort{|x,y| values[x][:order] <=> values[y][:order]}
+  end
+  
+  def parented_sort(tasks)
+    psorted = tasks.sort_by {|t| -t.children.count }
+    sorted = psorted.select {|p| p.parent.nil? && p.children.any?}
+    (psorted-sorted).each do |s|
+      if s.parent && sorted.include?(s.parent_issue)
+        parent_index = sorted.index(s.parent_issue)
+        sorted.insert(parent_index + 1, s)
+      else
+        sorted << s
+      end
+    end
+    sorted
   end
 end
