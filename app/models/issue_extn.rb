@@ -82,6 +82,11 @@ module IssueExtn
   def feature_child?
     parent.issue_from.feature?
   end
+ 
+  def if_blocked
+    issue = IssueRelation.find(:first, :conditions => ["issue_to_id = ?",self.id])
+    issue.relation_type.eql? 'blocks' if !issue.nil?
+  end
   
   def update_parents
     parents = []
