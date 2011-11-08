@@ -215,6 +215,12 @@
 <script type="text/javascript">
   jQuery(document).ready(function(){
     jQuery("#showchart").show();
+    if (jQuery("#show_bugs").is(":checked")) {
+      jQuery('.isBug').show();
+    }
+    else {
+        jQuery('.isBug').hide();
+    }
   });
   jQuery("#showchart").colorbox({opacity: 0.5, onComplete:function(){
       plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
