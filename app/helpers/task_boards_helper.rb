@@ -57,7 +57,7 @@ module TaskBoardsHelper
   def update_sticky_note container, issue, board=nil
     if issue.feature?
       page.replace_html "#{container}", :partial => 'feature', :locals => {:feature => issue } 
-      classname = "task_board_data #{ task_board_border_class(issue) } task_board_feature_parent assigned_to_#{issue.assigned_to_id}"
+      classname = "task_board_data #{ task_board_border_class(issue) } assigned_to_#{issue.assigned_to_id} task_board_feature_parent"
     else
       page.replace_html "#{container}", :partial => 'issue_show', :locals => {:issue => issue}
       classname = "#{status_classes_for(issue, User.current)} task_board_data assigned_to_#{issue.assigned_to_id} #{ task_board_border_class(issue) } "
