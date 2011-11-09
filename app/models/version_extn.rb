@@ -42,40 +42,24 @@ module VersionExtn
       selected_issue_count 4
     end
     
-    def bug_count_open
-      count_open_issue 1
+    def bug_counter
+      "#{issue_check_counter 1,'f'} open / #{issue_check_counter 1,'t'} closed"
     end
 
-    def feature_count_open
-      count_open_issue 2
+    def feature_counter
+      "#{issue_check_counter 2,'f'} open / #{issue_check_counter 2,'t'} closed"
     end
 
-    def task_count_open
-      count_open_issue 4
-    end
-
-    def bug_count_closed
-      count_closed_issue 1
-    end
-
-    def feature_count_closed
-      count_closed_issue 2
-    end
-
-    def task_count_closed
-      count_closed_issue 4
+    def task_counter
+      "#{issue_check_counter 4,'f'} open / #{issue_check_counter 4,'t'} closed"
     end
 
     def selected_issue_count tracker
       Issue.count(:all, :select => "id", :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker])
     end
 
-    def count_open_issue tracker
-      Issue.count_by_sql("SELECT count(issues.id) AS count_id FROM issues INNER JOIN issue_statuses ON issue_statuses.id = issues.status_id WHERE (issues.fixed_version_id = #{self.id} and issues.tracker_id = #{tracker} and issue_statuses.is_closed = 'f') ")
-    end
-
-    def count_closed_issue tracker
-      Issue.count_by_sql("SELECT count(issues.id) AS count_id FROM issues INNER JOIN issue_statuses ON issue_statuses.id = issues.status_id WHERE (issues.fixed_version_id = #{self.id} and issues.tracker_id = #{tracker} and issue_statuses.is_closed = 't') ")
+    def issue_check_counter tracker,tof
+      Issue.count_by_sql("SELECT count(issues.id) AS count_id FROM issues INNER JOIN issue_statuses ON issue_statuses.id = issues.status_id WHERE (issues.fixed_version_id = #{self.id} and issues.tracker_id = #{tracker} and issue_statuses.is_closed = '#{tof}') ")
     end
 
     def count_total_estimated_effort

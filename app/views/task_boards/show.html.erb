@@ -43,11 +43,11 @@
 <% end %>
 <div>
   <%= link_to "Features: ", :controller => "task_boards",:action => "show", :version_id => @version.id, :board => 1,:id => @project.id %>
-  <%= "<span style='color: #0EA94B'>#{@version.feature_count_open} open / #{@version.feature_count_closed} closed</span></br>" %>
+  <%= "<span style='color: #0EA94B'>#{@version.feature_counter}</span></br>" %>
   <%= link_to "Tasks: ", :controller => "task_boards",:action => "show", :version_id => @version.id, :board => 1,:id => @project.id %>
-  <%= "<span style='color:#5081AA'>#{@version.task_count_open} open / #{@version.task_count_closed} closed</span>" %><br/>
+  <%= "<span style='color:#5081AA'>#{@version.task_counter}</span>" %><br/>
   <%= link_to "Bugs: ",:controller => "task_boards",:action => "show",:version_id => @version.id,:board => 2, :id => @project.id %>
-  <%= "<span style='color: red'>#{@version.bug_count_open} open / #{@version.bug_count_closed} closed</span><br/>" %>
+  <%= "<span style='color: red'>#{@version.bug_counter}</span><br/>" %>
   <span class='effortLabel'>Total Estimated Effort:</span> <strong><%= @version.count_total_estimated_effort%></strong> <span class='effortLabel'><%= l(:field_sp_hours) %></span></br>
   <span class='effortLabel'>Total Remaining Effort:</span> <strong><%= @version.count_total_remaining_effort %></strong> <span class='effortLabel'><%= l(:field_sp_hours) %></span></br>
 </div>
