@@ -71,29 +71,20 @@ module VersionExtn
     end
 
     def count_open_issue tracker
-      Issue.count(:all, :joins => "INNER JOIN issue_statuses ON issue_statuses.id = issues.status_id",
-        :conditions => ["issues.fixed_version_id = ? and issues.tracker_id = ? and issue_statuses.is_closed = 'f'", self.id,tracker])
+      Issue.count_by_sql("SELECT count(issues.id) AS count_id FROM issues INNER JOIN issue_statuses ON issue_statuses.id = issues.status_id WHERE (issues.fixed_version_id = #{self.id} and issues.tracker_id = #{tracker} and issue_statuses.is_closed = 'f') ")
     end
 
     def count_closed_issue tracker
-      Issue.count(:all, :joins => "INNER JOIN issue_statuses ON issue_statuses.id = issues.status_id",
-        :conditions => ["issues.fixed_version_id = ? and issues.tracker_id = ? and issue_statuses.is_closed = 't'", self.id,tracker])
+      Issue.count_by_sql("SELECT count(issues.id) AS count_id FROM issues INNER JOIN issue_statuses ON issue_statuses.id = issues.status_id WHERE (issues.fixed_version_id = #{self.id} and issues.tracker_id = #{tracker} and issue_statuses.is_closed = 't') ")
     end
 
     def count_total_estimated_effort
-      ee = 0
-      estimated_efforts = Issue.find(:all, :conditions => ["fixed_version_id = ?", self.id])
-      for estimate_effort in estimated_efforts
-        estimate_effort.estimated_hours = 0 if estimate_effort.estimated_hours.nil?
-	ee += estimate_effort.estimated_hours
-      end
-      return ee
+      Issue.sum(:estimated_hours, :conditions => "fixed_version_id = #{self.id}")
     end
 
     def count_total_remaining_effort
       re = 0.0
-      estimated_efforts = Issue.find(:all, :conditions => ["fixed_version_id = ?", self.id])
-      for estimate_effort in estimated_efforts
+      for estimate_effort in Issue.find_by_sql("SELECT id FROM issues WHERE (fixed_version_id = #{self.id}) ")
 	re += estimate_effort.remaining_effort if !estimate_effort.remaining_effort.nil?
       end
       return re
