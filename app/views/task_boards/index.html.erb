@@ -7,7 +7,9 @@
                                             :include => [:project, :status, :tracker],
                                             :conditions => ["(#{cond}) AND #{IssueStatus.table_name}.is_closed=?", false]) %>
 <h2><%= html_title "#{@project.name} - Task board" -%></h2>
-
+<% form_for :state_filter, :url => {:controller => "task_boards", :action => "index"} do |f| %>
+Filter by: <%= select_tag "state", options_for_select(Milestone::STATES, "state"),:onchange => "$('filter_button').show();" %><%= submit_tag 'Filter', :id => "filter_button", :style => "display: none;" %>
+<% end %>
 <div id="version_container">
 <% unless @project.versions.empty? %>
 <ul class="version_holder">
