@@ -65,10 +65,10 @@
     <% resource_blank = (["", "All", "Select a resource..."].member? @selected_resource)? ["Select a resource..."] : ["All"] %>
     <%= check_box_tag 'condensed', @condensed, @condensed, :hidden => true %>
     <%= select_tag "selected_resource", 
-                        "<option value='#{resource_blank}'>
+                        "<option id='selected_resource_blank' value='#{resource_blank}'>
                           #{resource_blank}
                         </option>" + options_from_collection_for_select(@project.members.sort_by(&:name), "user_id", "name", @selected_resource.to_i), 
-                        :onchange => "$('filter_button').show();" %>
+                        :onchange => "filterByResource();" %>
     <%= submit_tag 'Filter', :id => "filter_button", :style => "display: none;" %>
     <% end %>
   </span>
@@ -231,6 +231,23 @@
   jQuery("#showchart").colorbox({opacity: 0.5, onComplete:function(){
       plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
   }});
+  function filterByResource(){
+    if(jQuery("#filter_button").is(':hidden')){
+      var res_id = jQuery("#selected_resource option:selected").val();
+      if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) != -1){
+        jQuery('#selected_resource_blank').val('Select a resource...');
+        jQuery('#selected_resource_blank').text('Select a resource...');
+        jQuery('.task_board_data').show();
+      }else{
+        jQuery('#selected_resource_blank').val('All');
+        jQuery('#selected_resource_blank').text('All');
+        jQuery('.task_board_data').hide();
+        jQuery('.assigned_to_' + res_id).show();
+      }
+    }else{
+      return "";
+    }
+  }
 </script>
 <script type='text/javascript'>
   //===========TOOLTIP===========
