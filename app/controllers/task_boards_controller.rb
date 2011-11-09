@@ -5,7 +5,11 @@ class TaskBoardsController < ApplicationController
   before_filter :get_project, :authorize, :only => [:index, :show]
 
   def index
-    @versions = @project.versions.all(:order => 'effective_date IS NULL, effective_date DESC')
+    if params[:state].nil?
+      @versions = @project.versions.all(:order => 'effective_date IS NULL, effective_date DESC')
+    else
+      @versions = @project.versions.all(:conditions => ["state = ?", params[:state]],:order => 'effective_date IS NULL, effective_date DESC')
+    end
   end
 
   def show
