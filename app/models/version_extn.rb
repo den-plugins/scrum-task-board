@@ -6,6 +6,7 @@ module VersionExtn
     base.send(:include, InstanceMethods)
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
+      cattr_accessor :tmp_features, :tmp_tasks
     end
   end
   
@@ -26,7 +27,7 @@ module VersionExtn
       narrow_down 4
     end
     
-    def narrow_down tracker
+    def narrow_down(tracker)
       Issue.find(:all, :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker], :include => [:status, :assigned_to], :order => 'id ASC')
     end
     

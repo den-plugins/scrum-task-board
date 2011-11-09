@@ -33,11 +33,13 @@ class TaskBoardsController < ApplicationController
           b if b.parent and !b.super_parent.bug?
         end
       end
-
-      #modifications end
-      
-      @features = @version.features
-      @tasks = @version.tasks
+      if @bugs
+        @features = @version.tmp_features
+        @tasks = @version.tmp_tasks
+      else
+        @features = @version.features
+        @tasks = @version.tasks
+      end
       @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
       unless ["", "All", "Select a team..."].member? @selected_team
         @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }

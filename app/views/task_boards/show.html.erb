@@ -119,6 +119,8 @@
   <%= javascript_include_tag 'jquery-ui-1.8.16.custom.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
 
+<% @version.tmp_features = @features %>
+<% @version.tmp_tasks = @tasks %>
 <table id="task_board" cellspacing="0">
   <thead>
   <tr>
@@ -135,7 +137,6 @@
   <% end %>
   </tr>
   </thead>
-
   <tbody>
   <% if @featured %>
     <% @features.each do |feature| %>
