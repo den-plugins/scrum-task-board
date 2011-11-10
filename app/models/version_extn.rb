@@ -62,14 +62,14 @@ module VersionExtn
       Issue.count_by_sql("SELECT count(issues.id) AS count_id FROM issues INNER JOIN issue_statuses ON issue_statuses.id = issues.status_id WHERE (issues.fixed_version_id = #{self.id} and issues.tracker_id = #{tracker} and issue_statuses.is_closed = '#{tof}') ")
     end
 
-    def count_total_estimated_effort
+    def total_estimated_effort
       Issue.sum(:estimated_hours, :conditions => "fixed_version_id = #{self.id}")
     end
 
-    def count_total_remaining_effort
+    def total_remaining_effort
       re = 0.0
-      for estimate_effort in Issue.find_by_sql("SELECT id FROM issues WHERE (fixed_version_id = #{self.id}) ")
-	re += estimate_effort.remaining_effort if !estimate_effort.remaining_effort.nil?
+      for estimate_effort in Issue.find_by_sql("SELECT distinct(issues.id) FROM issues LEFT OUTER JOIN remaining_effort_entries ON remaining_effort_entries.issue_id = issues.id WHERE (fixed_version_id = #{self.id} and remaining_effort is not null)")
+       re += estimate_effort.remaining_effort if !estimate_effort.remaining_effort.nil?
       end
       return re
     end

@@ -48,8 +48,8 @@
   <%= "<span style='color:#5081AA'>#{@version.task_counter}</span>" %><br/>
   <%= link_to "Bugs: ",:controller => "task_boards",:action => "show",:version_id => @version.id,:board => 2, :id => @project.id %>
   <%= "<span style='color: red'>#{@version.bug_counter}</span><br/>" %>
-  <span class='effortLabel'>Total Estimated Effort:</span> <strong><%= @version.count_total_estimated_effort%></strong> <span class='effortLabel'><%= l(:field_sp_hours) %></span></br>
-  <span class='effortLabel'>Total Remaining Effort:</span> <strong><%= @version.count_total_remaining_effort %></strong> <span class='effortLabel'><%= l(:field_sp_hours) %></span></br>
+  <span class='effortLabel'>Total Estimated Effort:</span> <strong><%= @version.total_estimated_effort%></strong> <span class='effortLabel'><%= l(:field_sp_hours) %></span></br>
+  <span class='effortLabel'>Total Remaining Effort:</span> <strong><%= @version.total_remaining_effort %></strong> <span class='effortLabel'><%= l(:field_sp_hours) %></span></br>
 </div>
 <% unless @nodata_to_filter %>
 <div style="float:left; width: 70%; padding: 10px;">
