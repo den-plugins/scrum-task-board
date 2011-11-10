@@ -68,11 +68,12 @@ module VersionExtn
     end
 
     def count_total_remaining_effort
-      re = 0.0
-      for estimate_effort in Issue.find_by_sql("SELECT id FROM issues WHERE (fixed_version_id = #{self.id}) ")
-	re += estimate_effort.remaining_effort if !estimate_effort.remaining_effort.nil?
-      end
-      return re
+#      re = 0.0
+#      for estimate_effort in Issue.find_by_sql("SELECT id FROM issues WHERE (fixed_version_id = #{self.id}) ")
+#	re += estimate_effort.remaining_effort if !estimate_effort.remaining_effort.nil?
+#      end
+#      return re
+      Issue.sum(:remaining_effort, :include => [:remaining_effort_entries], :conditions => "fixed_version_id = #{self.id}")
     end
     
   end
