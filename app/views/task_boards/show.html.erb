@@ -83,12 +83,14 @@
    <!--<input type="checkbox" id="show_bugs" /><label>Show Bugs</label>-->
 <%# end %>
   
-<% form_tag({:action => 'show', :id => @project.id, :version_id =>@version.id, :board => @board},
+<% form_tag({:action => 'show', :id => @project.id, :version_id =>@version.id, :board => @board, 
+                         :selected_team => @selected_team},
                          :id => 'condensed_view_form') do %>
   <%= check_box_tag 'condensed', !@condensed, @condensed, :onchange => "$('condensed_view_form').submit();" %>
   <%= label_tag 'Condensed View' %>
   <% if @featured and ((!@bugs.nil? and !@bugs.empty?) or @bugs.nil?) %>
-    <%= check_box_tag 'show_bugs', !@show_bugs, @show_bugs, :id => "show_bugs", :onchange => (@bugs.nil? ? "$('condensed_view_form').submit();" : "") %>
+    <%= check_box_tag 'show_bugs', !@show_bugs, @show_bugs, :id => "show_bugs", 
+          :onchange => (@bugs.nil? ? "$('condensed_view_form').submit();" : "toggleBugs(); filterBugs();") %>
     <%= label_tag 'Show Bugs' %>
   <% end %>
 <% end %>
@@ -119,6 +121,8 @@
   <%= javascript_include_tag 'jquery-ui-1.8.16.custom.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
 
+<% @version.tmp_features = @features %>
+<% @version.tmp_tasks = @tasks %>
 <table id="task_board" cellspacing="0">
   <thead>
   <tr>
@@ -135,7 +139,6 @@
   <% end %>
   </tr>
   </thead>
-
   <tbody>
   <% if @featured %>
     <% @features.each do |feature| %>
@@ -221,33 +224,49 @@
 <script type="text/javascript">
   jQuery(document).ready(function(){
     jQuery("#showchart").show();
-    if (jQuery("#show_bugs").is(":checked")) {
-      jQuery('.isBug').show();
-    }
-    else {
-        jQuery('.isBug').hide();
-    }
+    toggleBugs();
   });
   jQuery("#showchart").colorbox({opacity: 0.5, onComplete:function(){
       plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
   }});
   function filterByResource(){
+    var res_id = jQuery("#selected_resource option:selected").val();
     if(jQuery("#filter_button").is(':hidden')){
-      var res_id = jQuery("#selected_resource option:selected").val();
       if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) != -1){
         jQuery('#selected_resource_blank').val('Select a resource...');
         jQuery('#selected_resource_blank').text('Select a resource...');
         jQuery('.task_board_data').show();
+        toggleBugs();
       }else{
         jQuery('#selected_resource_blank').val('All');
         jQuery('#selected_resource_blank').text('All');
         jQuery('.task_board_data').hide();
         jQuery('.assigned_to_' + res_id).show();
+        toggleBugs();
       }
+      filterBugs();
     }else{
       return "";
     }
   }
+  function toggleBugs(){
+    if (jQuery("#show_bugs").is(":checked")){
+      jQuery('.isBug').show();
+    }else{
+      jQuery('.isBug').hide();
+    }
+  }
+  function filterBugs(){
+    var res_id = jQuery("#selected_resource option:selected").val();
+    if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) == -1){
+      jQuery('.isBug').each(function(){
+        if(!jQuery(this).hasClass('assigned_to_' + res_id) && !jQuery(this).is(':hidden')){
+          jQuery(this).hide();
+        }
+      });
+    }
+  }
+  
 </script>
 <script type='text/javascript'>
   //===========TOOLTIP===========

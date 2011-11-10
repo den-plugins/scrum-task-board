@@ -33,30 +33,33 @@ class TaskBoardsController < ApplicationController
           b if b.parent and !b.super_parent.bug?
         end
       end
-
-      #modifications end
+      if @bugs
+        @features = @version.tmp_features
+        @tasks = @version.tmp_tasks
+      else
+        @features = @version.features
+        @tasks = @version.tasks
       
-      @features = @version.features
-      @tasks = @version.tasks
-      @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
-      unless ["", "All", "Select a team..."].member? @selected_team
-        @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
-        @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
-      end
-      @tracker = 4
-      @tasks.reject!.each do |f|
-        if f.version_child?(@version)
-          p = f.parent.issue_from
-          if p.feature? or p.support?
-            f
-          elsif p.task? and p.version_child?(@version)
-            pp = p.parent.issue_from
-            f if pp.feature? or pp.task? or pp.support?
+        @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
+        unless ["", "All", "Select a team..."].member? @selected_team
+          @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
+          @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
+        end
+        @tracker = 4
+        @tasks.reject!.each do |f|
+          if f.version_child?(@version)
+            p = f.parent.issue_from
+            if p.feature? or p.support?
+              f
+            elsif p.task? and p.version_child?(@version)
+              pp = p.parent.issue_from
+              f if pp.feature? or pp.task? or pp.support?
+            end
           end
         end
+        @features = parented_sort  @features
+        @version.tmp_features, @version.tmp_tasks = @features, @tasks
       end
-      
-      @features = parented_sort  @features
       @featured = (@features.empty? and @tasks.empty?)? false : true
       @error_msg = "There are no Features/Tasks." if not @featured
     elsif @board.to_i.eql? 2
