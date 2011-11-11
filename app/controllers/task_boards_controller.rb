@@ -6,7 +6,7 @@ class TaskBoardsController < ApplicationController
 
   def index
     if params[:state].nil?
-      @versions = @project.versions.all(:order => 'effective_date IS NULL, effective_date DESC')
+      @versions = @project.versions.all(:conditions => ["state = ?", 2],:order => 'effective_date IS NULL, effective_date DESC')
     else
       @versions = @project.versions.all(:conditions => ["state = ?", params[:state]],:order => 'effective_date IS NULL, effective_date DESC')
     end
