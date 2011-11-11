@@ -37,6 +37,7 @@ jQuery(function( $ ){
         else {
             jQuery('.isBug').hide();
         }
+        filterBugs();
     });
 // 'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
   var $mark = jQuery( "#task_board thead" );

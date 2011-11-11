@@ -90,7 +90,7 @@
   <%= label_tag 'Condensed View' %>
   <% if @featured and ((!@bugs.nil? and !@bugs.empty?) or @bugs.nil?) %>
     <%= check_box_tag 'show_bugs', !@show_bugs, @show_bugs, :id => "show_bugs", 
-          :onchange => (@bugs.nil? ? "$('condensed_view_form').submit();" : "toggleBugs(); filterBugs();") %>
+          :onchange => (@bugs.nil? ? "$('condensed_view_form').submit();" : "") %>
     <%= label_tag 'Show Bugs' %>
   <% end %>
 <% end %>
