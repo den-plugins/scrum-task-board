@@ -84,7 +84,7 @@ module IssueExtn
   end
  
   def if_blocked
-    issue = IssueRelation.find(:first, :conditions => ["issue_to_id = ?",self.id])
+    issue = IssueRelation.find(:first, :conditions => ["issue_to_id = ? and relation_type = ?",self.id, 'blocks'])
     issue.relation_type.eql? 'blocks' if !issue.nil?
   end
   
