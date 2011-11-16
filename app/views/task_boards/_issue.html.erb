@@ -1,4 +1,4 @@
-<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%> <%= 'current_is_assigned' if issue.assigned_to.eql? User.current %> <%= 'isBug' if defined?(bug) %> assigned_to_<%= issue.assigned_to_id %>">
+<li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%> <%= 'current_is_assigned' if issue.assigned_to.eql? User.current %> <%= 'isBug' if defined?(bug) %> assigned_to_<%= issue.assigned_to_id %>" <%= "style='border: 3px solid #E33;'" if issue.if_blocked %>>
   <%= render :partial => 'issue_show', :locals => {:issue => issue } %>
 </li>
 
