@@ -19,9 +19,9 @@
   </div>
 
   <div class="current_data">
-    <p class="estimate"><%= issue.remaining_effort ? issue.remaining_effort : '' %></p>
+    <p class="estimate"><%= "R: #{issue.remaining_effort}" if issue.remaining_effort %></p>
     <p class="assignee <%= "assigned_to_current" if issue.assigned_to.eql? User.current %>"><%= issue.assigned_to ? issue.assigned_to : '' %></p>
-    <p class="est"><%= issue.estimated_hours %></p>
+    <p class="est"><%= "E: #{issue.estimated_hours}" if issue.estimated_hours %></p>
     <p class="status"><%= issue.status.name %></p>
     <hr/>
     <p><%= truncate(issue.subject, :length => 50) %></p>
