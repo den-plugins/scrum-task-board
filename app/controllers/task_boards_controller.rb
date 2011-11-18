@@ -3,6 +3,12 @@ class TaskBoardsController < ApplicationController
   menu_item :task_board
   layout 'base'
   before_filter :get_project, :authorize, :only => [:index, :show]
+  before_filter :set_cache_buster
+  def set_cache_buster
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
 
   def index
 #    Rails.cache.delete('cached_features')
