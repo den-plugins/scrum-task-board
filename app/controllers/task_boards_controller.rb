@@ -5,8 +5,11 @@ class TaskBoardsController < ApplicationController
   before_filter :get_project, :authorize, :only => [:index, :show]
 
   def index
-    Rails.cache.delete('cached_features')
-    Rails.cache.delete('cached_tasks')
+#    Rails.cache.delete('cached_features')
+#    Rails.cache.delete('cached_tasks')
+    Rails.cache.clear
+    Version.tmp_features = nil
+    Version.tmp_tasks = nil
     if params[:state].nil?
       @versions = @project.versions.all(:conditions => ["state = ?", 2],:order => 'effective_date IS NULL, effective_date DESC')
     else
@@ -36,8 +39,10 @@ class TaskBoardsController < ApplicationController
         end
       end
       if @bugs
-        @features = Rails.cache.read('cached_features')
-        @tasks = Rails.cache.read('cached_tasks')
+        @features = Version.tmp_features
+        @tasks = Version.tmp_tasks
+#        @features = Rails.cache.read('cached_features')
+#        @tasks = Rails.cache.read('cached_tasks')
       else
         @features = @version.features
         @tasks = @version.tasks
@@ -60,8 +65,10 @@ class TaskBoardsController < ApplicationController
           end
         end
         @features = parented_sort  @features
-        Rails.cache.write('cached_features', @features)
-        Rails.cache.write('cached_tasks', @tasks)
+        Version.tmp_features = @features
+        Version.tmp_tasks = @tasks
+#        Rails.cache.write('cached_features', @features)
+#        Rails.cache.write('cached_tasks', @tasks)
       end
       @featured = (@features.empty? and @tasks.empty?)? false : true
       @error_msg = "There are no Features/Tasks." if not @featured

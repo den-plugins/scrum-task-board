@@ -6,7 +6,7 @@ module VersionExtn
     base.send(:include, InstanceMethods)
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
-      #cattr_accessor :tmp_features, :tmp_tasks
+      cattr_accessor :tmp_features, :tmp_tasks
     end
   end
   
