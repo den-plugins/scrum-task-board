@@ -44,7 +44,7 @@ class TaskBoardsController < ApplicationController
           b if b.parent and !b.super_parent.bug?
         end
       end
-      if @bugs
+      if @bugs and Version.tmp_features and Version.tmp_tasks
         @features = Version.tmp_features
         @tasks = Version.tmp_tasks
 #        @features = Rails.cache.read('cached_features')
