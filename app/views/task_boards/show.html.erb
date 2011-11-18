@@ -88,7 +88,7 @@
                          :id => 'condensed_view_form') do %>
   <%= check_box_tag 'condensed', !@condensed, @condensed, :onchange => "$('condensed_view_form').submit();" %>
   <%= label_tag 'Condensed View' %>
-  <% if @featured and ((!@bugs.nil? and !@bugs.empty?) or @bugs.nil?) %>
+  <% if @featured %>
     <%= check_box_tag 'show_bugs', !@show_bugs, @show_bugs, :id => "show_bugs", 
           :onchange => (@bugs.nil? ? "$('condensed_view_form').submit();" : "") %>
     <%= label_tag 'Show Bugs' %>

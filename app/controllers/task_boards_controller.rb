@@ -97,7 +97,7 @@ class TaskBoardsController < ApplicationController
       
       #puts @parent_bugs.inspect
       @bugs.reject!.each do |b|
-        b if !b.version_descendants.empty? or !b.parent.nil? #and not (b.parent.issue_from.feature? or b.parent.issue_from.task?)
+        b if !b.version_descendants.empty? or (!b.parent.nil? and b.parent.issue_from.bug?) #and not (b.parent.issue_from.feature? or b.parent.issue_from.task?)
       end
       
       @bugged = @bugs.empty? ? false : true
