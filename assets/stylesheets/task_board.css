@@ -189,6 +189,14 @@
   width: 40px;
 }
 
+.current_data .est {
+  height: 12px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 40px;
+}
+
 .current_is_assigned {
   border: 2px solid #FFCC33;
 /*  color: #f1f1f1;*/
