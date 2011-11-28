@@ -1,8 +1,5 @@
-<%# html_title "#{@version.nil? ? "Issues with no version" : @version.name} - Task board" -%>
-
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'colorbox', :plugin => 'scrum_task_board' %>
-  <!-- <link type="text/css" media="screen" rel="stylesheet" href="http://dl.getdropbox.com/u/2863383/js/colorbox132/example5/colorbox.css" /> -->
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
   <style type="text/css">
     .clearfix:after {
@@ -35,7 +32,7 @@
 
 
 <h2>
-  <%= @version.nil? ? "Product Backlog" : @version.name %> Task Board 
+  <%= @version.nil? ? "Product Backlog" : @version.name %> Task Board
   <span style="float:right"><%= "Target Date: " + format_date(@version.effective_date) unless @version.effective_date.nil? %></span>
 </h2>
 <% if @version.completed? %><% elsif @version.effective_date %>
@@ -55,57 +52,51 @@
 <div style="float:left; width: 70%; padding: 10px;">
 
   <span style="padding-right:20px;">
-    <% form_for :team_filter, :url => {:controller => "task_boards", :action => "show", :version_id => @version.id, 
+    <% form_for :team_filter, :url => {:controller => "task_boards", :action => "show", :version_id => @version.id,
                    :board => @board, :id => @project.id}, :html => {:id => "form_sort_team"} do |f| %>
     <% if @teams.projects.member? @project %>
     <% team_blank = (["", "All", "Select a team..."].member? @selected_team)? ["Select a team..."] : ["All"] %>
-    <%= select_tag "selected_team", options_for_select(team_blank + @teams.possible_values, @selected_team), 
+    <%= select_tag "selected_team", options_for_select(team_blank + @teams.possible_values, @selected_team),
                         :onchange => "$('filter_button').show();" %>
     <% end %>
     <% resource_blank = (["", "All", "Select a resource..."].member? @selected_resource)? ["Select a resource..."] : ["All"] %>
-    <%= check_box_tag 'condensed', @condensed, @condensed, :hidden => true %>
-    <%= select_tag "selected_resource", 
+
+    <%= select_tag "selected_resource",
                         "<option id='selected_resource_blank' value='#{resource_blank}'>
                           #{resource_blank}
-                        </option>" + options_from_collection_for_select(@project.members.sort_by(&:name), "user_id", "name", @selected_resource.to_i), 
+                        </option>" + options_from_collection_for_select(@project.members.sort_by(&:name), "user_id", "name", @selected_resource.to_i),
                         :onchange => "filterByResource();" %>
     <%= submit_tag 'Filter', :id => "filter_button", :style => "display: none;" %>
     <% end %>
   </span>
 
 <% unless @error_msg %>
-
-<% unless @condensed %>
-  <input type="checkbox" id="toggle_all" checked/><label>Show Issue Details</label>
-<% end %>
-
+  <input type="checkbox" id="toggle_all" checked="checked"/><label id="toggle_all_label">Show Issue Details</label>
+  <input type="checkbox" id="toggle_condensed" /><label>Condensed View</label>
 <%# if @featured and !@bugs.empty? %>
    <!--<input type="checkbox" id="show_bugs" /><label>Show Bugs</label>-->
 <%# end %>
-  
-<% form_tag({:action => 'show', :id => @project.id, :version_id =>@version.id, :board => @board, 
+<% if @featured %>
+<% form_tag({:action => 'show', :id => @project.id, :version_id =>@version.id, :board => @board,
                          :selected_team => @selected_team},
-                         :id => 'condensed_view_form') do %>
-  <%= check_box_tag 'condensed', !@condensed, @condensed, :onchange => "$('condensed_view_form').submit();" %>
-  <%= label_tag 'Condensed View' %>
-  <% if @featured %>
-    <%= check_box_tag 'show_bugs', !@show_bugs, @show_bugs, :id => "show_bugs", 
-          :onchange => (@bugs.nil? ? "$('condensed_view_form').submit();" : "") %>
+                         :id => 'show_bugs_form') do %>
+    <%= check_box_tag 'show_bugs', !@show_bugs, @show_bugs, :id => "show_bugs",
+          :onchange => (@bugs.nil? ? "$('show_bugs_form').submit();" : "") %>
     <%= label_tag 'Show Bugs' %>
   <% end %>
 <% end %>
 
 </div>
 <div style="float:right; min-width: 90px; padding: 10px;">
-  
+
   <%= link_to_if_authorized "<span>
   #{image_tag('/plugin_assets/redmine_burndown/chart.png', :size => '20x20') }
   </span>
-  <span style='float: right; padding-top: 3px; padding-right: 5px;'>Show Chart </span>", 
-                                            { :controller => 'burndowns', :action => 'chart', 
-                                              :project_id => @version.project_id, 
-                                              :id => @version.id, 
-                                              :issue_filter => {:tracker => @tracker, :team => @team} }, 
+  <span style='float: right; padding-top: 3px; padding-right: 5px;'>Show Chart </span>",
+                                            { :controller => 'burndowns', :action => 'chart',
+                                              :project_id => @version.project_id,
+                                              :id => @version.id,
+                                              :issue_filter => {:tracker => @tracker, :team => @team} },
                                               :id => 'showchart', :style => "display: none;" %>
 
 <% end %>
@@ -120,7 +111,57 @@
   <%= javascript_include_tag 'sticky_note', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'jquery-ui-1.8.16.custom.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
+  <script type="text/javascript">
+  jtoggleDetails = jQuery('.toggle_details');
+  jtoggleAll = jQuery("#toggle_all");
+  jtoggleAllLabel = jQuery("#toggle_all_label");
+  jcondensedCheck = jQuery("#toggle_condensed");
 
+  jtoggleAll.click(function(){
+    if(jQuery(this).is(":checked"))
+    {
+      jQuery(".current_data").show();
+      if (jtoggleDetails.hasClass("minimized"))
+        jtoggleDetails.removeClass("minimized").addClass("maximized");
+    }
+    else {
+      jQuery(".current_data").hide();
+      if (jtoggleDetails.hasClass("maximized"))
+        jtoggleDetails.removeClass("maximized").addClass("minimized");
+    }
+  });
+
+  //setting css() seems to be faster than hide() and show()
+  function condensedView(){
+    jQuery(".bulk_details").css('display', 'none');
+    jQuery(".taskboard_issues_list").addClass("condensed");
+    jQuery(".to_parent").css('display', 'none');
+  }
+
+  function normalView(){
+    jQuery(".bulk_details").css('display', 'block');
+    jQuery(".taskboard_issues_list").removeClass("condensed");
+    jQuery(".to_parent").css('display', 'inline');
+  }
+
+  function toggleCondensed() {
+    if(jcondensedCheck.is(":checked")) {
+      condensedView();
+      jtoggleAll.attr('checked', false);
+      jtoggleAll.attr('disabled', true);
+      jtoggleAllLabel.css('color', "#a1a1a1");
+    }
+    else {
+    normalView();
+    jtoggleAll.attr('disabled', false);
+    jtoggleAllLabel.css('color', "#303030");
+    if (jQuery(".current_data").is(":visible"))
+      jtoggleAll.attr('checked', true);
+    }
+  }
+
+  jcondensedCheck.click(toggleCondensed);
+  </script>
 <table id="task_board" cellspacing="0">
   <thead>
   <tr>
@@ -149,7 +190,7 @@
         <%= render :partial => "row", :locals => { :feature => child, :color => color } %>
       <% end %>
     <% end %>
-    
+
     <% unless @tasks.empty? %>
       <tr id="other_issues" style="background: #cacaca">
         <td><strong>Other Issues</strong></td>
@@ -157,7 +198,7 @@
           <% default = @status_grouped[k][:default] %>
           <% statuses = @status_grouped[k][:statuses] %>
           <td id="<%= task_board_dom_id(nil, default) %>">
-          <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list <%= @condensed ? 'condensed' : '' %>">
+          <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list ">
             <% statuses.each do |status| %>
               <%= render :partial => 'issue', :collection => Array(@tasks.group_by(&:status)[status]) %>
               <% if @show_bugs %>
@@ -170,7 +211,7 @@
         <% end %>
       </tr>
     <% end %>
-    
+
   <% else %>
     <% unless @parent_bugs.compact.empty? %>
       <% @parent_bugs.compact.each do |bug| %>
@@ -179,7 +220,7 @@
           <% default = @status_grouped[k][:default] %>
           <% statuses = @status_grouped[k][:statuses] %>
           <td id="<%= task_board_dom_id(bug, default) %>">
-          <ul id="<%= task_board_dom_id(bug, default, 'list') %>" class="taskboard_issues_list <%= @condensed ? 'condensed' : '' %>">
+          <ul id="<%= task_board_dom_id(bug, default, 'list') %>" class="taskboard_issues_list ">
             <% statuses.each do |status| %>
               <%= render :partial => 'issue', :collection => Array(bug.version_descendants(true).group_by(&:status)[status]),
                              :locals => {:descendant => true} %>
@@ -196,7 +237,7 @@
         <% default = @status_grouped[k][:default] %>
         <% statuses = @status_grouped[k][:statuses] %>
         <td id="<%= task_board_dom_id(nil, default) %>">
-        <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list <%= @condensed ? 'condensed' : '' %>">
+        <ul id="<%= task_board_dom_id(nil, default, 'list') %>" class="taskboard_issues_list ">
           <% statuses.each do |status| %>
             <%= render :partial => 'issue', :collection => Array(@bugs.group_by(&:status)[status]) %>
           <% end %>
@@ -205,7 +246,7 @@
         </td>
       <% end %>
     </tr>
-    
+
   <% end %>
   </tbody>
 </table>
@@ -227,6 +268,7 @@
   jQuery("#showchart").colorbox({opacity: 0.5, onComplete:function(){
       plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
   }});
+
   function filterByResource(){
     var res_id = jQuery("#selected_resource option:selected").val();
     if(jQuery("#filter_button").is(':hidden')){
@@ -264,7 +306,6 @@
       });
     }
   }
-  
 </script>
 <script type='text/javascript'>
   //===========TOOLTIP===========
@@ -298,3 +339,4 @@
 <% else %>
   <p class="nodata"><%= @error_msg %></p>
 <% end %>
+

@@ -17,14 +17,13 @@ class TaskBoardsController < ApplicationController
     Version.tmp_features = nil
     Version.tmp_tasks = nil
     if params[:state].nil?
-      @versions = @project.versions.all(:conditions => ["state = ?", 2],:order => 'effective_date IS NULL, effective_date DESC')
+      @versions = @project.versions.all(:conditions => ["state = ?", 2], :order => 'effective_date IS NULL, effective_date DESC')
     else
-      @versions = @project.versions.all(:conditions => ["state = ?", params[:state]],:order => 'effective_date IS NULL, effective_date DESC')
+      @versions = @project.versions.all(:conditions => ["state = ?", params[:state]], :order => 'effective_date IS NULL, effective_date DESC')
     end
   end
 
   def show
-    @condensed = params[:condensed] ? true : false
     @show_bugs = params[:show_bugs] ? true : false
     @statuses = IssueStatus.all(:order => "position asc")
     @version = Version.find params[:version_id]
@@ -52,7 +51,7 @@ class TaskBoardsController < ApplicationController
       else
         @features = @version.features
         @tasks = @version.tasks
-      
+
         @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
         unless ["", "All", "Select a team..."].member? @selected_team
           @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
@@ -94,33 +93,32 @@ class TaskBoardsController < ApplicationController
       @parent_bugs = @bugs.map do |b|
         b if !b.version_descendants.empty? and b.parent.nil?
       end
-      
+
       #puts @parent_bugs.inspect
       @bugs.reject!.each do |b|
         b if !b.version_descendants.empty? or (!b.parent.nil? and b.parent.issue_from.bug?) #and not (b.parent.issue_from.feature? or b.parent.issue_from.task?)
       end
-      
+
       @bugged = @bugs.empty? ? false : true
       @error_msg = "There are no Bugs." if not @bugged
     end
-    
+
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
   end
-  
+
   def update_issue_status
     get_project
     @status = IssueStatus.find(params[:status_id])
     @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, "")
-    @condensed = params[:condensed] ? true : false
     @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
 
     attrs = {:status_id => @status.id}
     @issue.update_attributes(attrs)
     parents = @issue.update_parents
-    
+
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
-    
+
     render :update do |page|
       page.remove dom_id(@issue)
       story = @issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent unless @issue.parent.nil?
@@ -144,7 +142,7 @@ class TaskBoardsController < ApplicationController
       #page.complete "Element.show('#{task_board_dom_id(story, @status, 'list')}')"
     end
   end
-  
+
   def update_issue
     #TODO Permissions trapping - view
       get_project
@@ -152,10 +150,10 @@ class TaskBoardsController < ApplicationController
     @issue.init_journal(User.current, '')
     @issue.update_attributes(params[:issue])
     @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
-    
+
     parents = @issue.update_parents
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
-    
+
     render :update do |page|
       page.update_sticky_note dom_id(@issue), @issue, params[:board].to_i
       #show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
@@ -188,20 +186,20 @@ class TaskBoardsController < ApplicationController
       page.replace_html "#{@issue.id}_tip".to_sym, page.task_board_tooltip(@issue)
     end
   end
-    
+
 private
   def get_project
     @project = Project.find(params[:id])
   end
-      
+
   def get_version
     @version = Version.find params[:version_id]
   end
-  
+
   def ordered_keys(values)
     values.keys.sort{|x,y| values[x][:order] <=> values[y][:order]}
   end
-  
+
   def parented_sort(tasks)
     psorted = tasks.sort_by {|t| -t.children.count }
     sorted = psorted.select {|p| p.parent.nil? && p.children.any?}
@@ -216,3 +214,4 @@ private
     sorted
   end
 end
+

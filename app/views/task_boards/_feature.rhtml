@@ -1,12 +1,12 @@
 <div class="issue_number">
-  <%= link_to "#{feature.parent.issue_from_id} &raquo; ", "##{dom_id(feature.parent.issue_from)}", 
-                          :class => "to_parent", :style => "color: orange;", :title => "Jump to parent." if !feature.parent.nil? and !@condensed %> 
+  <%= link_to "#{feature.parent.issue_from_id} &raquo; ", "##{dom_id(feature.parent.issue_from)}",
+                          :class => "to_parent", :style => "color: orange;", :title => "Jump to parent." if !feature.parent.nil? %>
   <div class="tooltip">
     <%= link_to_issue feature %><span id="<%= feature.id %>_tip" class="tip"><%= task_board_tooltip(feature) %></span>
   </div>
 </div>
 
-<% unless @condensed %>
+<div class="bulk_details">
   <div class="initial_controls" style="display: none;">
     <div class="edit" title="Edit">Edit</div>
     <div class="toggle_details" title="Show Details">Show Details</div>
@@ -29,9 +29,9 @@
   <div class="talk_here" style="display:none">
     <div class="cancel" title="Cancel">Cancel</div>
     <div class="comment_form_panel">
-    <% remote_form_for :issue, feature, :url => {:action => "add_comment", :controller => "task_boards", 
+    <% remote_form_for :issue, feature, :url => {:action => "add_comment", :controller => "task_boards",
                             :id => @project, :issue_id => feature }, :html => {:id => "#{feature.id}_comment_form", :class => "comment_form"},
-                            :complete => "$('text_comment_#{feature.id}').clear(); 
+                            :complete => "$('text_comment_#{feature.id}').clear();
                             var barheight = getbarHeight(jQuery('##{feature.id}_discussion'), 30);
                             jQuery('.slimScrollBar').css({height: barheight + 'px'});
                             " do |f| %>
@@ -45,16 +45,10 @@
       </div>
     </div>
   </div>
+</div>
 
   <script type="text/javascript">
     sticky_note("<%= dom_id(feature) %>", "<%= feature.assigned_to_id %>", "<%= feature.status_id %>");
-    if (jQuery("#toggle_all").is(":checked")){
-      jQuery('.toggle_details').addClass("maximized").removeClass("minimized");
-      jQuery('.current_data').show();
-    }else{
-      jQuery('.toggle_details').addClass("minimized").removeClass("maximized");
-      jQuery('.current_data').hide();
-    }
     jQuery(function(){
       jQuery("#<%= feature.id %>_discussion").slimScroll({
         height: '150px',
@@ -67,4 +61,4 @@
       if(jQuery(this).val() == "Type your comment here...") jQuery(this).val("");
     });
   </script>
-<% end%>
+
