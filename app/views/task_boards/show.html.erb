@@ -112,12 +112,12 @@
   <%= javascript_include_tag 'jquery-ui-1.8.16.custom.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
   <script type="text/javascript">
-  jtoggleDetails = jQuery('.toggle_details');
   jtoggleAll = jQuery("#toggle_all");
   jtoggleAllLabel = jQuery("#toggle_all_label");
   jcondensedCheck = jQuery("#toggle_condensed");
 
   jtoggleAll.click(function(){
+    jtoggleDetails = jQuery('.toggle_details');
     if(jQuery(this).is(":checked"))
     {
       jQuery(".current_data").show();
