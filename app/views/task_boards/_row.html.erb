@@ -22,7 +22,7 @@
     <% default = @status_grouped[k][:default] %>
     <% statuses = @status_grouped[k][:statuses] %>
     <td id="<%= task_board_dom_id(feature, default) %>" style="<%= border %>">
-    <ul id="<%= task_board_dom_id(feature, default, 'list') %>" class="taskboard_issues_list <%= @condensed ? 'condensed' : '' %>">
+    <ul id="<%= task_board_dom_id(feature, default, 'list') %>" class="taskboard_issues_list ">
       <% statuses.each do |status| %>
         <% if feature.task_parent? %>
           <%= render :partial => 'issue', :collection => Array(feature.version_descendants_filtered.group_by(&:status)[status]) %>
@@ -48,3 +48,4 @@
     jQuery('.assigned_to_<%= feature.assigned_to_id %>').hide();
   <% end %>
 </script>
+

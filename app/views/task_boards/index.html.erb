@@ -2,15 +2,17 @@
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
 <% end %>
 <% cond = @project.project_condition(Setting.display_subprojects_issues?)
-    
+
     @open_issues_by_tracker = Issue.visible.count(:group => :tracker,
                                             :include => [:project, :status, :tracker],
                                             :conditions => ["(#{cond}) AND #{IssueStatus.table_name}.is_closed=?", false]) %>
 <h2><%= html_title "#{@project.name} - Task board" -%></h2>
+
+<div id="version_container">
 <% form_for :state_filter, :url => {:controller => "task_boards", :action => "index"} do |f| %>
 Filter by: <%= select_tag "state", options_for_select(Milestone::STATES, "state"),:onchange => "$('filter_button').show();" %><%= submit_tag 'Filter', :id => "filter_button", :style => "display: none;" %>
 <% end %>
-<div id="version_container">
+
 <% unless @project.versions.empty? %>
 <ul class="version_holder">
   <% @versions.each do |v| %>
@@ -21,9 +23,9 @@ Filter by: <%= select_tag "state", options_for_select(Milestone::STATES, "state"
     <% end %><br/>
     <span>Date: <strong><%= v.effective_date.nil? ? 'none' : format_date(v.effective_date) %></strong></span>
     <br/>
-    <span>Issues: <strong><%= v.fixed_issues.count %></strong></span> 
+    <span>Issues: <strong><%= v.fixed_issues.count %></strong></span>
     <br/><br/>
-    
+
     <%= link_to "Features: <span style='color: #0EA94B'>#{v.feature_counter}</span><br/>Tasks: <span style='color:#5081AA'>#{v.task_counter}</span>",
                     :controller => "task_boards",
                     :action => "show",
@@ -31,13 +33,13 @@ Filter by: <%= select_tag "state", options_for_select(Milestone::STATES, "state"
                     :board => 1,
                     :id => @project.id %>
     <br/>
-    
+
     <%= link_to "Bugs: <span style='color: red'>#{v.bug_counter}</span>",
                     :controller => "task_boards",
                     :action => "show",
                     :version_id => v.id,
                     :board => 2,
-                    :id => @project.id %>       
+                    :id => @project.id %>
     </br>
     <span class='effortLabel'>Total Estimated Effort:</span> <strong><%= v.total_estimated_effort%></strong> <span class='effortLabel'><%= l(:field_sp_hours) %></span></br>
     <span class='effortLabel'>Total Remaining Effort:</span> <strong><%= v.total_remaining_effort%></strong> <span class='effortLabel'><%= l(:field_sp_hours) %></span>
