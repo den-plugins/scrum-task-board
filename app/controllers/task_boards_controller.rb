@@ -46,6 +46,7 @@ class TaskBoardsController < ApplicationController
       if @bugs and Version.tmp_features and Version.tmp_tasks
         @features = Version.tmp_features
         @tasks = Version.tmp_tasks
+        puts "hey! ==============================="
 #        @features = Rails.cache.read('cached_features')
 #        @tasks = Rails.cache.read('cached_tasks')
       else
@@ -57,7 +58,7 @@ class TaskBoardsController < ApplicationController
           @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
           @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
         end
-        @tracker = 4
+        
         @tasks.reject!.each do |f|
           if f.version_child?(@version)
             p = f.parent.issue_from
@@ -75,6 +76,7 @@ class TaskBoardsController < ApplicationController
 #        Rails.cache.write('cached_features', @features)
 #        Rails.cache.write('cached_tasks', @tasks)
       end
+      @tracker = 4
       @featured = (@features.empty? and @tasks.empty?)? false : true
       @error_msg = "There are no Features/Tasks." if not @featured
     elsif @board.to_i.eql? 2
