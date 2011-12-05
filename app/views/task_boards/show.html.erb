@@ -135,14 +135,15 @@
   function condensedView(){
     jQuery(".bulk_details").css('display', 'none');
     jQuery(".taskboard_issues_list").addClass("condensed");
-    jQuery(".to_parent, .isBug").css('display', 'none');
+    jQuery(".to_parent").css('display', 'none');
+    toggleBugs();
   }
 
   function normalView(){
     jQuery(".bulk_details").css('display', 'block');
     jQuery(".taskboard_issues_list").removeClass("condensed");
     jQuery(".to_parent").css('display', 'inline');
-    jQuery(".isBug").css('display', 'line-item').show();
+    toggleBugs();
   }
 
   function toggleCondensed() {
