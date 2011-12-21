@@ -18,18 +18,18 @@
     -webkit-border-radius: 8px;
     border-radius: 8px;
   }
-  
+
   .version_holder li:hover{
     margin: 8px 12px 12px 8px;
     background: #fff;
     background:  -moz-linear-gradient(top, #fff, #E9E9E9);
     background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#E9E9E9));
-    
+
     -moz-box-shadow: 2px 2px 2px #888;
     -webkit-box-shadow: 2px 2px 2px #888;
     box-shadow: 2px 2px 2px #888;
   }
-  
+
   .version_holder li a:hover {
     text-decoration: none !important;
     font-size: 1.2em;
@@ -37,7 +37,7 @@
 
 /***** SHOW *****/
 
-#task_board { 
+#task_board {
   width: 100%;
   empty-cells: show;
   table-layout: fixed;
@@ -51,12 +51,12 @@
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
 }
-  
+
 #task_board ul { padding: 0; list-style: none; margin: 5px 0 0 0; }
 #task_board ul li { margin-bottom: 10px; background: #FEFEFE; }
 #task_board ul li p { font-size:10px; margin-bottom: 4px; padding-bottom:2px; color: #101010;}
 #task_board ul li .pourcent { border-bottom: 0; margin-bottom: 0; }
-#task_board .progress { float:none; }    
+#task_board .progress { float:none; }
 #task_board .task_board_task {
   border-left: 0;
   padding-right: 10px;
@@ -102,22 +102,23 @@
 
 #task_board .task_board_feature_data .issue_number{
   background: #0EA94B;
-}  
+}
 
 #task_board .task_board_task_data .issue_number{
   background: #5081AA;
-} 
+}
 
 #task_board .task_board_support_data .issue_number{
   background: #3C03EE;
-} 
+}
 
 #task_board .task_board_bug_data .issue_number{
   background: #5F5F5F;
-} 
+}
 
 #task_board .task_board_data {
   background: #fefefe;
+  width: 98%;
   -moz-box-shadow: 2px 2px 2px #818181;
   -webkit-box-shadow: 2px 2px 2px #818181;
   box-shadow: 2px 2px 2px #818181;
@@ -148,11 +149,11 @@
 #task_board a:hover {
   text-decoration: none;
 }
- 
+
 #task_board .show_row{
   text-transform: uppercase;
   font-size: 8px;
-} 
+}
 
 .current_data .assignee {
   background: #d0d0d0;
@@ -210,7 +211,7 @@
   background: #65A7D7;
   color: #f1f1f1;
 }
- 
+
 #task_board .task_board_closed {
   color: #ff0000;
   text-align: right;
@@ -390,3 +391,4 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
 }
 
 .effortLabel { font-weight: normal;color: #666;font-size: 95%; }
+
