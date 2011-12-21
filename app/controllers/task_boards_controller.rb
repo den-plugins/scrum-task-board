@@ -13,9 +13,9 @@ class TaskBoardsController < ApplicationController
   def index
 #    Rails.cache.delete('cached_features')
 #    Rails.cache.delete('cached_tasks')
-    Rails.cache.clear
-    Version.tmp_features = nil
-    Version.tmp_tasks = nil
+#    Rails.cache.clear
+#    Version.tmp_features = nil
+#    Version.tmp_tasks = nil
     if params[:state].nil?
       @versions = @project.versions.all(:conditions => ["state = ?", 2], :order => 'effective_date IS NULL, effective_date DESC')
     else
@@ -44,12 +44,12 @@ class TaskBoardsController < ApplicationController
           b if b.parent and !b.super_parent.bug?
         end
       end
-      if @bugs and Version.tmp_features and Version.tmp_tasks
-        @features = Version.tmp_features
-        @tasks = Version.tmp_tasks
-#        @features = Rails.cache.read('cached_features')
-#        @tasks = Rails.cache.read('cached_tasks')
-      else
+#      if @bugs and Version.tmp_features and Version.tmp_tasks
+#        @features = Version.tmp_features
+#        @tasks = Version.tmp_tasks
+##        @features = Rails.cache.read('cached_features')
+##        @tasks = Rails.cache.read('cached_tasks')
+#      else
         @features = @version.features
         @tasks = @version.tasks
 
@@ -71,11 +71,11 @@ class TaskBoardsController < ApplicationController
           end
         end
         @features = parented_sort  @features
-        Version.tmp_features = @features
-        Version.tmp_tasks = @tasks
+#        Version.tmp_features = @features
+#        Version.tmp_tasks = @tasks
 #        Rails.cache.write('cached_features', @features)
 #        Rails.cache.write('cached_tasks', @tasks)
-      end
+#      end
       @tracker = 4
       @featured = (@features.empty? and @tasks.empty?)? false : true
       @error_msg = "There are no Features/Tasks." if not @featured
