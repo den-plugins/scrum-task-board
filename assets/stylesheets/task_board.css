@@ -118,7 +118,7 @@
 
 #task_board .task_board_data {
   background: #fefefe;
-  width: 98%;
+  max-width: 98%;
   -moz-box-shadow: 2px 2px 2px #818181;
   -webkit-box-shadow: 2px 2px 2px #818181;
   box-shadow: 2px 2px 2px #818181;
