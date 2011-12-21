@@ -19,7 +19,8 @@ class TaskBoardsController < ApplicationController
     if params[:state].nil?
       @versions = @project.versions.all(:conditions => ["state = ?", 2], :order => 'effective_date IS NULL, effective_date DESC')
     else
-      @versions = @project.versions.all(:conditions => ["state = ?", params[:state]], :order => 'effective_date IS NULL, effective_date DESC')
+      conditions = (params[:state] == "4")? nil : ["state = ?", params[:state]]
+      @versions = @project.versions.all(:conditions => conditions, :order => 'effective_date IS NULL, effective_date DESC')
     end
   end
 
@@ -46,7 +47,6 @@ class TaskBoardsController < ApplicationController
       if @bugs and Version.tmp_features and Version.tmp_tasks
         @features = Version.tmp_features
         @tasks = Version.tmp_tasks
-        puts "hey! ==============================="
 #        @features = Rails.cache.read('cached_features')
 #        @tasks = Rails.cache.read('cached_tasks')
       else
