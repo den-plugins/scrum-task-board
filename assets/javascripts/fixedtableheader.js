@@ -21,7 +21,7 @@ jQuery(function( $ ){
 // 'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
   var jmark = jQuery( "#task_board thead" );
   var jheader = jQuery( "#fixed_table_header" );
-
+  var jbtt = jQuery("#back_to_top");
   var count = 0;
   var leftInit = jheader.offset().left;
 
@@ -66,11 +66,13 @@ jQuery(function( $ ){
       if (viewTop > markTop)
       {
         jheader.show();
+        jbtt.fadeIn();
       }
 // Check to see if the view has scroll back up above the message
       else if (viewTop <= markTop)
       {
         jheader.hide();
+        jbtt.fadeOut();
       }
 // Allow the fixed header to scroll horizontally
       jheader.offset({
@@ -101,6 +103,8 @@ jview.resize(function(){
   jQuery("#task_board").bind('DOMNodeInserted DOMNodeRemoved', function(event) {
     th_adjust();
   });
+
+  jbtt.click(function(){ jQuery("body").animate({scrollTop: 0}, 100) });
 });
 // script modified from http://www.bennadel.com/blog/1810-Creating-A-Sometimes-Fixed-Position-Element-With-jQuery.htm
 

@@ -252,6 +252,7 @@
   <% end %>
   </tbody>
 </table>
+<div id="back_to_top">Back to top</div>
 <%= javascript_include_tag 'fixedtableheader', :plugin => 'scrum_task_board' %>
 <%= javascript_include_tag 'jquery.colorbox-min.js', :plugin => 'scrum_task_board' %>
 <%= javascript_include_tag 'jquery.jqplot.js', :plugin => 'redmine_burndown' %>
@@ -308,8 +309,6 @@
       });
     }
   }
-</script>
-<script type='text/javascript'>
   //===========TOOLTIP===========
   var tip;
   jQuery(".tooltip").hover(function(){

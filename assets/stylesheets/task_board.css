@@ -392,3 +392,22 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
 
 .effortLabel { font-weight: normal;color: #666;font-size: 95%; }
 
+#back_to_top {
+  position: fixed;
+  right: 10px;
+  bottom: 4px;
+  text-align: center;
+  border: 1px solid #999
+  padding: 8px 10px;
+  background: white;
+  cursor: pointer;
+  font-weight: bold;
+  display:none;
+  box-shadow: 1px 1px 1px #CCC;
+}
+
+#back_to_top:hover {
+  border-color: #ccc;
+  color: #999;
+}
+
