@@ -104,7 +104,7 @@ jview.resize(function(){
     th_adjust();
   });
 
-  jbtt.click(function(){ jQuery("body").animate({scrollTop: 0}, 100) });
+  jbtt.click(function(){ jQuery("html, body").animate({scrollTop: 0}, 100) });
 });
 // script modified from http://www.bennadel.com/blog/1810-Creating-A-Sometimes-Fixed-Position-Element-With-jQuery.htm
 

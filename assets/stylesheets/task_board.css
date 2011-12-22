@@ -397,7 +397,7 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
   right: 10px;
   bottom: 4px;
   text-align: center;
-  border: 1px solid #999
+  border: 1px solid #999;
   padding: 8px 10px;
   background: white;
   cursor: pointer;
