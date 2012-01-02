@@ -91,7 +91,7 @@
     <% unless @error_msg %>
     <button type="button" class="buttons activated" id="detailed">Detailed View</button>
     <button type="button" class="buttons" id="condensed">Condensed View</button>
-    <% if !@bugs.nil? and @featured %>
+    <% if @featured %>
       <% unless @show_bugs %>
       <%= link_to_if_authorized "Show Bugs",
                                             { :controller => 'task_boards', :action => 'show',
