@@ -134,7 +134,7 @@
   jtoggleAll = jQuery("#detailed");
   jcondensed = jQuery("#condensed");
 
-  jQuery(".buttons").not("#showchart").click(function(){
+  jQuery(".buttons").not("#showchart, #hidebugs").click(function(){
     if(!jQuery(this).hasClass("disabled"))
      jQuery(this).toggleClass("activated");
   });
