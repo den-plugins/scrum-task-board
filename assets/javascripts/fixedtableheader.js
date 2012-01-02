@@ -7,17 +7,10 @@ function th_resize(count)
 }
 
 jQuery(function( $ ){
-   //show/hide bugs
-    jQuery("#show_bugs").click(function() {
-       console.log("show_bugs_clicked");
-        if (jQuery(this).is(":checked")) {
-            jQuery('.isBug').show();
-        }
-        else {
-            jQuery('.isBug').hide();
-        }
-        filterBugs();
-    });
+  //enable show chart
+  jQuery("#showchart").attr("disabled", false).removeClass("disabled").colorbox({opacity: 0.5, onComplete:function() {
+      plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
+  }});
 // 'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width
   var jmark = jQuery( "#task_board thead" );
   var jheader = jQuery( "#fixed_table_header" );

@@ -2,10 +2,14 @@
 
 #version_container {
   width: 100%;
-
+  margin-top: 10px;
 }
 
-  .version_holder li{
+#version_container form {
+  margin-left: 10px;
+}
+
+  .version_holder li {
     float:left;
     width:300px;
     border: 1px solid #004480;
@@ -19,7 +23,11 @@
     border-radius: 8px;
   }
 
-  .version_holder li:hover{
+  .version_holder li .total {
+    font-size: 95%;
+  }
+
+  .version_holder li:hover {
     margin: 8px 12px 12px 8px;
     background: #fff;
     background:  -moz-linear-gradient(top, #fff, #E9E9E9);
@@ -81,7 +89,7 @@
 }
 
 .task_board_feature_parent_current_is_assigned {
-  border: 3px solid #FFCC33;
+  border: 3px solid #F9902C;
 /*  padding: 2px;*/
 }
 
@@ -134,7 +142,7 @@
 }
 
 #task_board .task_board_data p {
-  padding: 0;
+  padding: 0 2px;
   margin: 0;
 }
 
@@ -199,7 +207,7 @@
 }
 
 .current_is_assigned {
-  border: 2px solid #FFCC33;
+  border: 2px solid #F9902C;
 /*  color: #f1f1f1;*/
 }
 
@@ -390,7 +398,14 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
   display: none;
 }
 
-.effortLabel { font-weight: normal;color: #666;font-size: 95%; }
+.label {
+  font-weight: bold;
+  color: #1e1e1e;
+  font-size: 100%;
+  display: inline-block;
+  width: 135px;
+  text-align: right;
+}
 
 #back_to_top {
   position: fixed;
@@ -409,5 +424,85 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
 #back_to_top:hover {
   border-color: #ccc;
   color: #999;
+}
+
+#taskboard-header {
+  color: #333;
+  border-top: 1px solid #DDD;
+  border-left: 1px solid #DDD;
+  padding: 8px 8px 0 8px;
+  width: 500px;
+  margin-bottom: 0;
+}
+
+.block {
+  width: 270px;
+  display: inline-block;
+  vertical-align: top;
+  padding-top: 10px;
+}
+
+.buttons {
+  background: white;
+  border: 1px solid #DDD;
+  color: #555;
+  margin: 0;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-family: Arial;
+}
+
+.buttons:hover, #main a.buttons:hover {
+  background: #FAFAFA;
+  color: #333;
+  border-color: #BBB;
+  text-decoration: none;
+}
+
+.activated, .activated:hover, .buttons:active,  #main a.buttons:active {
+  border: 1px solid #ddd;
+  background: #eee;
+  color: #4E4E4E;
+}
+
+.disabled, .disabled:hover, #main a.disabled:hover {
+  color: #9E9E9E;
+  border: 1px solid #F0F0F0;
+  background: #F0F0F0;
+  cursor: default;
+}
+
+.buttons:focus, .activated:focus, .disabled:focus {
+  outline: 0;
+}
+
+.filter-box-view {
+  width: 400px;
+  float: right;
+  text-align: right;
+  padding: 4px 8px 8px 8px;
+  position: relative;
+  top: -20px;
+  border-right: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+}
+
+.row {
+  padding-bottom: 30px;
+}
+
+.first {
+  font-size: 14px;
+  padding-left: 8px;
+  border-left: 1px solid #DDD;
+}
+
+#selected_team, #selected_resource, .filter-box-view #filter_button {
+  padding: 0 8px;
+  margin: 0;
+}
+
+#selected_resource {
+  margin: 8px 0;
 }
 
