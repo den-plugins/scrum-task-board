@@ -1,6 +1,6 @@
 j = jQuery.noConflict(); //This allows Prototype to go undisturbed
 
-function sticky_note(issue, assigned_to, status_id)
+function sticky_note(issue, assigned_to, status_id, issue_id, draggable)
 {
   jQuery("#" + issue + "").hover(
     function(){
@@ -19,7 +19,7 @@ function sticky_note(issue, assigned_to, status_id)
     jQuery("#" + issue + " .talk_here").show();
     jQuery("#" + issue + " .talk_here textarea").val("Type your comment here...");
   });
-        
+
   jQuery("#" + issue + " .cancel").click(function(){
     jQuery("#" + issue + " #issue_assigned_to_id").val(assigned_to);
     jQuery("#" + issue + " #issue_status_id").val(status_id);
@@ -30,7 +30,7 @@ function sticky_note(issue, assigned_to, status_id)
     if ( jQuery("#" + issue + " .toggle_details").hasClass('maximized'))
       jQuery("#" + issue + " .current_data").show();
   });
-  
+
   jQuery("#" + issue + " .toggle_details").click(function(){
     jQuery("#" + issue + " .current_data").toggle(1, function()
     {
@@ -54,4 +54,16 @@ function sticky_note(issue, assigned_to, status_id)
       return false;
     }
   });
+
+  jQuery("#" + issue_id + "_discussion").slimScroll({ height: '150px'});
+  jQuery("#text_comment_" + issue_id).focusout(function(){
+    if(jQuery(this).val() == "") jQuery(this).val("Type your comment here...");
+  });
+  jQuery("#text_comment_" + issue_id).focusin(function(){
+    if(jQuery(this).val() == "Type your comment here...") jQuery(this).val("");
+  });
+
+  if(draggable)
+    new Draggable(issue, {constraint:"horizontal", revert:"failure"});
 }
+

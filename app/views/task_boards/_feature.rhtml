@@ -47,18 +47,7 @@
   </div>
 </div>
 
-  <script type="text/javascript">
-    sticky_note("<%= dom_id(feature) %>", "<%= feature.assigned_to_id %>", "<%= feature.status_id %>");
-    jQuery(function(){
-      jQuery("#<%= feature.id %>_discussion").slimScroll({
-        height: '150px',
-      });
-    });
-    jQuery("#text_comment_<%= feature.id %>").focusout(function(){
-      if(jQuery(this).val() == "") jQuery(this).val("Type your comment here...");
-    });
-    jQuery("#text_comment_<%= feature.id %>").focusin(function(){
-      if(jQuery(this).val() == "Type your comment here...") jQuery(this).val("");
-    });
-  </script>
+<script type="text/javascript">
+  sticky_note("<%= dom_id(feature) %>", "<%= feature.assigned_to_id %>", "<%= feature.status_id %>", "<%= feature.id %>", false);
+</script>
 
