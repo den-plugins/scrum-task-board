@@ -13,7 +13,7 @@
                             :title => "Jump to parent." if !issue.parent.nil? %>
     <% end %>
     <div class="tooltip">
-      <%= link_to_issue issue %><span id="<%= issue.id %>_tip" class="tip"><%= task_board_tooltip(issue) %></span>
+      <%= link_to_issue issue %><span id="<%= issue.id %>_tip" class="tip"><%= task_board_tooltip(issue, @journals) %></span>
     </div>
   </div>
 

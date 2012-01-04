@@ -2,7 +2,7 @@
   <%= link_to "#{feature.parent.issue_from_id} &raquo; ", "##{dom_id(feature.parent.issue_from)}",
                           :class => "to_parent", :style => "color: orange;", :title => "Jump to parent." if !feature.parent.nil? %>
   <div class="tooltip">
-    <%= link_to_issue feature %><span id="<%= feature.id %>_tip" class="tip"><%= task_board_tooltip(feature) %></span>
+    <%= link_to_issue feature %><span id="<%= feature.id %>_tip" class="tip"><%= task_board_tooltip(feature, @journals) %></span>
   </div>
 </div>
 

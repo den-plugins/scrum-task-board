@@ -73,19 +73,23 @@ module TaskBoardsHelper
     page.visual_effect(:highlight, "#{container}")
   end
 
-  def task_board_tooltip(ticket)
+  def task_board_tooltip(ticket, journals=nil)
     content = "<strong>#{l(:field_subject)}</strong>: #{textilizable ticket.subject}<br />" +
     "<strong>#{l(:field_description)}</strong>: #{textilizable ticket.description}<br />" +
     "<strong>#{l(:field_assigned_to)}</strong>: #{ticket.assigned_to}<br />" +
     ((ticket.feature? or ticket.children.any?) ? "" : "<strong>#{l(:field_estimated_hours)}</strong>: #{ticket.estimated_hours ? ticket.estimated_hours : 0} #{l(:field_sp_hours)}<br />") +
     ((ticket.feature? or ticket.children.any?) ? "" : "<strong>#{l(:field_remaining_effort)}</strong>: #{ticket.remaining_effort ? ticket.remaining_effort : 0} #{l(:field_sp_hours)}<br />") +
     "<strong>#{l(:field_comments)}</strong>: <br />"
-    if @journals
-      content += "<ul>"
-      @journals.take(5).reverse.each do |j|
-        content += "<li style='padding-left: 4px; margin: 0;'>&raquo; #{j.notes}</li>"
+    unless journals.nil?
+      if journals.empty?
+        content += "<span>No comments yet.</span>"
+      else
+        content += "<ul>"
+        journals.take(5).reverse.each do |j|
+          content += "<li style='padding-left: 4px; margin: 0;'>&raquo; #{j.notes}</li>"
+        end
+        content += "</ul>"
       end
-      content += "</ul>"
     else
       content += "<span>Click #{image_tag 'talk.png', :plugin => 'scrum_task_board'} to load comments.</span>"
     end

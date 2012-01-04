@@ -152,6 +152,7 @@ class TaskBoardsController < ApplicationController
     @issue.init_journal(User.current, '')
     @issue.update_attributes(params[:issue])
     @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
+    @journals = get_journals(@issue)
 
     parents = @issue.update_parents
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
@@ -212,9 +213,10 @@ private
 
   def render_comment
     @journals = get_journals(@issue)
+    @loaded = true
     render :update do |page|
       page.replace_html "#{@issue.id}_discussion".to_sym, :partial => "discussion", :locals => {:issue => @issue}
-      page.replace_html "#{@issue.id}_tip".to_sym, page.task_board_tooltip(@issue)
+      page.replace_html "#{@issue.id}_tip".to_sym, page.task_board_tooltip(@issue, @journals)
     end
   end
 
