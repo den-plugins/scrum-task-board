@@ -291,11 +291,16 @@
 #task_board .talk_here .discussion {
 /*  overflow: auto;*/
   height: 150px;
-  background-color: #ccc;
+  background-color: #fafafa;
 }
 
 div.discussion .time_ago {
   float: right;
+}
+
+.discussion .comment {
+  padding: 0 10px 0 2px;
+  word-wrap: break-word;
 }
 
 #task_board .issue_subject {
@@ -325,14 +330,16 @@ div.discussion .time_ago {
 }
 
 div.tooltip span.tip{
-position: absolute; z-index: 1000;
-display: none;
-/*top:12px; left:24px;*/
-border:1px solid #555;
-background-color:#fff;
-padding: 4px; width:300px;
-font-size: 0.8em;
-color:#505050;
+  position: absolute;
+  z-index: 1000;
+  display: none;
+  /*top:12px; left:24px;*/
+  border:1px solid #555;
+  background-color:#fff;
+  padding: 4px; width:300px;
+  font-size: 0.8em;
+  color:#505050;
+  word-wrap: break-word;
 }
 
 .tooltip { display: inline; }
@@ -368,8 +375,9 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
   max-height: 45px;
   margin-top: 0px;
   margin-bottom: 0px;
-  resize: none;
   overflow: hidden;
+  font-family: Helvetica, Arial;
+  resize: none;
 }
 
 .comment_form .add {
@@ -382,6 +390,7 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
   vertical-align: center;
   margin-right: 1px;
   background-color: #82C3F2;
+  cursor: pointer;
 }
 
 .comment_form .add:hover {

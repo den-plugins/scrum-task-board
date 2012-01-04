@@ -4,6 +4,8 @@ class TaskBoardsController < ApplicationController
   layout 'base'
   before_filter :get_project, :authorize, :only => [:index, :show]
   before_filter :set_cache_buster
+  before_filter :get_issue, :only => [:update_issue_status, :update_issue, :add_comment, :get_comment]
+
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
     response.headers["Pragma"] = "no-cache"
@@ -58,7 +60,7 @@ class TaskBoardsController < ApplicationController
           @features = @features.select {|f| not f.custom_values.first(:conditions => "value = '#{@selected_team}'").nil? }
           @tasks.reject!.each { |t| t if !@features.member? t.super_parent }
         end
-        
+
         @tasks.reject!.each do |f|
           if f.version_child?(@version)
             p = f.parent.issue_from
@@ -111,7 +113,6 @@ class TaskBoardsController < ApplicationController
   def update_issue_status
     get_project
     @status = IssueStatus.find(params[:status_id])
-    @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, "")
     @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
 
@@ -147,8 +148,7 @@ class TaskBoardsController < ApplicationController
 
   def update_issue
     #TODO Permissions trapping - view
-      get_project
-    @issue = Issue.find(params[:issue_id])
+    get_project
     @issue.init_journal(User.current, '')
     @issue.update_attributes(params[:issue])
     @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
@@ -180,13 +180,13 @@ class TaskBoardsController < ApplicationController
 
   def add_comment
     get_project
-    @issue = Issue.find(params[:issue_id])
     @issue.init_journal(User.current, params[:comment])
     @issue.update_attributes(params[:issue])
-    render :update do |page|
-      page.replace_html "#{@issue.id}_discussion".to_sym, :partial => "discussion", :locals => {:issue => @issue}
-      page.replace_html "#{@issue.id}_tip".to_sym, page.task_board_tooltip(@issue)
-    end
+    render_comment
+  end
+
+  def get_comment
+    render_comment
   end
 
 private
@@ -198,8 +198,24 @@ private
     @version = Version.find params[:version_id]
   end
 
+  def get_issue
+    @issue = Issue.find(params[:issue_id])
+  end
+
+  def get_journals(ticket)
+    ticket.journals.find(:all, :include => [:user, :journalized], :conditions => "notes <> ''", :order => "created_on DESC")
+  end
+
   def ordered_keys(values)
     values.keys.sort{|x,y| values[x][:order] <=> values[y][:order]}
+  end
+
+  def render_comment
+    @journals = get_journals(@issue)
+    render :update do |page|
+      page.replace_html "#{@issue.id}_discussion".to_sym, :partial => "discussion", :locals => {:issue => @issue}
+      page.replace_html "#{@issue.id}_tip".to_sym, page.task_board_tooltip(@issue)
+    end
   end
 
   def parented_sort(tasks)

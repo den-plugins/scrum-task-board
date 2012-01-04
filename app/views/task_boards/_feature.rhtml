@@ -10,7 +10,7 @@
   <div class="initial_controls" style="display: none;">
     <div class="edit" title="Edit">Edit</div>
     <div class="toggle_details maximized" title="Show Details">Show Details</div>
-    <div class="talk" title="Comment">Comment</div>
+    <div class="talk" title="Comment" id="<%= feature.id %>_talk">Comment</div>
   </div>
   <div class="current_data">
     <p class="estimate" style="right: 2px;"><%= feature.remaining_effort ? feature.remaining_effort : '' %></p>
@@ -41,7 +41,6 @@
     </div>
     <div class="discussion">
       <div id="<%= feature.id %>_discussion">
-        <%= render :partial => "discussion", :locals => {:issue => feature} %>
       </div>
     </div>
   </div>

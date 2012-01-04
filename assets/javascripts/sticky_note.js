@@ -1,5 +1,27 @@
 j = jQuery.noConflict(); //This allows Prototype to go undisturbed
 
+function initTalk(id) {
+  jQuery("#text_comment_" + id).val('Type your comment here...');
+  var barheight = getbarHeight(jQuery("#"+ id + "_discussion"), 30);
+  jQuery('.slimScrollBar').css({height: barheight + 'px'});
+}
+
+
+function markLoaded(id) {
+  var jtextComment = jQuery("#text_comment_" + id);
+  var defaultText = "Type your comment here...";
+  jQuery("#" + id + "_discussion").slimScroll({ height: '150px'});
+  jtextComment.focusout(function(){
+    if(jQuery(this).val() == "") jQuery(this).val(defaultText);
+  });
+  jtextComment.focusin(function(){
+    if(jQuery(this).val() == defaultText) jQuery(this).val("");
+  });
+  jQuery("#issue_" + id + " .talk").addClass("comments_loaded");
+  jQuery("#issue_" + id + " .talk_here").show();
+  initTalk(id);
+}
+
 function sticky_note(issue, assigned_to, status_id, issue_id, draggable)
 {
   jQuery("#" + issue + "").hover(
@@ -16,8 +38,20 @@ function sticky_note(issue, assigned_to, status_id, issue_id, draggable)
 
   jQuery("#" + issue + " .talk").click(function(){
     jQuery("#" + issue + " .current_data, #" + issue + " .initial_controls").hide();
-    jQuery("#" + issue + " .talk_here").show();
-    jQuery("#" + issue + " .talk_here textarea").val("Type your comment here...");
+    if(jQuery(this).hasClass("comments_loaded")) {
+      jQuery("#" + issue + " .talk_here").show();
+      jQuery("#" + issue + " .talk_here textarea").val("Type your comment here...");
+    }
+    else {
+      var id = jQuery(this).attr("id").split("_")[0];
+      console.log(jQuery(this).attr("id").split("_")[0]);
+      new Ajax.Request('/task_boards/get_comment', {
+                                                    asynchronous  :true,
+                                                    evalScripts   :true,
+                                                    onComplete    :function(request){markLoaded(id)},
+                                                    parameters    :'issue_id=' + id
+                                                   });
+    }
   });
 
   jQuery("#" + issue + " .cancel").click(function(){
@@ -53,14 +87,6 @@ function sticky_note(issue, assigned_to, status_id, issue_id, draggable)
     }else{
       return false;
     }
-  });
-
-  jQuery("#" + issue_id + "_discussion").slimScroll({ height: '150px'});
-  jQuery("#text_comment_" + issue_id).focusout(function(){
-    if(jQuery(this).val() == "") jQuery(this).val("Type your comment here...");
-  });
-  jQuery("#text_comment_" + issue_id).focusin(function(){
-    if(jQuery(this).val() == "Type your comment here...") jQuery(this).val("");
   });
 
   if(draggable)
