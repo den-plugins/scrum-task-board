@@ -5,6 +5,7 @@ class TaskBoardsController < ApplicationController
   before_filter :get_project, :authorize, :only => [:index, :show]
   before_filter :set_cache_buster
   before_filter :get_issue, :only => [:update_issue_status, :update_issue, :add_comment, :get_comment]
+  before_filter :get_members, :only => [:update_issue_status, :update_issue, :show]
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
@@ -205,6 +206,10 @@ private
 
   def get_journals(ticket)
     ticket.journals.find(:all, :include => [:user, :journalized], :conditions => "notes <> ''", :order => "created_on DESC")
+  end
+
+  def get_members
+    @members = @project.members.find(:all, :include => [:user], :order => "users.firstname ASC")
   end
 
   def ordered_keys(values)
