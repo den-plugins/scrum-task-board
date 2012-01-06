@@ -83,7 +83,7 @@
     <%= select_tag "selected_resource",
                         "<option id='selected_resource_blank' value='#{resource_blank}'>
                           #{resource_blank}
-                        </option>" + options_from_collection_for_select(@project.members.sort_by(&:name), "user_id", "name", @selected_resource.to_i),
+                        </option>" + options_from_collection_for_select(@members.sort_by(&:name), "user_id", "name", @selected_resource.to_i),
                         :onchange => "filterByResource();" %>
 
     <% end %>

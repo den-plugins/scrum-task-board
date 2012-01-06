@@ -5,7 +5,7 @@ class TaskBoardsController < ApplicationController
   before_filter :get_project, :authorize, :only => [:index, :show]
   before_filter :set_cache_buster
   before_filter :get_issue, :only => [:update_issue_status, :update_issue, :add_comment, :get_comment]
-  before_filter :get_members, :only => [:update_issue_status, :update_issue, :show]
+  before_filter :get_dependencies, :only => [:update_issue_status, :update_issue]
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
@@ -28,6 +28,7 @@ class TaskBoardsController < ApplicationController
   end
 
   def show
+    get_members
     @show_bugs = params[:show_bugs] ? true : false
     @statuses = IssueStatus.all(:order => "position asc")
     @version = Version.find params[:version_id]
@@ -112,7 +113,6 @@ class TaskBoardsController < ApplicationController
   end
 
   def update_issue_status
-    get_project
     @status = IssueStatus.find(params[:status_id])
     @issue.init_journal(User.current, "")
     @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
@@ -149,7 +149,6 @@ class TaskBoardsController < ApplicationController
 
   def update_issue
     #TODO Permissions trapping - view
-    get_project
     @issue.init_journal(User.current, '')
     @issue.update_attributes(params[:issue])
     @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
@@ -210,6 +209,11 @@ private
 
   def get_members
     @members = @project.members.find(:all, :include => [:user], :order => "users.firstname ASC")
+  end
+
+  def get_dependencies
+    get_project
+    get_members
   end
 
   def ordered_keys(values)
