@@ -1,7 +1,5 @@
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%> <%= 'current_is_assigned' if issue.assigned_to.eql? User.current %> <%= 'isBug' if defined?(bug) %> assigned_to_<%= issue.assigned_to_id %>" <%= "style='border: 3px solid #E33;'" if issue.if_blocked %>>
 
-<!--- START-------------------------------------------------------------------------------------------------------------->
-
   <div class="issue_number">
     <% if params[:board].to_i.eql? 1 %>
       <%= link_to "#{issue.parent.issue_from_id} &raquo; ", "##{dom_id(issue.parent.issue_from)}",
@@ -64,8 +62,6 @@
   <script type="text/javascript" id="stickynotejs_<%= issue.id %>" class="stickynotejs">
     sticky_note('<%= dom_id(issue) %>', '<%= issue.assigned_to_id %>', '<%= issue.status_id %>', '<%= issue.id %>', <%= issue.version_descendants.empty? %>);
   </script>
-
-<!----------------------------------------------------------------------------------------------------------------END --->
 
 </li>
 
