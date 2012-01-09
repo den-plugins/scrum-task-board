@@ -9,8 +9,9 @@
 <h2 id="taskboard-header"><%= html_title "#{@project.name} - Task board" -%></h2>
 
 <div id="version_container">
+<% selected = params["state"] ? params["state"].to_i : 2 %>
 <% form_for :state_filter, :url => {:controller => "task_boards", :action => "index"} do |f| %>
-Filter by: <%= select_tag "state", options_for_select(Version::STATES.collect {|k,v| [v, k]} << ["All", 4], "state"),:onchange => "$('filter_button').show();" %><%= submit_tag 'Filter', :id => "filter_button", :style => "display: none;" %>
+Filter by: <%= select_tag "state", options_for_select((Version::STATES.collect {|k,v| [v, k]} << ["All", 4]), selected),:onchange => "$('filter_button').show();" %><%= submit_tag 'Filter', :id => "filter_button", :style => "display: none;" %>
 <% end %>
 
 <% unless @project.versions.empty? %>
