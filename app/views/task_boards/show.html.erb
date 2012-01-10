@@ -130,9 +130,14 @@
   <%= javascript_include_tag 'jquery-ui-1.8.16.custom.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
   <script type="text/javascript">
-  var showbugs = <%= (@bugs and @featured) or false %>;
+  var showbugs = (jQuery("#hidebugs").html() == "Show Bugs"); <%# (@bugs and @featured) or false %>
   jtoggleAll = jQuery("#detailed");
   jcondensed = jQuery("#condensed");
+
+  jQuery(function(){
+    var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
+    jQuery(".isBug").css("display", display);
+  });
 
   jQuery(".buttons").not("#showchart, #hidebugs").click(function(){
     if(!jQuery(this).hasClass("disabled"))
@@ -151,6 +156,7 @@
     else {
       var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
       jQuery(".isBug").css("display", display);
+      filterBugs();
       jQuery(this).html("Hide Bugs");
     }
   });
@@ -319,6 +325,12 @@
       jQuery('.task_board_data').hide();
       jQuery('.assigned_to_' + res_id).css(opts);
     }
+    if(jQuery("#hidebugs").text() == "Show Bugs"){
+      jQuery(".isBug").css("display", "none");
+    }else{
+      var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
+      jQuery(".isBug").css("display", display);
+    }
     filterBugs();
   }
 
@@ -327,7 +339,7 @@
     if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) == -1){
       jQuery('.isBug').each(function(){
         if(!jQuery(this).hasClass('assigned_to_' + res_id) && !jQuery(this).is(':hidden')){
-          jQuery(this).hide();
+          jQuery(this).css('display', 'none');
         }
       });
     }
