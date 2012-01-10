@@ -69,7 +69,8 @@ module VersionExtn
 
     def total_remaining_effort
       re = 0.0
-      for estimate_effort in Issue.find_by_sql("SELECT distinct(issues.id) FROM issues LEFT OUTER JOIN remaining_effort_entries ON remaining_effort_entries.issue_id = issues.id WHERE (fixed_version_id = #{self.id} and remaining_effort is not null and tracker_id <> 2)")
+      end_date = self.completed_on ? self.completed_on.to_date : Date.today
+      for estimate_effort in Issue.find_by_sql("SELECT distinct(issues.id) FROM issues LEFT OUTER JOIN remaining_effort_entries ON remaining_effort_entries.issue_id = issues.id WHERE (fixed_version_id = #{self.id} and remaining_effort is not null and tracker_id <> 2 and remaining_effort_entries.created_on <= '#{end_date}')")
        re += estimate_effort.remaining_effort if !estimate_effort.remaining_effort.nil?
       end
       return re
