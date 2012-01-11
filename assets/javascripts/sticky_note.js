@@ -83,7 +83,7 @@ function sticky_note(issue, assigned_to, status_id, issue_id, draggable)
       jQuery("#" + issue + " .edit_here").hide();
       if (jQuery("#" + issue + " .toggle_details").hasClass('maximized'))
         jQuery("#" + issue + " .current_data").show();
-      jQuery("#" + issue + " form").submit();
+      jQuery("#" + issue + " #taskboard-edit-form-"+ issue +" form").submit();
     }else{
       return false;
     }
