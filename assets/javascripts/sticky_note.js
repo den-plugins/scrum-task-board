@@ -94,7 +94,7 @@ function sticky_note(issue, assigned_to, status_id, issue_id, draggable)
 
 //===========TOOLTIP===========
   var tip;
-  jQuery(".tooltip").hover(function(){
+  jQuery("#" + issue + "_tooltip").hover(function(){
     tip = jQuery(this).find('.tip');
     tip.hide().fadeIn('fast'); //Show tooltip
   }, function() {
