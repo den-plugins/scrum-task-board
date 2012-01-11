@@ -61,6 +61,12 @@
   </div>
   <script type="text/javascript" id="stickynotejs_<%= issue.id %>" class="stickynotejs">
     sticky_note('<%= dom_id(issue) %>', '<%= issue.assigned_to_id %>', '<%= issue.status_id %>', '<%= issue.id %>', <%= issue.version_descendants.empty? %>);
+    if(jQuery("#hidebugs").text() == "Show Bugs"){
+      jQuery(".isBug").css("display", "none");
+    }else{
+      var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
+      jQuery(".isBug").css("display", display);
+    }
   </script>
 
 </li>
