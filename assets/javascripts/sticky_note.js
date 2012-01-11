@@ -91,5 +91,34 @@ function sticky_note(issue, assigned_to, status_id, issue_id, draggable)
 
   if(draggable)
     new Draggable(issue, {constraint:"horizontal", revert:"failure"});
+
+//===========TOOLTIP===========
+  var tip;
+  jQuery(".tooltip").hover(function(){
+    tip = jQuery(this).find('.tip');
+    tip.hide().fadeIn('fast'); //Show tooltip
+  }, function() {
+    tip.hide(); //Hide tooltip
+  }).mousemove(function(e) {
+    var x = 24; //Get X coodrinates
+    var y = 12; //Get Y coordinates
+    var tipWidth = tip.width(); //Find width of tooltip
+    var tipHeight = tip.height(); //Find height of tooltip
+  //  alert(tipWidth + ", " + tipHeight);
+    //Distance of element from the right edge of viewport
+    var tipVisX = jQuery(window).width() - (e.pageX + tipWidth);
+    //Distance of element from the bottom of viewport
+    var tipVisY = jQuery(window).height() - (e.pageY + tipHeight);
+
+    if ( tipVisX < 20 ) { //If tooltip exceeds the X coordinate of viewport
+        x = x - tipWidth - 30;
+    } if ( tipVisY < 20 ) { //If tooltip exceeds the Y coordinate of viewport
+        y = y - tipHeight - 20;
+    }
+    //Absolute position the tooltip according to mouse position
+    tip.css({  top: y, left: x, display: "inline" });
+  });
+
+//=================
 }
 
