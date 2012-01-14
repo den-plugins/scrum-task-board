@@ -83,8 +83,8 @@
     <%= select_tag "selected_resource",
                         "<option id='selected_resource_blank' value='#{resource_blank}'>
                           #{resource_blank}
-                        </option>" + options_from_collection_for_select(@members.sort_by(&:name), "user_id", "name", @selected_resource.to_i),
-                        :onchange => "filterByResource();" %>
+                        </option>" + options_from_collection_for_select(@members.sort_by(&:name), "user_id", "name", @selected_resource.to_i) +
+                        "<option value=' '>Unassigned</option>" %>
 
     <% end %>
     <br/>
@@ -208,7 +208,44 @@
     }
   }
 
+  function filterByResource(){
+    var res_id = jQuery("#selected_resource option:selected").val();
+    var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
+    var opts = { display: display, listStyle: "none" };
+    if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) != -1) {
+      jQuery('#selected_resource_blank').val('Select a resource...');
+      jQuery('#selected_resource_blank').text('Select a resource...');
+      jQuery('.task_board_data').css(opts);
+    }
+    else {
+      jQuery('#selected_resource_blank').val('All');
+      jQuery('#selected_resource_blank').text('All');
+      jQuery('.task_board_data').hide();
+      jQuery('.assigned_to_' + res_id).css(opts);
+    }
+    if(jQuery("#hidebugs").text() == "Show Bugs"){
+      jQuery(".isBug").css("display", "none");
+    }else{
+      var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
+      jQuery(".isBug").css("display", display);
+    }
+    filterBugs();
+  }
+
+  function filterBugs(){
+    var res_id = jQuery("#selected_resource option:selected").val();
+    if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) == -1){
+      jQuery('.isBug').each(function(){
+        if(!jQuery(this).hasClass('assigned_to_' + res_id) && !jQuery(this).is(':hidden')){
+          jQuery(this).css('display', 'none');
+        }
+      });
+    }
+  }
+
   jcondensed.click(toggleCondensed);
+  jQuery("#selected_resource").bind("change keyup", function() { filterByResource(); });
+  jQuery("#showchart").click(function(){ return false });
   </script>
 <table id="task_board" cellspacing="0">
   <thead>
@@ -308,45 +345,6 @@
 <%= javascript_include_tag 'plugins/jqplot.dateAxisRenderer.min.js', :plugin => 'redmine_burndown' %>
 <%= javascript_include_tag 'plugins/jqplot.highlighter.min.js', :plugin => 'redmine_burndown' %>
 <%= javascript_include_tag 'chart.js', :plugin => 'redmine_burndown' %>
-
-<script type="text/javascript">
-  function filterByResource(){
-    var res_id = jQuery("#selected_resource option:selected").val();
-    var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
-    var opts = { display: display, listStyle: "none" };
-    if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) != -1) {
-      jQuery('#selected_resource_blank').val('Select a resource...');
-      jQuery('#selected_resource_blank').text('Select a resource...');
-      jQuery('.task_board_data').css(opts);
-    }
-    else {
-      jQuery('#selected_resource_blank').val('All');
-      jQuery('#selected_resource_blank').text('All');
-      jQuery('.task_board_data').hide();
-      jQuery('.assigned_to_' + res_id).css(opts);
-    }
-    if(jQuery("#hidebugs").text() == "Show Bugs"){
-      jQuery(".isBug").css("display", "none");
-    }else{
-      var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
-      jQuery(".isBug").css("display", display);
-    }
-    filterBugs();
-  }
-
-  function filterBugs(){
-    var res_id = jQuery("#selected_resource option:selected").val();
-    if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) == -1){
-      jQuery('.isBug').each(function(){
-        if(!jQuery(this).hasClass('assigned_to_' + res_id) && !jQuery(this).is(':hidden')){
-          jQuery(this).css('display', 'none');
-        }
-      });
-    }
-  }
-  
-</script>
-
 <% else %>
   <p class="nodata"><%= @error_msg %></p>
 <% end %>

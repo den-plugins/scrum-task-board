@@ -8,7 +8,7 @@ function th_resize(count)
 
 jQuery(function( $ ){
   //enable show chart
-  jQuery("#showchart").attr("disabled", false).removeClass("disabled").colorbox({opacity: 0.5, onComplete:function() {
+  jQuery("#showchart").unbind("click").removeClass("disabled").colorbox({opacity: 0.5, onComplete:function() {
       plot_chart(jQuery.parseJSON(jQuery("#hidden_chart_data").val()));
   }});
 // 'Recreate' the table header since attributing a thead with position: fixed causes empty <td>s to lose their width

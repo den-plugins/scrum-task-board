@@ -64,7 +64,7 @@
 #task_board ul li { margin-bottom: 10px; background: #FEFEFE; }
 #task_board ul li p { font-size:10px; margin-bottom: 4px; padding-bottom:2px; color: #101010;}
 #task_board ul li .pourcent { border-bottom: 0; margin-bottom: 0; }
-#task_board .progress { float:none; }
+#task_board .progress { float:none; margin: 4px auto; }
 #task_board .task_board_task {
   border-left: 0;
   padding-right: 10px;
@@ -511,7 +511,16 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
   margin: 0;
 }
 
+#selected_team, #selected_resource {
+  padding-right: 0px;
+}
+
 #selected_resource {
   margin: 8px 0;
+}
+
+#task_board .bulk_details {
+  border: 1px solid #DDD;
+  border-top: none;
 }
 
