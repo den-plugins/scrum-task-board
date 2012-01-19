@@ -343,6 +343,7 @@ div.tooltip span.tip{
 }
 
 .tooltip { display: inline; }
+.tooltip img {max-width: 100%; }
 
 div.tooltip span.tip pre, div.tooltip span.tip li pre{
   width: 290px;
