@@ -112,6 +112,10 @@
   background: #0EA94B;
 }
 
+#task_board .task_board_task_data .issue_number_parent{
+  background: #000080;
+}
+
 #task_board .task_board_task_data .issue_number{
   background: #5081AA;
 }
