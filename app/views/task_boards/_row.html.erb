@@ -3,14 +3,14 @@
 <% unless feature.task_parent? %>
   <td class="task_board_feature" style="<%= border %>">
     <div class="task_board_data task_board_feature_data task_board_feature_parent<%= '_current_is_assigned' if feature.assigned_to.eql? User.current %> no_drag assigned_to_<%= feature.assigned_to_id %>" id="<%= dom_id(feature) %>" <%= "style='border: 3px solid #E33;'" if feature.if_blocked %>>
-      <%= render :partial => 'feature', :locals => {:feature => feature } %>
+      <%= render :partial => 'details', :locals => {:issue => feature } %>
     </div>
   </td>
 <% else %>
   <td style="<%= border %>">
     <% if feature.feature? %>
       <div class="task_board_data task_board_feature_data task_board_feature_parent no_drag assigned_to_<%= feature.assigned_to_id %>" id="<%= dom_id(feature) %>" <%= "style='border: 3px solid #E33;'" if feature.if_blocked %>>
-        <%= render :partial => 'feature', :locals => {:feature => feature } %>
+        <%= render :partial => 'details', :locals => {:issue => feature } %>
       </div>
     <% else %>
       &nbsp;

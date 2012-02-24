@@ -21,16 +21,16 @@
      /* Only IE can see inside the conditional comment
     and read this CSS rule. Don't ever use a normal HTML
     comment inside the CC or it will close prematurely. */
-    </style><a title="reference" class="show_reference">Show Reference</a>
+    </style>
     <![endif]-->
 
   <style type="text/css" media="screen">
-    #task_board tr th { width: <%= 100 / (@status_columns.size) %>%;}
+    #task_board tr th { width: <%= 100 / (@status_columns.size + 1) %>%;}
     .show_reference { cursor: pointer;}
   </style>
 <% end %>
 
-<!--- START-------------------------------------------------------------------------------------------------------------->
+<!-- START------------------------------------------------------------------------------------------------------------ -->
 <h2 id="taskboard-header">
   <%= @version.nil? ? "Product Backlog" : @version.name %>
 </h2>
@@ -116,137 +116,20 @@
   </div>
 </div>
 
-<!--------------------------------------------------------------------------------------------------------------END --->
+<!-- ------------------------------------------------------------------------------------------------------------END -->
 
 
 <div class="clear"></div>
 <% end %>
-<div id="bdchart"></div>
-<div id="fixed_table_header"></div>
 
 <% if @featured or @bugged %>
+<div id="bdchart"></div>
+<div id="fixed_table_header"></div>
   <%= javascript_include_tag 'jquery.min.js', :plugin => 'scrum_task_board' %>
-  <%= javascript_include_tag 'sticky_note', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag 'sticky_note.js', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag 'task_board_display.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'jquery-ui-1.8.16.custom.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
-  <script type="text/javascript">
-  var showbugs = (jQuery("#hidebugs").html() == "Show Bugs"); <%# (@bugs and @featured) or false %>
-  jtoggleAll = jQuery("#detailed");
-  jcondensed = jQuery("#condensed");
-
-  jQuery(function(){
-    var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
-    jQuery(".isBug").css("display", display);
-  });
-
-  jQuery(".buttons").not("#showchart, #hidebugs").click(function(){
-    if(!jQuery(this).hasClass("disabled"))
-     jQuery(this).toggleClass("activated");
-  });
-
-  jQuery("#showbugs").click(function(){
-      jQuery(this).text("Loading...").addClass("disabled").css("color", "#4e4e4e");
-  });
-
-  jQuery("#hidebugs").click(function(){
-    if(jQuery(this).html() === "Hide Bugs") {
-      jQuery(".isBug").css("display", "none");
-      jQuery(this).html("Show Bugs");
-    }
-    else {
-      var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
-      jQuery(".isBug").css("display", display);
-      filterBugs();
-      jQuery(this).html("Hide Bugs");
-    }
-  });
-
-  jtoggleAll.click(function(){
-    jtoggleDetails = jQuery('.toggle_details');
-    if(jQuery(this).hasClass("activated"))
-    {
-      jQuery(".current_data").show();
-      if (jtoggleDetails.hasClass("minimized"))
-        jtoggleDetails.removeClass("minimized").addClass("maximized");
-    }
-    else {
-      jQuery(".current_data").hide();
-      if (jtoggleDetails.hasClass("maximized"))
-        jtoggleDetails.removeClass("maximized").addClass("minimized");
-    }
-  });
-
-  //setting css() seems to be faster than hide() and show()
-  function condensedView(){
-    jQuery(".task_board_data:visible").css("display", "inline-block");
-    jQuery(".bulk_details").css('display', 'none');
-    jQuery(".taskboard_issues_list").addClass("condensed");
-    jQuery(".to_parent").css('display', 'none');
-    if(showbugs)
-      jQuery(".isBug").addClass("condensed").css("display", "inline-block");
-  }
-
-  function normalView(){
-    jQuery(".task_board_data:visible").css("display", "list-item");
-    jQuery(".bulk_details").css('display', 'block');
-    jQuery(".taskboard_issues_list").removeClass("condensed");
-    jQuery(".to_parent").css("display", "inline");
-    if(showbugs)
-      jQuery(".isBug").removeClass("condensed").css("display", "list-item");
-  }
-
-  function toggleCondensed() {
-    if(jcondensed.hasClass("activated")) {
-      condensedView();
-      jQuery("#detailed").attr("disabled", true).addClass("disabled");
-    }
-    else {
-    normalView();
-    jQuery("#detailed").attr("disabled", false).removeClass("disabled");
-    if (jQuery(".current_data").is(":visible"))
-      jtoggleAll.addClass("activated");
-    }
-  }
-
-  function filterByResource(){
-    var res_id = jQuery("#selected_resource option:selected").val();
-    var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
-    var opts = { display: display, listStyle: "none" };
-    if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) != -1) {
-      jQuery('#selected_resource_blank').val('Select a resource...');
-      jQuery('#selected_resource_blank').text('Select a resource...');
-      jQuery('.task_board_data').css(opts);
-    }
-    else {
-      jQuery('#selected_resource_blank').val('All');
-      jQuery('#selected_resource_blank').text('All');
-      jQuery('.task_board_data').hide();
-      jQuery('.assigned_to_' + res_id).css(opts);
-    }
-    if(jQuery("#hidebugs").text() == "Show Bugs"){
-      jQuery(".isBug").css("display", "none");
-    }else{
-      var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
-      jQuery(".isBug").css("display", display);
-    }
-    filterBugs();
-  }
-
-  function filterBugs(){
-    var res_id = jQuery("#selected_resource option:selected").val();
-    if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) == -1){
-      jQuery('.isBug').each(function(){
-        if(!jQuery(this).hasClass('assigned_to_' + res_id) && !jQuery(this).is(':hidden')){
-          jQuery(this).css('display', 'none');
-        }
-      });
-    }
-  }
-
-  jcondensed.click(toggleCondensed);
-  jQuery("#selected_resource").bind("change keyup", function() { filterByResource(); });
-  jQuery("#showchart").click(function(){ return false });
-  </script>
 <table id="task_board" cellspacing="0">
   <thead>
   <tr>
@@ -336,7 +219,11 @@
   </tbody>
 </table>
 <div id="back_to_top">Back to top</div>
-<%= javascript_include_tag 'fixedtableheader', :plugin => 'scrum_task_board' %>
+<script type="text/javascript">
+  j(function($){
+    TaskBoardDisplay.init();
+  });
+</script>
 <%= javascript_include_tag 'jquery.colorbox-min.js', :plugin => 'scrum_task_board' %>
 <%= javascript_include_tag 'jquery.jqplot.js', :plugin => 'redmine_burndown' %>
 <%= javascript_include_tag 'plugins/jqplot.canvasTextRenderer.min.js', :plugin => 'redmine_burndown' %>
