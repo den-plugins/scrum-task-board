@@ -80,17 +80,13 @@
   background: #fff;
 }
 
-#task_board .task_board_feature_parent, #task_board .task_board_task_parent {
-  padding: 2px;
-}
-
 #task_board .task_board_feature_parent {
   border: 1px solid #0EA94B;
+  list-style: none !important;
 }
 
 .task_board_feature_parent_current_is_assigned {
   border: 3px solid #F9902C;
-/*  padding: 2px;*/
 }
 
 #task_board .task_board_task_parent {
@@ -187,6 +183,7 @@
   display: inline-block;
   width: 100%;
   height: 17px;
+  font-style: italic;
 }
 
 .current_data .estimate, .estimate input {
@@ -228,12 +225,16 @@
 #task_board .edit, #task_board .submit_link, #task_board .cancel, #task_board .toggle_details, #task_board .has_subtasks, #task_board .talk {
   cursor: pointer;
   position: absolute;
-  background: #fff;
-  width:18px;
-  height:18px;
   text-indent:-9999px;
-  top: 1px;
-  border-radius: 4px;
+  top: 4px;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("../images/glyphicons-halflings-white.png");
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
 }
 
 #task_board .issue_number {
@@ -241,43 +242,37 @@
 }
 
 #task_board .edit {
-  background: transparent url('../images/edit.png') no-repeat;
-  top: 2px;
+  background-position: 0 -72px;
   left: 4px;
 }
 
 #task_board .cancel {
-  background: transparent url('../images/false.png') no-repeat;
+  background-position: -312px 0;
   left: 2px;
 }
 
 #task_board .talk {
-  background: transparent url('../images/talk.png') no-repeat;
-  height: 15px; width: 15px;
+  background-position: -240px -120px;
   left: 50px;
-  top: 2px;
 }
 
 #task_board .submit_link {
-  background: transparent url('../images/true.png') no-repeat;
+  background-position: -288px 0;
   left: 26px;
 }
 
-#task_board .toggle_details.maximized{
-  background:  transparent url('../images/zoom_out.png') no-repeat;
-  top: 2px;
+#task_board .toggle_details.maximized {
+  background-position: -360px 0;
   left: 26px;
 }
 
-#task_board .toggle_details.minimized{
-  background:  transparent url('../images/zoom_in.png') no-repeat;
-  top: 2px;
+#task_board .toggle_details.minimized {
+  background-position: -336px 0;
   left: 26px;
 }
 
 #task_board .has_subtasks {
-  background: transparent url('../images/copy.png') no-repeat;
-  top: 2px;
+  background-position: -264px 0;
   left: 50px;
   outline: 0;
 }
@@ -308,7 +303,7 @@ div.discussion .time_ago {
 }
 
 #task_board form select {
-  font-size: 10px;
+  font-size: 11px;
 }
 
 #task_board .issue_closed {
@@ -358,7 +353,7 @@ div.tooltip span.tip pre, div.tooltip span.tip li pre{
 }
 
 #task_board .min_ul .min_li {
-  width: 20%;
+  width: 16%;
   float: left;
 }
 
@@ -523,5 +518,15 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
 #task_board .bulk_details {
   border: 1px solid #DDD;
   border-top: none;
+}
+
+#main a.project_name {
+  color: #111;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#main a.project_name:hover {
+  color: #6C0;
 }
 
