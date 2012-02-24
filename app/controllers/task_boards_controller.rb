@@ -159,11 +159,10 @@ class TaskBoardsController < ApplicationController
 
     render :update do |page|
       page.update_sticky_note dom_id(@issue), @issue, params[:board].to_i
-      #show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
-      #page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version }
+
       parents.each do |parent|
         if params[:board].to_i.eql? 1
-          if parent.version_descendants.present? and !parent.feature? #and !(params[:board].to_i.eql?(1) and parent.bug?)
+          if parent.version_descendants.present? and !parent.feature?
             show_bug = {:bug => true} if parent.bug? and params[:board].to_i.eql?(1)
             page.remove dom_id(parent)
             page.insert_html :top, task_board_dom_id(parent.task_parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => show_bug
