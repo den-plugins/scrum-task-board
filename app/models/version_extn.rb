@@ -9,40 +9,42 @@ module VersionExtn
       cattr_accessor :tmp_features, :tmp_tasks
     end
   end
-  
-  module ClassMethods  
+
+  module ClassMethods
   end
-  
+
   module InstanceMethods
-    
+
     def bugs
       narrow_down 1
     end
-    
-    def features 
+
+    def features
       narrow_down 2
     end
-    
+
     def tasks
       narrow_down 4
     end
-    
+
     def narrow_down(tracker)
-      Issue.find(:all, :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker], :include => [:status, :assigned_to], :order => 'id ASC')
+      #nested workflows
+      Issue.find(:all, :conditions => ["fixed_version_id = ? AND tracker_id = ?", self.id, tracker],
+                  :include => [{:tracker, :workflows}, :status, :assigned_to, :project, :subtasks], :order => 'id ASC')
     end
-    
+
     def bug_count
       selected_issue_count 1
     end
-    
+
     def feature_count
       selected_issue_count 2
     end
-    
+
     def task_count
       selected_issue_count 4
     end
-    
+
     def bug_counter
       "#{issue_check_counter 1,'f'} open / #{issue_check_counter 1,'t'} closed"
     end
@@ -76,11 +78,10 @@ module VersionExtn
       return re
 #      Issue.sum(:remaining_effort, :include => [:remaining_effort_entries], :conditions => "fixed_version_id = #{self.id}")
     end
-    
+
   end
 end
 
 # Add module to Issue
 Version.send(:include, VersionExtn)
-
 
