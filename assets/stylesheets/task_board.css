@@ -112,7 +112,7 @@
   background: #0EA94B;
 }
 
-#task_board .task_board_task_data .issue_number_parent{
+#task_board .task_board_task_data.no_drag .issue_number{
   background: #000080;
 }
 

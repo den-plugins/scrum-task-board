@@ -1,13 +1,6 @@
 <li id="<%= dom_id(issue) %>" class="<%= status_classes_for(issue, User.current) %> task_board_data <%= task_board_border_class(issue)%> <%= 'current_is_assigned' if issue.assigned_to.eql? User.current %> <%= 'isBug' if defined?(bug) %> assigned_to_<%= issue.assigned_to_id %>" <%= "style='border: 3px solid #E33;'" if issue.if_blocked %>>
 
- <% flag = false %>
- <% unless relation_empty(issue) %>
-   <% Issue.find(issue.id).relations_from.each do |v| %>
-    <% flag = true if v.relation_type == "subtasks" %>
-   <% end %>
- <% end %>
-
-  <div class="<% if relation_empty(issue) && flag == false %>issue_number<% else %>issue_number_parent<% end %>">
+  <div class="issue_number">
     <% if params[:board].to_i.eql? 1 %>
       <%= link_to "#{issue.parent.issue_from_id} &raquo; ", "##{dom_id(issue.parent.issue_from)}",
                             :class => "to_parent", :style => "color: orange;",

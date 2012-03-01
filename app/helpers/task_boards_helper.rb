@@ -94,8 +94,5 @@ module TaskBoardsHelper
     end
   end
 
-  def relation_empty(issue)
-     Issue.find(issue.id).relations_from.empty?
-  end
 end
 
