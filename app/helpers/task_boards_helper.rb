@@ -94,5 +94,12 @@ module TaskBoardsHelper
     end
   end
 
+  def tracker_indicator(issue)
+    if issue.task_parent? or issue.parent.nil? or issue.parent.issue_from.feature?
+      "task"
+    else
+      "subtask"
+    end
+  end
 end
 
