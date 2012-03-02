@@ -21,8 +21,9 @@ or
 
 = Dependencies
 
-This plugin depends on other management plugins to run.
-1. pm_dashboard plugin
+This plugin depends on the ff. plugins to run.
+1. redmine-burndown
+2. redmine-custom
 
 = Compatibility
 
