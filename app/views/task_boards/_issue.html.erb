@@ -13,7 +13,7 @@
     <div id="<%= dom_id(issue) %>_tooltip" class="tooltip">
       <%= link_to_issue issue %>
       <% if issue.task? %>
-          <a><%= tracker_indicator(issue).chars.first.upcase %></a>
+          <a><%= tracker_indicator(issue) %></a>
       <% end %>
       <span id="<%= issue.id %>_tip" class="tip"><%= task_board_tooltip(issue, @journals) %></span>
     </div>
