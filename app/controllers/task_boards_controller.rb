@@ -143,6 +143,7 @@ class TaskBoardsController < ApplicationController
       end
       show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
       page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => show_bug
+      page.call :filterByResource
       #page.complete "Element.show('#{task_board_dom_id(story, @status, 'list')}')"
     end
   end

@@ -69,9 +69,14 @@
       jQuery(".isBug").css("display", "none");
     }else{
       var display = (jQuery("#condensed").hasClass("activated")) ? "inline-block" : "list-item";
-      jQuery(".isBug").css("display", display);
+      var res_id = jQuery("#selected_resource option:selected").val();
+      if(jQuery.inArray(res_id, ["", "All", "Select a resource..."]) == -1){
+        jQuery('.isBug').each(function(){
+          if(jQuery(this).hasClass('assigned_to_' + res_id) && jQuery(this).is(':hidden')){
+            jQuery(this).css('display', display);
+          }
+        });
+      }
     }
   </script>
-
 </li>
-
