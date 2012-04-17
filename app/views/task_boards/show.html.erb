@@ -232,8 +232,8 @@
       <% color = cycle('F2F2F2', 'FFFFFF') %>
       <tr style="background:#<%= color %>">
       <%= render :partial => "row", :locals => { :feature => feature, :color => color } %>
-      <% children = feature.version_children.reject {|f| f unless f.task_parent? } %>
-      <% Array(children).each do |child| %>
+      <% children = feature.version_children.select(&:task_parent?) %>
+      <% children.each do |child| %>
         <tr style="background:#<%= color %>">
         <%= render :partial => "row", :locals => { :feature => child, :color => color } %>
       <% end %>
