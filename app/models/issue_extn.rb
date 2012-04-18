@@ -5,6 +5,7 @@ module IssueExtn
     base.extend(ClassMethods)
     base.send(:include, InstanceMethods)
     base.class_eval do
+      has_one :item
       unloadable # Send unloadable so it will not be unloaded in development
     end
   end
@@ -101,5 +102,3 @@ end
 
 # Add module to Issue
 Issue.send(:include, IssueExtn)
-
-
