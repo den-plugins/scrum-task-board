@@ -74,8 +74,8 @@ class TaskBoardsController < ApplicationController
             end
           end
         end
-        @features = parented_sort  @features
-#        Version.tmp_features = @features
+        @features = @features
+         Version.tmp_features = @features
 #        Version.tmp_tasks = @tasks
 #        Rails.cache.write('cached_features', @features)
 #        Rails.cache.write('cached_tasks', @tasks)
