@@ -75,7 +75,7 @@ class TaskBoardsController < ApplicationController
           end
         end
         @features = @features
-         Version.tmp_features = @features
+        Version.tmp_features = @features
 #        Version.tmp_tasks = @tasks
 #        Rails.cache.write('cached_features', @features)
 #        Rails.cache.write('cached_tasks', @tasks)
@@ -86,7 +86,7 @@ class TaskBoardsController < ApplicationController
     elsif @board.to_i.eql? 2
       @status_grouped = IssueStatusGroup::BUG_GROUPED
       @status_columns = ordered_keys(@status_grouped)
-      @bugs = @version.bugs
+      @bugs = @version.bugs.sort_by { |bug| bug.item.position }
       @descendant_bugs = []
       @nodata_to_filter = (@bugs.empty?)? true : false
       unless ["", "All", "Select a team..."].member? @selected_team
