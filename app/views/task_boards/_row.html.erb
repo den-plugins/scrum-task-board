@@ -25,14 +25,14 @@
     <ul id="<%= task_board_dom_id(feature, default, 'list') %>" class="taskboard_issues_list ">
       <% statuses.each do |status| %>
         <% if feature.task_parent? %>
-          <%= render :partial => 'issue', :collection => Array(feature.version_descendants_filtered.group_by(&:status)[status]).sort_by { |d| d.item.position } %>
+          <%= render :partial => 'issue', :collection => Array(feature.version_descendants_filtered.group_by(&:status)[status]) %>
           <% if @show_bugs %>
-            <%= render :partial => 'issue', :collection => Array(feature.version_descendants_bugs.group_by(&:status)[status]).sort_by { |d| d.item.position }, :locals => {:bug => true} %>
+            <%= render :partial => 'issue', :collection => Array(feature.version_descendants_bugs.group_by(&:status)[status]), :locals => {:bug => true} %>
           <% end %>
         <% else %>
-          <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]).sort_by { |d| d.item.position }.reject {|c| c if c.task_parent? or c.feature? } %>
+          <%= render :partial => 'issue', :collection => Array(feature.version_children.group_by(&:status)[status]).reject {|c| c if c.task_parent? or c.feature? } %>
           <% if @show_bugs %>
-            <%= render :partial => 'issue', :collection => Array(feature.version_descendants_bugs.select {|b| b.parent.issue_from == b.super_parent}.group_by(&:status)[status]).sort_by { |d| d.item.position }, :locals => {:bug => true} %>
+            <%= render :partial => 'issue', :collection => Array(feature.version_descendants_bugs.select {|b| b.parent.issue_from == b.super_parent}.group_by(&:status)[status]), :locals => {:bug => true} %>
           <% end %>
         <% end %>
       <% end %>
