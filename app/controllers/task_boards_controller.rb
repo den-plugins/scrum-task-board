@@ -43,7 +43,7 @@ class TaskBoardsController < ApplicationController
 
       #modifications start adding of bugs in features selection
       if @show_bugs
-        @bugs = @version.bugs.sort_by { |bug| bug.item.position }
+        @bugs = @version.bugs.sort_by { |bug| (bug.item.position.nil? ? 100 : bug.item.position) }
         @bugs.reject!.each do |b|
           b if b.parent and !b.super_parent.bug?
         end
@@ -54,8 +54,8 @@ class TaskBoardsController < ApplicationController
 ##        @features = Rails.cache.read('cached_features')
 ##        @tasks = Rails.cache.read('cached_tasks')
 #      else
-        @features = @version.features.sort_by { |feature| feature.item.position }
-        @tasks = @version.tasks.sort_by { |task| task.item.position }
+        @features = @version.features.sort_by { |feature| (feature.item.position.nil? ? 100 : feature.item.position) }
+        @tasks = @version.tasks.sort_by { |task| (task.item.position.nil? ? 100 : task.item.position) }
 
         @nodata_to_filter = (@features.empty? and @tasks.empty?)? true : false
         unless ["", "All", "Select a team..."].member? @selected_team
@@ -86,7 +86,7 @@ class TaskBoardsController < ApplicationController
     elsif @board.to_i.eql? 2
       @status_grouped = IssueStatusGroup::BUG_GROUPED
       @status_columns = ordered_keys(@status_grouped)
-      @bugs = @version.bugs.sort_by { |bug| bug.item.position }
+      @bugs = @version.bugs.sort_by { |bug| (bug.item.position.nil? ? 100 : bug.item.position) }
       @descendant_bugs = []
       @nodata_to_filter = (@bugs.empty?)? true : false
       unless ["", "All", "Select a team..."].member? @selected_team
@@ -231,7 +231,7 @@ private
   end
 
   def parented_sort(tasks)
-    psorted = tasks.sort_by {|t| t.item.position }
+    psorted = tasks.sort_by {|t| (t.item.position.nil? ? 100 : t.item.position) }
     sorted = psorted.select {|p| p.parent.nil? && p.children.any?}
     (psorted-sorted).each do |s|
       if s.parent && sorted.include?(s.parent_issue)
