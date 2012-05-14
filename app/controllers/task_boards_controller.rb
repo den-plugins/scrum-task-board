@@ -2,7 +2,7 @@ class TaskBoardsController < ApplicationController
   unloadable
   menu_item :task_board
   layout 'base'
-  before_filter :get_project, :authorize, :only => [:index, :show]
+  before_filter :get_project, :authorize, :only => [:index, :show, :load_distribution_summary]
   before_filter :set_cache_buster
   before_filter :get_issue, :only => [:update_issue_status, :update_issue, :add_comment, :get_comment]
   before_filter :get_dependencies, :only => [:update_issue_status, :update_issue]
@@ -19,6 +19,20 @@ class TaskBoardsController < ApplicationController
 #    Rails.cache.clear
 #    Version.tmp_features = nil
 #    Version.tmp_tasks = nil
+    @version = @project.versions.sort_by(&:created_on).last
+    @issues = []
+    if @version
+      capacity = {}
+      @version.fixed_issues.select{|i| i.assigned_to != nil && !i.parent && i.children.empty?}.each do |i|
+        resources = i.assigned_to.memberships.select {|m| m.project.eql? @project}
+        week = [@version.original_start_date, @version.original_end_date]
+        capacity[i.assigned_to.id] ||= compute_forecasted_hours(week, resources);
+        issue = {:subject => i.subject, :resource => i.assigned_to.to_s, :status => i.status.name, 
+                 :capacity => capacity[i.assigned_to.id], :estimate => i.estimated_hours, :remaining => i.remaining_effort, 
+                 :remaining_by_alloc => nil}
+        @issues << issue
+      end
+    end
     if params[:state].nil?
       @versions = @project.versions.all(:conditions => ["state = ?", 2], :order => 'effective_date IS NULL, effective_date DESC')
     else
@@ -147,6 +161,22 @@ class TaskBoardsController < ApplicationController
       #page.complete "Element.show('#{task_board_dom_id(story, @status, 'list')}')"
     end
   end
+  
+  def load_distribution_summary
+    @version = @project.versions.sort_by(&:created_on).last
+    @issues = []
+    if @version
+      @version.fixed_issues.select{|i| i.assigned_to != nil && !i.parent && i.children.empty?}.each do |i|
+        issue = {:name => i.subject, :resource => i.assigned_to.to_s, :status => i.status.name, 
+                 :capacity => nil, :estimate => i.estimated_hours, :remaining => i.remaining_effort, 
+                 :remaining_by_alloc => nil}
+        @issues << issue
+      end
+    end
+    respond_to do |format|
+      format.js {render :layout => false}
+    end
+  end
 
   def update_issue
     #TODO Permissions trapping - view
@@ -189,6 +219,12 @@ class TaskBoardsController < ApplicationController
 
   def get_comment
     render_comment
+  end
+  
+  def compute_forecasted_hours(week, resources)
+    from, to = week.first, week.last
+    allocated = resources.select {|r| r.billable?(from, to)}
+    allocated.sum {|a| a.days_and_cost((from..to), nil, false) * 8}
   end
 
 private
@@ -243,5 +279,6 @@ private
     end
     sorted
   end
+  
 end
 

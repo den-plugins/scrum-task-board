@@ -1,0 +1,29 @@
+<div id = "title">
+  <%= v.name if v %>
+</div>
+<table id = "dist_summary">
+  <thead>
+    <tr>
+      <th>Issue name</th>
+      <th>Resource name</th>
+      <th>Status</th>
+      <th>Capacity</th>
+      <th>Estimate Hours</th>
+      <th>Remaining Hours</th>
+      <th>Remaining Hours by Allocation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @issues.each do |i| %>
+      <tr>
+        <td><%= i[:subject] %></td>
+        <td><%= i[:resource] %></td>
+        <td><%= i[:status] %></td>
+        <td><%= i[:capacity] %></td>
+        <td><%= i[:estimate] %></td>
+        <td><%= i[:remaining] %></td>
+        <td><%= i[:remaining_by_alloc] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,5 +1,9 @@
 <% content_for :header_tags do %>
+  <%= javascript_include_tag "jquery-1.7.1.min.js", :plugin => 'time_logging' %>
+  <%= javascript_include_tag "jquery-ui-1.8.18.custom.min.js", :plugin => 'time_logging' %>
+  <%= javascript_include_tag 'distribution_summary', :plugin => 'scrum_task_board' %>
   <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
+  <%= stylesheet_link_tag "jquery-ui-1.8.18.custom.css", :plugin => 'time_logging' %>
 <% end %>
 <% cond = @project.project_condition(Setting.display_subprojects_issues?)
 
@@ -56,4 +60,6 @@ Filter by: <%= select_tag "state", options_for_select((Version::STATES.collect {
 <% end %>
 </ul>
 </div>
-
+<div id = "distribution_summary">
+  <%= render :partial => "distribution_summary", :locals => {:issues => [], :project => @project, :v => @version} %>
+</div>
