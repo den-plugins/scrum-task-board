@@ -1,5 +1,7 @@
 jQuery(function(){
-  $("#distribution_summary").dialog({
+  jQuery("#distribution_summary").dialog({
+    autoOpen:false,
+    title:"Taskboard Distribution Summary",
     width:1000,
     resizable: false,
     modal: true,

@@ -31,6 +31,12 @@
 <% end %>
 
 <!--- START-------------------------------------------------------------------------------------------------------------->
+<div id = "distribution_summary" style="display:none;">
+  <%= render :partial => "distribution_summary", :locals => {:project_members => @project_members, :project => @project, :v => @version} %>
+</div>
+<% if @featured %>
+  <input type="button" id="dialog-launcher" value="Distribution Summary" OnClick="jQuery('#distribution_summary').dialog('open')" />
+<% end %>
 <h2 id="taskboard-header">
   <%= @version.nil? ? "Product Backlog" : @version.name %>
 </h2>
@@ -125,10 +131,12 @@
 <div id="fixed_table_header"></div>
 
 <% if @featured or @bugged %>
-  <%= javascript_include_tag 'jquery.min.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'sticky_note', :plugin => 'scrum_task_board' %>
-  <%= javascript_include_tag 'jquery-ui-1.8.16.custom.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag "jquery-1.7.1.min.js", :plugin => 'time_logging' %>
+  <%= javascript_include_tag "jquery-ui-1.8.18.custom.min.js", :plugin => 'time_logging' %>
+  <%= javascript_include_tag 'distribution_summary', :plugin => 'scrum_task_board' %>
+  <%= stylesheet_link_tag "jquery-ui-1.8.18.custom.css", :plugin => 'time_logging' %>
   <script type="text/javascript">
   var showbugs = (jQuery("#hidebugs").html() == "Show Bugs"); <%# (@bugs and @featured) or false %>
   jtoggleAll = jQuery("#detailed");
@@ -350,4 +358,3 @@
 <% else %>
   <p class="nodata"><%= @error_msg %></p>
 <% end %>
-

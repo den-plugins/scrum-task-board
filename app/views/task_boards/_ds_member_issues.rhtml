@@ -1,0 +1,18 @@
+<table class = "inner_table">
+  <thead>
+    <tr>
+      <th>Issue Name</th>
+      <th>Estimated Hours</th>
+      <th>Remaining Effort</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% issues.each do |i| %>
+      <tr>
+        <td><%= i.subject %></td>
+        <td><%= i.estimated_hours %></td>
+        <td><%= i.remaining_effort %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

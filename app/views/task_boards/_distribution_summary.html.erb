@@ -1,28 +1,26 @@
-<div id = "title">
-  <%= v.name if v %>
-</div>
 <table id = "dist_summary">
   <thead>
     <tr>
-      <th>Issue name</th>
-      <th>Resource name</th>
-      <th>Status</th>
+      <th>Resource Name</th>
       <th>Capacity</th>
-      <th>Estimate Hours</th>
-      <th>Remaining Hours</th>
+      <th>Total Estimate Hours</th>
+      <th>Total Remaining Estimated Hours</th>
       <th>Remaining Hours by Allocation</th>
     </tr>
   </thead>
   <tbody>
-    <% @issues.each do |i| %>
+    <% project_members.each do |m| %>
       <tr>
-        <td><%= i[:subject] %></td>
-        <td><%= i[:resource] %></td>
-        <td><%= i[:status] %></td>
-        <td><%= i[:capacity] %></td>
-        <td><%= i[:estimate] %></td>
-        <td><%= i[:remaining] %></td>
-        <td><%= i[:remaining_by_alloc] %></td>
+        <td><%= m[:resource] %></td>
+        <td><%= m[:capacity] %></td>
+        <td><%= m[:estimate] %></td>
+        <td><%= m[:remaining] %></td>
+        <td><%= m[:remaining_allocation] %></td>
+      </tr>
+      <tr class = "member_issues">
+        <td colspan = "5">
+          <%= render :partial => "ds_member_issues", :locals => {:issues => m[:issues]}%>
+        </td>
       </tr>
     <% end %>
   </tbody>
