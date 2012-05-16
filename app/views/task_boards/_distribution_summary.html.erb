@@ -1,6 +1,13 @@
+<div class = "title">
+  <span class = "left"><h1><%= @version %></h1></span>
+  <span class = "right"><h3>End Date: <%= @version.original_end_date.strftime("%m/%d/%Y") %></h3></span>
+  <span class = "right"><h3>Start Date: <%= @version.original_start_date.strftime("%m/%d/%Y") %></h3></span>
+</div>
+
 <table id = "dist_summary">
   <thead>
-    <tr>
+    <tr class = "parent_header">
+      <th>&nbsp;</th>
       <th>Resource Name</th>
       <th>Capacity</th>
       <th>Total Estimate Hours</th>
@@ -10,18 +17,27 @@
   </thead>
   <tbody>
     <% project_members.each do |m| %>
-      <tr>
+      <tr class = "parent_row">
+        <td>
+          <% if !m[:issues].empty? %>
+            <input type="button" value="+" id="<%=m[:resource].id%>" class="issue_slider">
+          <% else %>
+            &nbsp;
+          <% end %>
+        </td>
         <td><%= m[:resource] %></td>
         <td><%= m[:capacity] %></td>
         <td><%= m[:estimate] %></td>
         <td><%= m[:remaining] %></td>
         <td><%= m[:remaining_allocation] %></td>
       </tr>
-      <tr class = "member_issues">
-        <td colspan = "5">
-          <%= render :partial => "ds_member_issues", :locals => {:issues => m[:issues]}%>
-        </td>
-      </tr>
+      <% if !m[:issues].empty? %>
+        <tr class = "member_issues <%= m[:resource].id%>" style = "display:none;">
+          <td colspan = "5">
+            <%= render :partial => "ds_member_issues", :locals => {:issues => m[:issues]}%>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

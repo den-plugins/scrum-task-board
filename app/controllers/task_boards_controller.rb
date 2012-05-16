@@ -2,11 +2,10 @@ class TaskBoardsController < ApplicationController
   unloadable
   menu_item :task_board
   layout 'base'
-  before_filter :get_project, :authorize, :only => [:index, :show, :load_distribution_summary]
+  before_filter :get_project, :authorize, :only => [:index, :show, :init_distribution_summary]
   before_filter :set_cache_buster
   before_filter :get_issue, :only => [:update_issue_status, :update_issue, :add_comment, :get_comment]
   before_filter :get_dependencies, :only => [:update_issue_status, :update_issue]
-  before_filter :init_distribution_summary, :only => [:show]
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
@@ -113,6 +112,33 @@ class TaskBoardsController < ApplicationController
     @error_msg = "There are no issues for this version." if @version.fixed_issues.empty?
     
   end
+  
+  def init_distribution_summary
+    @version = Version.find(params[:version_id])
+    @issues = []
+    @project_members = []
+    team = @project.members.sort_by{|u| u.user.firstname.downcase}
+    if @version && !team.empty?
+      week = [@version.original_start_date, @version.original_end_date]
+      week_realtime = (Date.current <= @version.original_end_date) ? [Date.current, @version.original_end_date] : nil
+      team.each do |t|
+        resources = t.user.memberships.select {|m| m.project.eql? @project}
+        capacity = compute_forecasted_hours(week, resources)
+        remaining_by_allocation = compute_forecasted_hours(week_realtime, resources)
+        issues = @version.fixed_issues.select{|i| i.assigned_to == t.user and ((i.parent && i.children.empty?) or (!i.parent && i.children.empty?))}
+        total_estimate = issues.map(&:estimated_hours).compact.inject(:+)
+        total_estimate ? total_estimate = total_estimate : total_estimate = 0
+        total_remaining = issues.map(&:remaining_effort).compact.inject(:+)
+        total_remaining ? total_remaining = total_remaining : total_remaining = 0
+        @project_members << {:resource => t.user, :capacity => capacity, :estimate=>total_estimate, 
+                             :remaining => total_remaining, :remaining_allocation => remaining_by_allocation, 
+                             :issues => issues}
+      end
+    end
+    respond_to do |format|
+      format.js { render :layout => false}
+    end
+  end
 
   def update_issue_status
     @status = IssueStatus.find(params[:status_id])
@@ -150,22 +176,6 @@ class TaskBoardsController < ApplicationController
     end
   end
   
-  def load_distribution_summary
-    @version = @project.versions.sort_by(&:created_on).last
-    @issues = []
-    if @version
-      @version.fixed_issues.select{|i| i.assigned_to != nil && !i.parent && i.children.empty?}.each do |i|
-        issue = {:name => i.subject, :resource => i.assigned_to.to_s, :status => i.status.name, 
-                 :capacity => nil, :estimate => i.estimated_hours, :remaining => i.remaining_effort, 
-                 :remaining_by_alloc => nil}
-        @issues << issue
-      end
-    end
-    respond_to do |format|
-      format.js {render :layout => false}
-    end
-  end
-
   def update_issue
     #TODO Permissions trapping - view
     @issue.init_journal(User.current, '')
@@ -210,32 +220,12 @@ class TaskBoardsController < ApplicationController
   end
   
   def compute_forecasted_hours(week, resources)
-    from, to = week.first, week.last
-    allocated = resources
-    allocated.sum {|a| a.days_and_cost((from..to), nil, true, "both")}
-  end
-
-  def init_distribution_summary
-    @version = Version.find(params[:version_id])
-    @issues = []
-    @project_members = []
-    team = @project.members.sort_by{|u| u.user.firstname.downcase}
-    if @version && !team.empty?
-      week = [@version.original_start_date, @version.original_end_date]
-      week_realtime = (Date.current <= @version.original_end_date) ? [Date.current, @version.original_end_date] : [Date.current, Date.current]
-      team.each do |t|
-        resources = t.user.memberships.select {|m| m.project.eql? @project}
-        capacity = compute_forecasted_hours(week, resources)
-        remaining_by_allocation = compute_forecasted_hours(week_realtime, resources)
-        issues = @version.fixed_issues.select{|i| i.assigned_to == t.user && !i.parent && i.children.empty?}
-        total_estimate = issues.map(&:estimated_hours).compact.inject(:+)
-        total_estimate ? total_estimate = total_estimate : total_estimate = 0
-        total_remaining = issues.map(&:remaining_effort).compact.inject(:+)
-        total_remaining ? total_remaining = total_remaining : total_remaining = 0
-        @project_members << {:resource => t.user, :capacity => capacity, :estimate=>total_estimate, 
-                             :remaining => total_remaining, :remaining_allocation => remaining_by_allocation, 
-                             :issues => issues}
-      end
+    if week
+      from, to = week.first, week.last
+      allocated = resources
+      allocated.sum {|a| a.resource_day_capacity(from..to)}
+    else
+      0
     end
   end
 

@@ -2,14 +2,20 @@
   <thead>
     <tr>
       <th>Issue Name</th>
+      <th>Status</th>
       <th>Estimated Hours</th>
       <th>Remaining Effort</th>
     </tr>
   </thead>
   <tbody>
     <% issues.each do |i| %>
-      <tr>
+      <% if i.status.name.downcase == "closed" %>
+        <tr class = "closed_issue">
+      <% else %>
+        <tr class = "issue">
+      <% end %>
         <td><%= i.subject %></td>
+        <td><%= i.status.name %></td>
         <td><%= i.estimated_hours %></td>
         <td><%= i.remaining_effort %></td>
       </tr>

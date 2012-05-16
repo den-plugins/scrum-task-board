@@ -1,0 +1,1 @@
+jQuery("#distribution_summary").html("<%= escape_javascript(render :partial => "distribution_summary", :locals => {:project_members => @project_members, :project => @project, :v => @version})%>");

@@ -17,7 +17,7 @@ Redmine::Plugin.register :scrum_task_board do
   version '1.0.0'
 
   project_module :task_boards do  
-    permission :view_task_boards, :task_boards => [:index, :show]
+    permission :view_task_boards, :task_boards => [:index, :show, :init_distribution_summary]
     permission :update_task_boards, :task_boards => :update_status
   end
   

@@ -491,7 +491,7 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
 }
 
 .filter-box-view {
-  width: 400px;
+  width: 500px;
   float: right;
   text-align: right;
   padding: 4px 8px 8px 8px;
@@ -520,3 +520,16 @@ ul.condensed li {display: inline-block; margin-right: 1px; }
   margin: 8px 0;
 }
 
+/********Taskboard Distribution Summary********/
+#dist_summary {overflow:auto; max-height:500px;}
+#dist_summary thead tr.parent_header th {border:1px solid #CCC; background-color:#EEE; padding:4px; white-space:nowrap;}
+#dist_summary {border: 1px solid #E4E4E4; border-collapse: collapse; width: 100%;}
+#dist_summary tbody tr.parent_row td {background-color:#F4F4EA;}
+#dist_summary tbody tr.member_issues table {width:100%;}
+#dist_summary tbody tr.member_issues thead th {border:1px solid #CCC; background-color:#CCC; padding:4px; white-space:nowrap;}
+#dist_summary tbody tr.member_issues tbody td {border:1px solid #CCC;}
+tr.issue td {background-color:#FFD;}
+tr.closed_issue td {background-color:#CFC;}
+span.right {float:right;}
+span.left {float:left;}
+/**********************************************/

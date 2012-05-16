@@ -32,11 +32,9 @@
 
 <!--- START-------------------------------------------------------------------------------------------------------------->
 <div id = "distribution_summary" style="display:none;">
-  <%= render :partial => "distribution_summary", :locals => {:project_members => @project_members, :project => @project, :v => @version} %>
 </div>
-<% if @featured %>
-  <input type="button" id="dialog-launcher" value="Distribution Summary" OnClick="jQuery('#distribution_summary').dialog('open')" />
-<% end %>
+<input type="text" id = "version_id" value="<%=params[:version_id]%>" style="display:none;"/>
+<input type="text" id = "project_id" value="<%=params[:id]%>" style="display:none;"/>
 <h2 id="taskboard-header">
   <%= @version.nil? ? "Product Backlog" : @version.name %>
 </h2>
@@ -118,7 +116,9 @@
                                               :issue_filter => {:tracker => @tracker, :team => @team} },
                                               :id => 'showchart', :class => "buttons disabled" %>
    <% end %>
-
+    <% if @featured or @bugged %>
+      <button type="button" id="dialog-launcher" class="buttons">Distribution Summary</button>
+    <% end %>
   </div>
 </div>
 
@@ -131,11 +131,11 @@
 <div id="fixed_table_header"></div>
 
 <% if @featured or @bugged %>
-  <%= javascript_include_tag 'sticky_note', :plugin => 'scrum_task_board' %>
-  <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
   <%= javascript_include_tag "jquery-1.7.1.min.js", :plugin => 'time_logging' %>
   <%= javascript_include_tag "jquery-ui-1.8.18.custom.min.js", :plugin => 'time_logging' %>
   <%= javascript_include_tag 'distribution_summary', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag 'sticky_note', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
   <%= stylesheet_link_tag "jquery-ui-1.8.18.custom.css", :plugin => 'time_logging' %>
   <script type="text/javascript">
   var showbugs = (jQuery("#hidebugs").html() == "Show Bugs"); <%# (@bugs and @featured) or false %>
