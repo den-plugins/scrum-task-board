@@ -25,15 +25,15 @@
             &nbsp;
           <% end %>
         </td>
-        <td><%= m[:resource] %></td>
-        <td><%= m[:capacity] %></td>
-        <td><%= m[:estimate] %></td>
-        <td><%= m[:remaining] %></td>
-        <td><%= m[:remaining_allocation] %></td>
+        <td><p class="resource"><%= m[:resource] %></p></td>
+        <td><p class="capacity"><%= m[:capacity] %></p></td>
+        <td><p class="estimate"><%= m[:estimate] %></p></td>
+        <td><p class="remaining"><%= m[:remaining] %></p></td>
+        <td><p class="remaining_allocation"><%= m[:remaining_allocation] %></p></td>
       </tr>
       <% if !m[:issues].empty? %>
         <tr class = "member_issues <%= m[:resource].id%>" style = "display:none;">
-          <td colspan = "5">
+          <td colspan = "6">
             <%= render :partial => "ds_member_issues", :locals => {:issues => m[:issues]}%>
           </td>
         </tr>

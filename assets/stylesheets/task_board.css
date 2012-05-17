@@ -532,4 +532,7 @@ tr.issue td {background-color:#FFD;}
 tr.closed_issue td {background-color:#CFC;}
 span.right {float:right;}
 span.left {float:left;}
+
+p {white-space:normal;}
+p.subject {word-wrap:break-word; width:500px;}
 /**********************************************/

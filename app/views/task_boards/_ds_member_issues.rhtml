@@ -14,10 +14,10 @@
       <% else %>
         <tr class = "issue">
       <% end %>
-        <td><%= i.subject %></td>
-        <td><%= i.status.name %></td>
-        <td><%= i.estimated_hours %></td>
-        <td><%= i.remaining_effort %></td>
+        <td><p class="subject"><%= i.subject %></p></td>
+        <td><p class="status"><%= i.status.name %></td>
+        <td><p class="estimate_hours"><%= i.estimated_hours %></td>
+        <td><p class="remaining_effort"><%= i.remaining_effort %></td>
       </tr>
     <% end %>
   </tbody>
