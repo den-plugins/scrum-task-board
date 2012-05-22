@@ -116,7 +116,7 @@
                                               :issue_filter => {:tracker => @tracker, :team => @team} },
                                               :id => 'showchart', :class => "buttons disabled" %>
    <% end %>
-   <% if (@featured or @bugged) and (@version.original_start_date and @version.original_end_date)%>
+   <% if (@featured or @bugged) and (@version.started_date and @version.effective_date)%>
       <button type="button" id="dialog-launcher" class="buttons">Distribution Summary</button>
     <% end %>
   </div>

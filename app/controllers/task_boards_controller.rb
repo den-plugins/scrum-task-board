@@ -119,8 +119,8 @@ class TaskBoardsController < ApplicationController
     @project_members = []
     team = @project.members.sort_by{|u| u.user.firstname.downcase}
     if @version && !team.empty?
-      week = [@version.original_start_date, @version.original_end_date]
-      week_realtime = (Date.current <= @version.original_end_date) ? [Date.current, @version.original_end_date] : nil
+      week = [@version.started_date, @version.effective_date]
+      week_realtime = (Date.current <= week.last) ? [Date.current, week.last] : nil
       team.each do |t|
         resources = t.user.memberships.select {|m| m.project.eql? @project}
         capacity = compute_forecasted_hours(week, resources)

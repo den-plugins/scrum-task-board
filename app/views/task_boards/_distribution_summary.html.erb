@@ -1,7 +1,7 @@
 <div class = "title">
   <span class = "left"><h1><%= @version %></h1></span>
-  <span class = "right"><h3>End Date: <%= @version.original_end_date.strftime("%m/%d/%Y") %></h3></span>
-  <span class = "right"><h3>Start Date: <%= @version.original_start_date.strftime("%m/%d/%Y") %></h3></span>
+  <span class = "right"><h3>End Date: <%= @version.effective_date.strftime("%m/%d/%Y") %></h3></span>
+  <span class = "right"><h3>Start Date: <%= @version.started_date.strftime("%m/%d/%Y") %></h3></span>
 </div>
 
 <table id = "dist_summary">
