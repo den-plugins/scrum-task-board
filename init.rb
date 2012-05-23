@@ -1,11 +1,13 @@
 require 'redmine'
 require 'custom_issue_patch'
+require 'stb_member_patch'
 require 'scrum_alliance/redmine/issue_status_extensions'
 require 'scrum_alliance/redmine/project_extensions'
 
 # Dependency loading hell. http://www.ruby-forum.com/topic/166578#new
 require 'dispatcher'
 Dispatcher.to_prepare do
+  Member.send(:include, Stb::MemberPatch)
   Project.class_eval { include ScrumAlliance::Redmine::ProjectExtensions }
   IssueStatus.class_eval { include ScrumAlliance::Redmine::IssueStatusExtensions }
 end
