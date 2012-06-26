@@ -98,6 +98,10 @@ module IssueExtn
     parents
   end
 
+  def story_points
+    pts = custom_values.detect{|x| x.custom_field.name.downcase["story points"]}
+    pts ? pts.value.to_f : 0.0
+  end
 end
 
 # Add module to Issue

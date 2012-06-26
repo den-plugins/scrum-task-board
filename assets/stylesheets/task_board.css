@@ -244,6 +244,11 @@
   text-align:right;
 }
 
+#task_board .issue_number span.story_points {
+  background-color: #b5b5b5;
+  height: 12px;
+}
+
 #task_board .edit {
   background: transparent url('../images/edit.png') no-repeat;
   top: 2px;

@@ -4,6 +4,7 @@
   <div class="tooltip">
     <%= link_to_issue feature %><span id="<%= feature.id %>_tip" class="tip"><%= task_board_tooltip(feature, @journals) %></span>
   </div>
+  <span class = "story_points"><%= feature.story_points %></span>
 </div>
 
 <div class="bulk_details">
