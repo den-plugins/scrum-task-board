@@ -4,7 +4,6 @@
   <div class="tooltip">
     <%= link_to_issue feature %><span id="<%= feature.id %>_tip" class="tip"><%= task_board_tooltip(feature, @journals) %></span>
   </div>
-  <span class = "story_points"><%= feature.story_points %></span>
 </div>
 
 <div class="bulk_details">
@@ -14,7 +13,7 @@
     <div class="talk" title="Comment" id="<%= feature.id %>_talk">Comment</div>
   </div>
   <div class="current_data">
-    <p class="estimate" style="right: 2px;"><%= feature.remaining_effort ? feature.remaining_effort : '' %></p>
+    <p class="estimate" style="right: 2px;"><%= feature.story_points %></p>
     <p class="assignee <%= "assigned_to_current" if feature.assigned_to.eql? User.current %>"><%= feature.assigned_to ? feature.assigned_to : '' %></p>
     <p class="status"><%= feature.status.name %></p>
     <hr/>
