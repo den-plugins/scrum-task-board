@@ -102,6 +102,12 @@ module IssueExtn
     pts = custom_values.detect{|x| x.custom_field.name.downcase["story points"]}
     pts ? pts.value.to_f : 0.0
   end
+
+  def story_points=(val)
+    pts = custom_values.detect{|x| x.custom_field.name.downcase["story points"]}
+    pts.value = val.to_f
+    pts.save
+  end
 end
 
 # Add module to Issue
