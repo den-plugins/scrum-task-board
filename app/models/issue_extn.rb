@@ -105,8 +105,12 @@ module IssueExtn
 
   def story_points=(val)
     pts = custom_values.detect{|x| x.custom_field.name.downcase["story points"]}
-    pts.value = val.to_f
-    pts.save
+    if pts
+      pts.value = val.to_f
+      pts.save
+    else
+      attributes = {"custom_field_values"=>{"35"=>"#{val.to_f}"}}
+    end
   end
 end
 
