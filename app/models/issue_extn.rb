@@ -1,5 +1,3 @@
-require_dependency 'project'
-
 module IssueExtn
   def self.included(base)
     base.extend(ClassMethods)
@@ -98,6 +96,3 @@ module IssueExtn
     parents
   end
 end
-
-# Add module to Issue
-Issue.send(:include, IssueExtn)

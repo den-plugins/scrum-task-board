@@ -1,5 +1,3 @@
-require_dependency 'member'
-
 module Stb
   module MemberPatch
     def self.included(base)

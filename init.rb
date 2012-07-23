@@ -7,6 +7,8 @@ require 'scrum_alliance/redmine/project_extensions'
 # Dependency loading hell. http://www.ruby-forum.com/topic/166578#new
 require 'dispatcher'
 Dispatcher.to_prepare do
+  Version.send(:include, VersionExtn)
+  Issue.send(:include, IssueExtn)
   Member.send(:include, Stb::MemberPatch)
   Project.class_eval { include ScrumAlliance::Redmine::ProjectExtensions }
   IssueStatus.class_eval { include ScrumAlliance::Redmine::IssueStatusExtensions }

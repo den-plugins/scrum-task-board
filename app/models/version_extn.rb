@@ -1,5 +1,3 @@
-require_dependency 'project'
-
 module VersionExtn
   def self.included(base)
     base.extend(ClassMethods)
@@ -79,8 +77,3 @@ module VersionExtn
     
   end
 end
-
-# Add module to Issue
-Version.send(:include, VersionExtn)
-
-
