@@ -1,6 +1,6 @@
 <% content_for :header_tags do %>
-  <%= stylesheet_link_tag 'colorbox', :plugin => 'scrum_task_board' %>
-  <%= stylesheet_link_tag 'task_board', :plugin => 'scrum_task_board' %>
+  <%= stylesheet_link_tag 'scrum_task_board/colorbox' %>
+  <%= stylesheet_link_tag 'scrum_task_board/task_board' %>
   <style type="text/css">
     .clearfix:after {
       content: ".";
@@ -133,9 +133,9 @@
 <% if @featured or @bugged %>
   <%= javascript_include_tag "jquery-1.7.1.min.js", :plugin => 'time_logging' %>
   <%= javascript_include_tag "jquery-ui-1.8.18.custom.min.js", :plugin => 'time_logging' %>
-  <%= javascript_include_tag 'distribution_summary', :plugin => 'scrum_task_board' %>
-  <%= javascript_include_tag 'sticky_note', :plugin => 'scrum_task_board' %>
-  <%= javascript_include_tag 'slimScroll.js', :plugin => 'scrum_task_board' %>
+  <%= javascript_include_tag 'scrum_task_board/distribution_summary' %>
+  <%= javascript_include_tag 'scrum_task_board/sticky_note' %>
+  <%= javascript_include_tag 'scrum_task_board/slimScroll.js' %>
   <%= stylesheet_link_tag "jquery-ui-1.8.18.custom.css", :plugin => 'time_logging' %>
   <script type="text/javascript">
   var showbugs = (jQuery("#hidebugs").html() == "Show Bugs"); <%# (@bugs and @featured) or false %>
@@ -307,8 +307,8 @@
   </tbody>
 </table>
 <div id="back_to_top">Back to top</div>
-<%= javascript_include_tag 'fixedtableheader', :plugin => 'scrum_task_board' %>
-<%= javascript_include_tag 'jquery.colorbox-min.js', :plugin => 'scrum_task_board' %>
+<%= javascript_include_tag 'scrum_task_board/fixedtableheader' %>
+<%= javascript_include_tag 'scrum_task_board/jquery.colorbox-min.js' %>
 <%= javascript_include_tag 'jquery.jqplot.js', :plugin => 'redmine_burndown' %>
 <%= javascript_include_tag 'plugins/jqplot.canvasTextRenderer.min.js', :plugin => 'redmine_burndown' %>
 <%= javascript_include_tag 'plugins/jqplot.canvasAxisLabelRenderer.min.js', :plugin => 'redmine_burndown' %>

@@ -1,18 +1,20 @@
 require 'redmine'
 require 'custom_issue_patch'
+require File.dirname(__FILE__) + '/install_assets'
 require 'stb_member_patch'
 require 'scrum_alliance/redmine/issue_status_extensions'
 require 'scrum_alliance/redmine/project_extensions'
+Dir[File.dirname(__FILE__) + '/../app/helpers/*.rb'].each {|file| require file }
+Dir[File.dirname(__FILE__) + '/../app/controllers/*.rb'].each {|file| require file }
+Dir[File.dirname(__FILE__) + '/../app/models/*.rb'].each {|file| require file }
 
-# Dependency loading hell. http://www.ruby-forum.com/topic/166578#new
-require 'dispatcher'
-Dispatcher.to_prepare do
-  Version.send(:include, VersionExtn)
-  Issue.send(:include, IssueExtn)
-  Member.send(:include, Stb::MemberPatch)
-  Project.class_eval { include ScrumAlliance::Redmine::ProjectExtensions }
-  IssueStatus.class_eval { include ScrumAlliance::Redmine::IssueStatusExtensions }
-end
+ActionView::Base.send(:include, TaskBoardsHelper)
+Member.send(:include, Stb::MemberPatch)
+Version.send(:include, VersionExtn)
+Issue.send(:include, IssueExtn)
+Project.class_eval { include ScrumAlliance::Redmine::ProjectExtensions }
+IssueStatus.class_eval { include ScrumAlliance::Redmine::IssueStatusExtensions }
+ActionController::Base.prepend_view_path File.dirname(__FILE__) + "/../app/views"
 
 Redmine::Plugin.register :scrum_task_board do
   name 'Redmine Task Board plugin'
@@ -27,6 +29,3 @@ Redmine::Plugin.register :scrum_task_board do
   
   menu :project_menu, :task_board, {:controller => 'task_boards', :action => 'index'}, :after => :treeview, :caption => 'Task Board'
 end
-
-require File.dirname(__FILE__) + '/app/models/issue_extn.rb'
-require File.dirname(__FILE__) + '/app/models/version_extn.rb'
