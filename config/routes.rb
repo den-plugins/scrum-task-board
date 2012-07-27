@@ -8,7 +8,6 @@ class << ActionController::Routing::Routes
           :init_distribution_summary => :post
         }
     end
-    puts @routes
     additional_routes = @routes.dup
     reload!
     @routes += additional_routes

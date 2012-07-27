@@ -91,7 +91,7 @@ module TaskBoardsHelper
         content += "</ul>"
       end
     else
-      content += "<span>Click #{image_tag '../stylesheets/scrum_task_board/images/talk.png'} to load comments.</span>"
+      content += "<span>Click #{image_tag '/plugin_assets/scrum_task_board/images/talk.png'} to load comments.</span>"
     end
   end
 

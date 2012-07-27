@@ -1,19 +1,22 @@
 require 'redmine'
 require 'custom_issue_patch'
-require File.dirname(__FILE__) + '/install_assets'
 require 'stb_member_patch'
 require 'scrum_alliance/redmine/issue_status_extensions'
 require 'scrum_alliance/redmine/project_extensions'
-Dir[File.dirname(__FILE__) + '/../app/helpers/*.rb'].each {|file| require file }
-Dir[File.dirname(__FILE__) + '/../app/controllers/*.rb'].each {|file| require file }
-Dir[File.dirname(__FILE__) + '/../app/models/*.rb'].each {|file| require file }
 
-ActionView::Base.send(:include, TaskBoardsHelper)
+this_file = File.dirname(__FILE__)
+require this_file + '/install_assets'
+Dir[this_file + '/../app/helpers/*.rb'].each {|file| require file }
+Dir[this_file + '/../app/controllers/*.rb'].each {|file| require file }
+Dir[this_file + '/../app/models/*.rb'].each {|file| require file }
+
 Member.send(:include, Stb::MemberPatch)
 Version.send(:include, VersionExtn)
 Issue.send(:include, IssueExtn)
 Project.class_eval { include ScrumAlliance::Redmine::ProjectExtensions }
 IssueStatus.class_eval { include ScrumAlliance::Redmine::IssueStatusExtensions }
+
+ActionView::Base.send(:include, TaskBoardsHelper)
 ActionController::Base.prepend_view_path File.dirname(__FILE__) + "/../app/views"
 
 Redmine::Plugin.register :scrum_task_board do

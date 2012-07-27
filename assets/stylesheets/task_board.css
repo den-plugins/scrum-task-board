@@ -245,42 +245,42 @@
 }
 
 #task_board .edit {
-  background: transparent url('../scrum_task_board/images/edit.png') no-repeat;
+  background: transparent url('/plugin_assets/scrum_task_board/images/edit.png') no-repeat;
   top: 2px;
   left: 4px;
 }
 
 #task_board .cancel {
-  background: transparent url('../scrum_task_board/images/false.png') no-repeat;
+  background: transparent url('/plugin_assets/scrum_task_board/images/false.png') no-repeat;
   left: 2px;
 }
 
 #task_board .talk {
-  background: transparent url('../scrum_task_board/images/talk.png') no-repeat;
+  background: transparent url('/plugin_assets/scrum_task_board/images/talk.png') no-repeat;
   height: 15px; width: 15px;
   left: 50px;
   top: 2px;
 }
 
 #task_board .submit_link {
-  background: transparent url('../scrum_task_board/images/true.png') no-repeat;
+  background: transparent url('/plugin_assets/scrum_task_board/images/true.png') no-repeat;
   left: 26px;
 }
 
 #task_board .toggle_details.maximized{
-  background:  transparent url('../scrum_task_board/images/zoom_out.png') no-repeat;
+  background:  transparent url('/plugin_assets/scrum_task_board/images/zoom_out.png') no-repeat;
   top: 2px;
   left: 26px;
 }
 
 #task_board .toggle_details.minimized{
-  background:  transparent url('../scrum_task_board/images/zoom_in.png') no-repeat;
+  background:  transparent url('/plugin_assets/scrum_task_board/images/zoom_in.png') no-repeat;
   top: 2px;
   left: 26px;
 }
 
 #task_board .has_subtasks {
-  background: transparent url('../scrum_task_board/images/copy.png') no-repeat;
+  background: transparent url('/plugin_assets/scrum_task_board/images/copy.png') no-repeat;
   top: 2px;
   left: 50px;
   outline: 0;
