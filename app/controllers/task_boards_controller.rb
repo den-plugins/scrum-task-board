@@ -6,6 +6,7 @@ class TaskBoardsController < ApplicationController
   before_filter :set_cache_buster
   before_filter :get_issue, :only => [:update_issue_status, :update_issue, :add_comment, :get_comment]
   before_filter :get_dependencies, :only => [:update_issue_status, :update_issue]
+  include TaskBoardsHelper
 
   def set_cache_buster
     response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
@@ -150,29 +151,28 @@ class TaskBoardsController < ApplicationController
     parents = @issue.update_parents
 
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
+    @parent_ids = []
+    @story = @issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent unless @issue.parent.nil?
+    @story = nil if @issue.parent.nil? or (!@issue.parent.nil? and @issue.parent.issue_from.fixed_version_id != @issue.fixed_version_id)
+    descendant = {}
+    @parents = []
+    @children = []
 
-    render :update do |page|
-      page.remove dom_id(@issue)
-      story = @issue.feature_child? ? @issue.parent.issue_from : @issue.task_parent unless @issue.parent.nil?
-      story = nil if @issue.parent.nil? or (!@issue.parent.nil? and @issue.parent.issue_from.fixed_version_id != @issue.fixed_version_id)
-      descendant = {}
-
-      if !story.nil?
-        story = story.parent.issue_from if story.bug? and !story.parent.nil?
-        parents.each do |parent|
-          unless parent.nil? or parent.feature? #or (params[:board].to_i.eql?(1) and parent.bug?)
-            show_bug = {:bug => true} if parent.bug? and params[:board].to_i.eql?(1)
-            page.remove dom_id(parent)
-            page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent, :locals => show_bug
-          else
-            page.update_sticky_note dom_id(parent), parent, params[:board].to_i
-          end
+    if !@story.nil?
+      @story = @story.parent.issue_from if @story.bug? and !@story.parent.nil?
+      parents.each do |parent|
+        unless parent.nil? or parent.feature? #or (params[:board].to_i.eql?(1) and parent.bug?)
+          show_bug =  (parent.bug? and params[:board].to_i.eql?(1)) ? {:bug => true, :issue => parent} : {:issue => parent}
+          @parents << [parent, show_bug]
+        else
+          @children << update_sticky_note(dom_id(parent), parent, params[:board].to_i)
         end
       end
-      show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
-      page.insert_html :bottom, task_board_dom_id(story, @status, "list"), :partial => "issue", :object => @issue, :locals => show_bug
-      page.call :filterByResource
-      #page.complete "Element.show('#{task_board_dom_id(story, @status, 'list')}')"
+    end
+    @show_bug = (@issue.bug? and params[:board].to_i.eql?(1)) ? {:bug => true, :issue => @issue} : {:issue => @issue}
+
+    respond_to do |format|
+      format.js { render :layout => false}
     end
   end
   
@@ -185,26 +185,33 @@ class TaskBoardsController < ApplicationController
 
     parents = @issue.update_parents
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
-
-    render :update do |page|
-      page.update_sticky_note dom_id(@issue), @issue, params[:board].to_i
-      #show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
-      #page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version }
-      parents.each do |parent|
-        if params[:board].to_i.eql? 1
-          if parent.version_descendants.present? and !parent.feature? #and !(params[:board].to_i.eql?(1) and parent.bug?)
-            show_bug = {:bug => true} if parent.bug? and params[:board].to_i.eql?(1)
-            page.remove dom_id(parent)
-            page.insert_html :top, task_board_dom_id(parent.task_parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => show_bug
-          else
-            page.update_sticky_note dom_id(parent), parent, params[:board].to_i
-          end
-        elsif params[:board].to_i.eql? 2
-          story = @issue.super_parent
-          page.remove dom_id(parent)
-          page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent #, :locals => descendant
+    
+    @update_insert, @update_sticky = [], []
+    @update_sticky << update_sticky_note(dom_id(@issue), @issue, params[:board].to_i)
+    #page.update_sticky_note dom_id(@issue), @issue, params[:board].to_i
+    #show_bug = {:bug => true} if @issue.bug? and params[:board].to_i.eql?(1)
+    #page.replace_html "chart_panel", :partial => 'show_chart', :locals => {:version => @issue.fixed_version }
+    parents.each do |parent|
+      if params[:board].to_i.eql? 1
+        if parent.version_descendants.present? and !parent.feature? #and !(params[:board].to_i.eql?(1) and parent.bug?)
+          show_bug =  (parent.bug? and params[:board].to_i.eql?(1)) ? {:bug => true, :issue => parent} : {:issue => parent}
+          @update_insert << {:show_bug => show_bug, :remove => dom_id(parent), :insert_target => task_board_dom_id(parent.task_parent, parent.status, "list")}
+          #page.remove dom_id(parent)
+          #page.insert_html :top, task_board_dom_id(parent.task_parent, parent.status, "list"), :partial => "issue", :object => parent, :locals => show_bug
+        else
+          @update_sticky << update_sticky_note(dom_id(parent), parent, params[:board].to_i)
         end
+      elsif params[:board].to_i.eql? 2
+        story = @issue.super_parent
+        show_bug = {:issue => parent}
+        @update_insert << {:show_bug => show_bug, :remove => dom_id(parent), :insert_target => task_board_dom_id(story, parent.status, "list")}
+        #page.remove dom_id(parent)
+        #page.insert_html :top, task_board_dom_id(story, parent.status, "list"), :partial => "issue", :object => parent #, :locals => descendant
       end
+    end
+    
+    respond_to do |format|
+      format.js { render :layout => false}
     end
   end
 

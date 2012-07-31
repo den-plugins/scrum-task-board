@@ -1,0 +1,13 @@
+<% @update_sticky.each do |arr| %>
+  <% if arr[:replace] %>
+    jQuery("#<%= arr[:container] %>").html("<%= escape_javascript(render :partial => arr[:partial], :locals => {arr[:partial].to_sym => arr[:issue]})%>");
+    jQuery("#<%= arr[:container] %>").attr("class", "<%= arr[:classname] %>");
+  <% else %>
+    jQuery("#<%= arr[:container] %>").attr("class", "<%= arr[:classname] %>");
+  <% end %>  
+<% end %>
+
+<% @update_insert.each do |arr| %>
+  jQuery("#<%= arr[:remove] %>").remove()
+  jQuery("#<%= arr[:insert_target] %>").append("<%= escape_javascript(render :partial => "issue", :locals => arr[:show_bug])%>");
+<% end %>

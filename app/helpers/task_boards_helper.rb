@@ -54,12 +54,18 @@ module TaskBoardsHelper
   end
 
   def update_sticky_note container, issue, board=nil
+    replace_flag = false
+    partial = ""
     if issue.feature?
-      page.replace_html "#{container}", :partial => 'feature', :locals => {:feature => issue }
+      #page.replace_html "#{container}", :partial => 'feature', :locals => {:feature => issue }
       classname = "task_board_data #{ task_board_border_class(issue) } assigned_to_#{issue.assigned_to_id} task_board_feature_parent"
+      partial = "feature"
+      replace_flag = true
     else
-      page.replace_html "#{container}", :partial => 'issue_show', :locals => {:issue => issue}
+      #page.replace_html "#{container}", :partial => 'issue_show', :locals => {:issue => issue}
       classname = "#{status_classes_for(issue, User.current)} task_board_data assigned_to_#{issue.assigned_to_id} #{ task_board_border_class(issue) } "
+      partial = "issue"
+      replace_flag = true
     end
     if issue.assigned_to.eql? User.current
       classname += '_' if issue.feature?
@@ -68,8 +74,9 @@ module TaskBoardsHelper
     if board and issue.bug? and board.eql?(1)
       classname += " isBug"
     end
-    page[container.to_sym].className = classname
-    page.visual_effect(:highlight, "#{container}")
+    {:issue => issue, :container => container, :classname => classname, :replace => replace_flag, :partial => partial}
+    #page[container.to_sym].className = classname
+    #page.visual_effect(:highlight, "#{container}")
   end
 
   def task_board_tooltip(ticket, journals=nil)

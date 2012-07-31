@@ -1,0 +1,17 @@
+jQuery("#<%= dom_id(@issue)%>").remove()
+<% if @story %>
+  <% @parents.each do |arr| %>
+         jQuery("#<%= dom_id(arr.first)%>").remove()
+         jQuery("#<%= task_board_dom_id(@story, arr.first.status, "list") %>").append("<%= escape_javascript(render :partial => "issue", :locals => arr.last)%>");
+  <% end %>
+  <% @children.each do |arr| %>
+    <% if arr[:replace] %>
+        jQuery("#<%= arr[:container] %>").html("<%= escape_javascript(render :partial => arr[:partial], :locals => {arr[:partial].to_sym => arr[:issue]})%>");
+        jQuery("#<%= arr[:container] %>").attr("class", "<%= arr[:classname] %>");
+    <% else %>
+        jQuery("#<%= arr[:container] %>").attr("class", "<%= arr[:classname] %>");
+    <% end %>
+  <% end %>
+<% end %>
+jQuery("#<%= task_board_dom_id(@story, @status, "list") %>").append("<%= escape_javascript(render :partial => "issue", :locals => @show_bug)%>");
+filterByResource();
