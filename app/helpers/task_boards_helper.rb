@@ -74,7 +74,7 @@ module TaskBoardsHelper
 
   def task_board_tooltip(ticket, journals=nil)
     content = "<strong>#{l(:field_subject)}</strong>: #{textilizable ticket.subject}<br />" +
-    "<strong>#{l(:field_description)}</strong>: #{h ticket.description}<br />" +
+    "<strong>#{l(:field_description)}</strong>: #{h truncate(ticket.description, :length => 300)}<br />" +
     "<strong>Story Points</strong>: #{ticket.story_points}<br />" +
     "<strong>#{l(:field_assigned_to)}</strong>: #{ticket.assigned_to}<br />" +
     ((ticket.feature? or ticket.children.any?) ? "" : "<strong>#{l(:field_estimated_hours)}</strong>: #{ticket.estimated_hours ? ticket.estimated_hours : 0} #{l(:field_sp_hours)}<br />") +
