@@ -147,10 +147,7 @@ class TaskBoardsController < ApplicationController
 
     attrs = {:status_id => @status.id}
     @issue.update_attributes(attrs)
-    if @status.name == "Closed"
-      remaining_effort = RemainingEffortEntry.find_by_issue_id(@issue.id)
-      remaining_effort.update_attribute :remaining_effort, 0 if remaining_effort
-    end
+
     parents = @issue.update_parents
 
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
@@ -186,11 +183,6 @@ class TaskBoardsController < ApplicationController
     @issue.update_attributes(params[:issue])
     @selected_resource = params[:selected_resource] ? params[:selected_resource] : ""
     @journals = get_journals(@issue)
-
-    if @issue.status.name == "Closed"
-      remaining_effort = RemainingEffortEntry.find_by_issue_id(@issue.id)
-      remaining_effort.update_attribute :remaining_effort, 0 if remaining_effort
-    end
 
     parents = @issue.update_parents
     @status_grouped = (params[:board].to_i.eql?(1) ? IssueStatusGroup::TASK_GROUPED : IssueStatusGroup::BUG_GROUPED)
